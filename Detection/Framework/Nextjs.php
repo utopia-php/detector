@@ -4,7 +4,7 @@ namespace Utopia\Detector\Detection\Framework;
 
 use Utopia\Detector\Detection\Framework\Detection as FrameworkDetection;
 
-class Nextjs extends FrameworkDetection
+class NextJs extends FrameworkDetection
 {
     public function getName(): string
     {
