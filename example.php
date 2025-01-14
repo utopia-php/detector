@@ -13,6 +13,16 @@ use Utopia\Detector\Detection\RenderingStrategy\Detection as RenderingStrategyDe
 use Utopia\Detector\Detection\Runtime\Detection as RuntimeDetection;
 
 $files = ['src/main.js', '.gitignore', 'package.json', 'yarn.lock'];
+
+$packageManagerDetector = new Detector($files, new PackageManager());
+$detection = $packageManagerDetector->detect();
+
+if ($detection instanceof PackageManagerDetection) {
+    echo "Detected package manager: " . $detection->getName() . "\n";
+} else {
+    echo "No package manager detected.\n";
+}
+
 $runtimeDetector = new Detector($files, new Runtime($files, PackageManagerType::NPM));
 $detection = $runtimeDetector->detect();
 
@@ -33,15 +43,6 @@ if ($detection instanceof FrameworkDetection) {
     echo "Build command: " . $detection->getBuildCommand() . "\n";
 } else {
     echo "No framework detected.\n";
-}
-
-$packageManagerDetector = new Detector($files, new PackageManager());
-$detection = $packageManagerDetector->detect();
-
-if ($detection instanceof PackageManagerDetection) {
-    echo "Detected package manager: " . $detection->getName() . "\n";
-} else {
-    echo "No package manager detected.\n";
 }
 
 $renderingStrategyDetector = new Detector($files, new RenderingStrategy(FrameworkType::NEXTJS));
