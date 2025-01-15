@@ -15,5 +15,4 @@ abstract class Detection extends BaseDetection
     }
 
     abstract public function getCommand(): string;
-    abstract public function getCommands(): array;
 }

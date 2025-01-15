@@ -2,6 +2,7 @@
 
 namespace Utopia\Detector\Detection\Runtime;
 
+use Utopia\Detector\Detection\Models\PackageManagerType;
 use Utopia\Detector\Detection\Runtime\Detection as RuntimeDetection;
 
 class Node extends RuntimeDetection
@@ -13,15 +14,10 @@ class Node extends RuntimeDetection
 
     public function getCommand(): string
     {
-        return 'npm install';
-    }
-
-    public function getCommands(): array
-    {
-        return [
-            'npm' => 'npm install',
-            'yarn' => 'yarn install',
-            'pnpm' => 'pnpm install',
-        ];
+        return match ($this->packageManagerType) {
+            PackageManagerType::NPM => 'npm install',
+            PackageManagerType::YARN => 'yarn install',
+            PackageManagerType::PNPM => 'pnpm install',
+        };
     }
 }

@@ -1,16 +1,19 @@
 <?php
 
-use Utopia\Detector\Detector;
+namespace Utopia\Detector;
+
 use Utopia\Detector\Adapter\Framework;
 use Utopia\Detector\Adapter\PackageManager;
-use Utopia\Detector\Adapter\RenderingStrategy;
+use Utopia\Detector\Adapter\Rendering;
 use Utopia\Detector\Adapter\Runtime;
 use Utopia\Detector\Detection\Framework\Detection as FrameworkDetection;
 use Utopia\Detector\Detection\Models\FrameworkType;
 use Utopia\Detector\Detection\Models\PackageManagerType;
 use Utopia\Detector\Detection\PackageManager\Detection as PackageManagerDetection;
-use Utopia\Detector\Detection\RenderingStrategy\Detection as RenderingStrategyDetection;
+use Utopia\Detector\Detection\Rendering\Detection as RenderingDetection;
 use Utopia\Detector\Detection\Runtime\Detection as RuntimeDetection;
+
+require_once 'vendor/autoload.php';
 
 $files = ['src/main.js', '.gitignore', 'package.json', 'yarn.lock'];
 
@@ -45,10 +48,10 @@ if ($detection instanceof FrameworkDetection) {
     echo "No framework detected.\n";
 }
 
-$renderingStrategyDetector = new Detector($files, new RenderingStrategy(FrameworkType::NEXTJS));
-$detection = $renderingStrategyDetector->detect();
+$renderingDetector = new Detector($files, new Rendering(FrameworkType::NEXTJS));
+$detection = $renderingDetector->detect();
 
-if ($detection instanceof RenderingStrategyDetection) {
+if ($detection instanceof RenderingDetection) {
     echo "Detected rendering strategy: " . $detection->getName() . "\n";
 } else {
     echo "No rendering strategy detected.\n";

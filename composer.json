@@ -1,0 +1,12 @@
+{
+    "name": "utopia-php/detector",
+    "description": "A simple library to detect popular runtimes, frameworks and package managers etc.",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Utopia\\Detector\\": "./"
+        }
+    },
+    "require": {}
+}

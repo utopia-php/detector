@@ -2,7 +2,7 @@
 
 namespace Utopia\Detector;
 
-abstract class Adapter
+interface Adapter
 {
-    abstract public function detect(array $inputs): ?Detection;
+    public function detect(array $inputs): ?Detection;
 }

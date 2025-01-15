@@ -13,7 +13,6 @@ class Runtime implements Adapter
     public function detect(array $inputs, PackageManagerType $packageManagerType = PackageManagerType::NPM): ?RuntimeDetection
     {
         // let's assume it detected node and wants to return the runtime detection
-
         return new Node($packageManagerType);
     }
 }

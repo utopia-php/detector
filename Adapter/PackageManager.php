@@ -4,6 +4,7 @@ namespace Utopia\Detector\Adapter;
 
 use Utopia\Detector\Adapter;
 use Utopia\Detector\Detection\PackageManager\Detection as PackageManagerDetection;
+use Utopia\Detector\Detection\PackageManager\Npm;
 
 class PackageManager implements Adapter
 {
@@ -12,6 +13,6 @@ class PackageManager implements Adapter
     {
         // implement logic to detect package manager
 
-        return null;
+        return new Npm();
     }
 }

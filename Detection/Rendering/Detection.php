@@ -1,6 +1,6 @@
 <?php
 
-namespace Utopia\Detector\Detection\RenderingStrategy;
+namespace Utopia\Detector\Detection\Rendering;
 
 use Utopia\Detector\Detection as BaseDetection;
 
