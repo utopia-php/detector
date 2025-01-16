@@ -35,7 +35,7 @@ class NextJs extends FrameworkDetection
         return './.next';
     }
 
-    public function getFallbackFile(): string | null
+    public function getFallbackFile(): ?string
     {
         return null;
     }

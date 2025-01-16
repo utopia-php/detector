@@ -2,17 +2,17 @@
 
 namespace Utopia\Detector\Adapter;
 
-use Utopia\Detector\Adapter;
 use Utopia\Detector\Detection\PackageManager\Detection as PackageManagerDetection;
 use Utopia\Detector\Detection\PackageManager\Npm;
+use Utopia\Detector\Detector;
 
-class PackageManager implements Adapter
+class PackageManager extends Detector
 {
     // add param input for mixed input
-    public function detect(array $inputs): ?PackageManagerDetection
+    public function detect(): ?PackageManagerDetection
     {
         // implement logic to detect package manager
 
-        return new Npm();
+        return new Npm;
     }
 }

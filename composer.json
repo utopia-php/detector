@@ -3,10 +3,19 @@
     "description": "A simple library to detect popular runtimes, frameworks and package managers etc.",
     "type": "library",
     "license": "MIT",
+    "scripts": {
+        "format": "vendor/bin/pint"
+    },
     "autoload": {
         "psr-4": {
-            "Utopia\\Detector\\": "./"
+            "Utopia\\Detector\\": "src/"
         }
     },
-    "require": {}
+    "require": {},
+    "require-dev": {
+        "laravel/pint": "^1.14"
+    },
+    "platform": {
+        "php": "8.3"
+    }
 }
