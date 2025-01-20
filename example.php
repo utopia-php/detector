@@ -1,32 +1,46 @@
 <?php
 
-include_once 'vendor/autoload.php';
+use Utopia\Detector\Framework;
+use Utopia\Detector\Packager;
+use Utopia\Detector\Rendering;
+use Utopia\Detector\Runtime;
 
-use Utopia\Detector\Adapter\Framework as FrameworkDetector;
-use Utopia\Detector\Adapter\PackageManager as PackageManagerDetector;
-use Utopia\Detector\Adapter\Rendering as RenderingDetector;
-use Utopia\Detector\Adapter\Runtime as RuntimeDetector;
-use Utopia\Detector\Detection\Models\FrameworkType;
-use Utopia\Detector\Detection\Models\PackageManagerType;
+include_once 'vendor/autoload.php';
 
 $files = ['src/main.js', '.gitignore', 'package.json', 'yarn.lock'];
 
-$packageManagerDetector = new PackageManagerDetector($files);
-$detection = $packageManagerDetector->detect();
-echo 'Detected package manager: '.$detection->getName()."\n";
+/**
+ * Function flows
+ */
 
-$runtimeDetector = new RuntimeDetector($files, PackageManagerType::NPM);
-$detection = $runtimeDetector->detect();
-$installCommand = $detection->getCommand();
-echo 'Detected runtime: '.$detection->getName()."\n";
-echo 'Install command: '.$installCommand."\n";
+// 1. Detect NPM
+$detector = new Packager($files);
+$packager = $detector->detect();
+echo 'Detected package manager: '.$packager->getName()."\n";
 
-$frameworkDetector = new FrameworkDetector($files, PackageManagerType::NPM);
-$detection = $frameworkDetector->detect();
-echo 'Detected framework: '.$detection->getName()."\n";
-echo 'Install command: '.$detection->getInstallCommand()."\n";
-echo 'Build command: '.$detection->getBuildCommand()."\n";
+// 2. Detect Node
+$detector = new Runtime($files, $packager->getName());
+$runtime = $detector->detect();
+echo 'Detected runtime: '.$runtime->getName()."\n";
+echo 'Install command: '.$runtime->getCommand()."\n";
 
-$renderingDetector = new RenderingDetector($files, FrameworkType::NEXTJS);
-$detection = $renderingDetector->detect();
-echo 'Detected rendering strategy: '.$detection->getName()."\n";
+/**
+ * Site flows
+ */
+echo "---\n";
+
+// 1. Detect NPM
+$detector = new Packager($files);
+$packager = $detector->detect();
+echo 'Detected package manager: '.$packager->getName()."\n";
+
+// 2. Detect Next.js
+$detector = new Framework($files, $packager->getName());
+$framework = $detector->detect();
+echo 'Detected framework: '.$framework->getName()."\n";
+echo 'Build command: '.$framework->getBuildCommand()."\n";
+
+// 3. Detect SSR
+$detector = new Rendering($files, $framework->getName());
+$rendering = $detector->detect();
+echo 'Detected rendering strategy: '.$rendering->getName()."\n";

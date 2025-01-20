@@ -2,9 +2,9 @@
 
 namespace Utopia\Detector\Detection\Rendering;
 
-use Utopia\Detector\Detection\Rendering\Detection as RenderingDetection;
+use Utopia\Detector\Detection\Rendering;
 
-class SSG extends RenderingDetection
+class SSG extends Rendering
 {
     public function getName(): string
     {
