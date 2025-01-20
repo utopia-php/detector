@@ -1,9 +1,9 @@
 <?php
 
-use Utopia\Detector\Framework;
-use Utopia\Detector\Packager;
-use Utopia\Detector\Rendering;
-use Utopia\Detector\Runtime;
+use Utopia\Detector\Detector\Framework;
+use Utopia\Detector\Detector\Packager;
+use Utopia\Detector\Detector\Rendering;
+use Utopia\Detector\Detector\Runtime;
 
 include_once 'vendor/autoload.php';
 

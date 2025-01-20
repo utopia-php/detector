@@ -1,6 +1,6 @@
 <?php
 
-namespace Utopia\Detector;
+namespace Utopia\Detector\Detector;
 
 use Utopia\Detector\Detection\Packager as PackagerDetection;
 use Utopia\Detector\Detection\Packager\Npm;

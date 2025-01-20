@@ -18,7 +18,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Utopia\\Detector\\": "src/Detector/"
+      "Utopia\\Detector\\": "src/"
     }
   },
   "autoload-dev": {

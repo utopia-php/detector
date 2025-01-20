@@ -1,6 +1,6 @@
 <?php
 
-namespace Utopia\Detector;
+namespace Utopia\Detector\Detector;
 
 use Utopia\Detector\Detection\Runtime as RuntimeDetection;
 use Utopia\Detector\Detection\Runtime\Node;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Utopia\Detector;
+namespace Utopia\Detector\Detector;
 
 use Utopia\Detector\Detection\Framework as FrameworkDetection;
 use Utopia\Detector\Detection\Framework\NextJs;
