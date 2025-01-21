@@ -8,7 +8,7 @@ class JavaScript extends Runtime
 {
     public function getName(): string
     {
-        return 'swift';
+        return 'node';
     }
 
     /**
@@ -16,7 +16,7 @@ class JavaScript extends Runtime
      */
     public function getLanguages(): array
     {
-        return ['Swift'];
+        return ['JavaScript', 'TypeScript'];
     }
 
     public function getCommand(): string
@@ -33,7 +33,7 @@ class JavaScript extends Runtime
      */
     public function getFileExtensions(): array
     {
-        return ['swift', 'xcodeproj', 'xcworkspace'];
+        return ['js', 'ts'];
     }
 
     /**
@@ -41,11 +41,11 @@ class JavaScript extends Runtime
      */
     public function getFiles(): array
     {
-        return ['Package.swift', 'Podfile', 'project.pbxproj'];
+        return ['package-lock.json', 'yarn.lock', 'tsconfig.json'];
     }
 
     public function getEntrypoint(): string
     {
-        return 'main.swift';
+        return 'src/index.js';
     }
 }

@@ -4,7 +4,7 @@ namespace Utopia\Detector\Detection\Framework;
 
 use Utopia\Detector\Detection\Framework;
 
-class xStatic extends Framework
+class XStatic extends Framework
 {
     public function getName(): string
     {
