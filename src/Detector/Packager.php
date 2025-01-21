@@ -11,6 +11,6 @@ class Packager extends Detector
     public function detect(): ?PackagerDetection
     {
         // TODO: Implement detection using $this->files
-        return new Npm();
+        return new Npm;
     }
 }
