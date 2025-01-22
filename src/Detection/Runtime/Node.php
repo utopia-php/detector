@@ -4,7 +4,7 @@ namespace Utopia\Detector\Detection\Runtime;
 
 use Utopia\Detector\Detection\Runtime;
 
-class JavaScript extends Runtime
+class Node extends Runtime
 {
     public function getName(): string
     {

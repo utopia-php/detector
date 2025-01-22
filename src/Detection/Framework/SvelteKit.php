@@ -33,9 +33,4 @@ class SvelteKit extends Framework
     {
         return './build';
     }
-
-    public function getFallbackFile(): ?string
-    {
-        return 'index.html';
-    }
 }

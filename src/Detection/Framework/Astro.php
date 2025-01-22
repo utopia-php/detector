@@ -33,9 +33,4 @@ class Astro extends Framework
     {
         return './dist';
     }
-
-    public function getFallbackFile(): ?string
-    {
-        return 'index.html';
-    }
 }

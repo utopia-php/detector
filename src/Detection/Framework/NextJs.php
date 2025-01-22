@@ -33,9 +33,4 @@ class NextJs extends Framework
     {
         return './.next';
     }
-
-    public function getFallbackFile(): ?string
-    {
-        return null;
-    }
 }

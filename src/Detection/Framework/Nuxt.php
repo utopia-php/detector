@@ -33,9 +33,4 @@ class Nuxt extends Framework
     {
         return './output';
     }
-
-    public function getFallbackFile(): ?string
-    {
-        return 'index.html';
-    }
 }

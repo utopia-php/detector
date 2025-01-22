@@ -4,11 +4,11 @@ namespace Utopia\Detector\Detection\Framework;
 
 use Utopia\Detector\Detection\Framework;
 
-class XStatic extends Framework
+class Other extends Framework
 {
     public function getName(): string
     {
-        return 'static';
+        return 'other';
     }
 
     public function getInstallCommand(): string
@@ -24,10 +24,5 @@ class XStatic extends Framework
     public function getOutputDirectory(): string
     {
         return './';
-    }
-
-    public function getFallbackFile(): ?string
-    {
-        return 'index.html';
     }
 }

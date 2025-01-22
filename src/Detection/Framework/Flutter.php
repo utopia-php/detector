@@ -25,9 +25,4 @@ class Flutter extends Framework
     {
         return './build/web';
     }
-
-    public function getFallbackFile(): ?string
-    {
-        return null;
-    }
 }

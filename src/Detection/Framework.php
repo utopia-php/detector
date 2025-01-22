@@ -15,6 +15,4 @@ abstract class Framework extends Detection
     abstract public function getBuildCommand(): string;
 
     abstract public function getOutputDirectory(): string;
-
-    abstract public function getFallbackFile(): ?string;
 }

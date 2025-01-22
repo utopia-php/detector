@@ -33,9 +33,4 @@ class Remix extends Framework
     {
         return './build';
     }
-
-    public function getFallbackFile(): ?string
-    {
-        return 'index.html';
-    }
 }

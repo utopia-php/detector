@@ -1,6 +1,8 @@
 <?php
 
-namespace Utopia\Detector\Detection;
+namespace Utopia\Detector\Detection\Runtime;
+
+use Utopia\Detector\Detection\Runtime;
 
 class Cpp extends Runtime
 {
