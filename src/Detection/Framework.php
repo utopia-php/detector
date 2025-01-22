@@ -10,6 +10,12 @@ abstract class Framework extends Detection
 
     abstract public function getName(): string;
 
+    abstract public function getFiles(): array;
+
+    abstract public function getFileExtensions(): array;
+
+    abstract public function getLanguages(): array;
+
     abstract public function getInstallCommand(): string;
 
     abstract public function getBuildCommand(): string;

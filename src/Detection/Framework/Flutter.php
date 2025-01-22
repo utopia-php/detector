@@ -11,6 +11,21 @@ class Flutter extends Framework
         return 'Flutter';
     }
 
+    public function getFiles(): array
+    {
+        return ['pubspec.yaml', 'pubspec.lock', 'lib/main.dart', 'android/', 'ios/', 'web/'];
+    }
+
+    public function getFileExtensions(): array
+    {
+        return ['dart'];
+    }
+
+    public function getLanguages(): array
+    {
+        return ['Dart'];
+    }
+
     public function getInstallCommand(): string
     {
         return '';

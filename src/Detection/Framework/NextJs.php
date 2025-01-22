@@ -11,6 +11,21 @@ class NextJs extends Framework
         return 'Next.js';
     }
 
+    public function getFiles(): array
+    {
+        return ['next.config.js', 'next.config.ts', 'next.config.mjs', '.next/'];
+    }
+
+    public function getFileExtensions(): array
+    {
+        return ['js', 'ts', 'mjs', 'jsx', 'tsx'];
+    }
+
+    public function getLanguages(): array
+    {
+        return ['JavaScript', 'TypeScript'];
+    }
+
     public function getInstallCommand(): string
     {
         return match ($this->packager) {

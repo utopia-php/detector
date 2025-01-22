@@ -11,6 +11,21 @@ class Remix extends Framework
         return 'Remix';
     }
 
+    public function getFiles(): array
+    {
+        return ['remix.config.js', 'remix.config.ts', 'app/root.jsx', 'app/root.tsx', 'vite.config.ts', 'vite.config.mjs'];
+    }
+
+    public function getFileExtensions(): array
+    {
+        return ['js', 'ts', 'jsx', 'tsx'];
+    }
+
+    public function getLanguages(): array
+    {
+        return ['JavaScript', 'TypeScript'];
+    }
+
     public function getInstallCommand(): string
     {
         return match ($this->packager) {

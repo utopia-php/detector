@@ -11,6 +11,21 @@ class Nuxt extends Framework
         return 'Nuxt';
     }
 
+    public function getFiles(): array
+    {
+        return ['nuxt.config.js', 'nuxt.config.ts', '.nuxt/'];
+    }
+
+    public function getFileExtensions(): array
+    {
+        return ['js', 'ts', 'jsx', 'tsx', 'vue'];
+    }
+
+    public function getLanguages(): array
+    {
+        return ['JavaScript', 'TypeScript', 'Vue'];
+    }
+
     public function getInstallCommand(): string
     {
         return match ($this->packager) {

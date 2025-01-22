@@ -11,6 +11,21 @@ class Other extends Framework
         return 'other';
     }
 
+    public function getFiles(): array
+    {
+        return ['index.html'];
+    }
+
+    public function getFileExtensions(): array
+    {
+        return ['html', 'htm'];
+    }
+
+    public function getLanguages(): array
+    {
+        return ['HTML'];
+    }
+
     public function getInstallCommand(): string
     {
         return '';

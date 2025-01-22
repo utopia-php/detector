@@ -15,7 +15,7 @@ use Utopia\Detector\Detector\Framework;
 use Utopia\Detector\Detector\Packager;
 use Utopia\Detector\Detector\Rendering;
 use Utopia\Detector\Detector\Runtime;
-use Utopia\Detector\Detector\RuntimeStrategy;
+use Utopia\Detector\Detector\Strategy;
 
 include_once 'vendor/autoload.php';
 
@@ -33,9 +33,9 @@ echo 'Detected package manager: '.$packager->getName()."\n";
 
 // 2. Detect Node
 $files = ['TypeScript', 'JavaScript', 'DockerFile'];
-$detector = new Runtime($files, $packager->getName(), RuntimeStrategy::LANGUAGES);
+$detector = new Runtime($files, $packager->getName(), Strategy::LANGUAGES);
 $detector
-    ->addDetector(new Deno($packager->getName()))
+    ->addDetector(new Deno($packager->getName())) // TODO: How can we avoid passing the packager name here?
     ->addDetector(new Bun($packager->getName()))
     ->addDetector(new Node($packager->getName()))
     ->addDetector(new PHP($packager->getName()))
