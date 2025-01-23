@@ -4,38 +4,34 @@ namespace Utopia\Detector\Detector;
 
 use Utopia\Detector\Detection\Runtime as DetectionRuntime;
 use Utopia\Detector\Detector;
-
-enum Strategy: string
-{
-    case FILEMATCH = 'filematch';
-    case EXTENSION = 'extension';
-    case LANGUAGES = 'languages';
-}
+use Utopia\Detector\Strategy;
 
 class Runtime extends Detector
 {
     public function __construct(
         protected array $inputs,
-        protected string $packager = 'npm',
-        protected Strategy $strategy = Strategy::FILEMATCH
+        protected Strategy $strategy,
+        protected string $packager = 'npm'
     ) {}
 
     public function detect(): ?DetectionRuntime
     {
         switch ($this->strategy) {
             case Strategy::FILEMATCH:
-                foreach ($this->detectors as $detector) {
+                foreach ($this->options as $detector) {
                     $detectorFiles = $detector->getFiles();
 
                     $matches = \array_intersect($detectorFiles, $this->inputs);
                     if (\count($matches) > 0) {
+                        $detector->setPackager($this->packager); // TODO: Fix it
+
                         return $detector;
                     }
                 }
                 break;
 
             case Strategy::EXTENSION:
-                foreach ($this->detectors as $detector) {
+                foreach ($this->options as $detector) {
                     foreach ($this->inputs as $file) {
                         if (\in_array(pathinfo($file, PATHINFO_EXTENSION), $detector->getFileExtensions())) {
                             return $detector;
@@ -45,7 +41,7 @@ class Runtime extends Detector
                 break;
 
             case Strategy::LANGUAGES:
-                foreach ($this->detectors as $detector) {
+                foreach ($this->options as $detector) {
                     foreach ($this->inputs as $language) {
                         if (\in_array($language, $detector->getLanguages())) {
                             return $detector;

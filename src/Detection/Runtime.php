@@ -6,7 +6,16 @@ use Utopia\Detector\Detection;
 
 abstract class Runtime extends Detection
 {
-    public function __construct(protected string $packager) {}
+    protected string $packager = '';
+
+    public function __construct() {}
+
+    public function setPackager(string $packager): self
+    {
+        $this->packager = $packager;
+
+        return $this;
+    }
 
     abstract public function getName(): string;
 

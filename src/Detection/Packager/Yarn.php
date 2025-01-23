@@ -10,4 +10,9 @@ class Yarn extends Packager
     {
         return 'yarn';
     }
+
+    public function getFiles(): array
+    {
+        return ['yarn.lock'];
+    }
 }

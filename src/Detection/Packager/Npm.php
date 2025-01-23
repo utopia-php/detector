@@ -10,4 +10,9 @@ class Npm extends Packager
     {
         return 'npm';
     }
+
+    public function getFiles(): array
+    {
+        return ['package.json', 'package-lock.json'];
+    }
 }

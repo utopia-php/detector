@@ -2,17 +2,24 @@
 
 namespace Utopia\Detector;
 
+enum Strategy: string
+{
+    case FILEMATCH = 'filematch';
+    case EXTENSION = 'extension';
+    case LANGUAGES = 'languages';
+}
+
 abstract class Detector
 {
-    protected array $detectors = [];
+    protected array $options = [];
 
     public function __construct(protected array $inputs) {}
 
     abstract public function detect(): ?Detection;
 
-    public function addDetector(Detection $detector): self
+    public function addOption(Detection $option): self
     {
-        $this->detectors[] = $detector;
+        $this->options[] = $option;
 
         return $this;
     }

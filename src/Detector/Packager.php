@@ -3,9 +3,6 @@
 namespace Utopia\Detector\Detector;
 
 use Utopia\Detector\Detection\Packager as PackagerDetection;
-use Utopia\Detector\Detection\Packager\Npm;
-use Utopia\Detector\Detection\Packager\Pnpm;
-use Utopia\Detector\Detection\Packager\Yarn;
 use Utopia\Detector\Detector;
 
 class Packager extends Detector
@@ -14,22 +11,13 @@ class Packager extends Detector
 
     public function detect(): ?PackagerDetection
     {
-        // Check for Yarn lock file
-        if (in_array('yarn.lock', $this->inputs)) {
-            return new Yarn;
-        }
+        foreach ($this->options as $packager) {
+            $packagerFiles = $packager->getFiles();
 
-        // Check for Pnpm lock file
-        if (in_array('pnpm-lock.yaml', $this->inputs)) {
-            return new Pnpm;
+            $matches = array_intersect($packagerFiles, $this->inputs);
+            if (count($matches) > 0) {
+                return $packager;
+            }
         }
-
-        // Check for Package.json file
-        if (in_array('package.json', $this->inputs)) {
-            return new Npm;
-        }
-
-        // No package manager detected
-        return null;
     }
 }
