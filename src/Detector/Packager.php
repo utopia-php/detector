@@ -19,5 +19,7 @@ class Packager extends Detector
                 return $packager;
             }
         }
+
+        return null;
     }
 }
