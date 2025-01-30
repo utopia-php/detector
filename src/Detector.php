@@ -2,13 +2,6 @@
 
 namespace Utopia\Detector;
 
-enum Strategy: string
-{
-    case FILEMATCH = 'filematch';
-    case EXTENSION = 'extension';
-    case LANGUAGES = 'languages';
-}
-
 abstract class Detector
 {
     protected array $options = [];

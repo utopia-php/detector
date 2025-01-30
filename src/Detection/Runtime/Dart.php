@@ -19,9 +19,9 @@ class Dart extends Runtime
         return ['Dart'];
     }
 
-    public function getCommand(): string
+    public function getCommands(): string
     {
-        return 'dart pub get && dart compile exe lib/main.dart -o main';
+        return 'dart pub get';
     }
 
     /**

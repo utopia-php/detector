@@ -19,7 +19,7 @@ class Python extends Runtime
         return ['Python'];
     }
 
-    public function getCommand(): string
+    public function getCommands(): string
     {
         return 'pip install';
     }

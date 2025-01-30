@@ -19,7 +19,7 @@ class Cpp extends Runtime
         return ['C++'];
     }
 
-    public function getCommand(): string
+    public function getCommands(): string
     {
         return 'g++ -o main.cpp && ./output';
     }

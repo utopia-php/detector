@@ -24,7 +24,7 @@ use Utopia\Detector\Detector\Framework;
 use Utopia\Detector\Detector\Packager;
 use Utopia\Detector\Detector\Rendering;
 use Utopia\Detector\Detector\Runtime;
-use Utopia\Detector\Strategy;
+use Utopia\Detector\Detector\Strategy;
 
 include_once 'vendor/autoload.php';
 
@@ -47,7 +47,7 @@ echo 'Detected package manager: '.$packager->getName()."\n";
 
 // 2. Detect Node
 $files = ['TypeScript', 'JavaScript', 'DockerFile'];
-$detector = new Runtime($files, Strategy::LANGUAGES, $packager->getName());
+$detector = new Runtime($files, new Strategy(Strategy::LANGUAGES), $packager->getName());
 $detector
     ->addOption(new Bun)
     ->addOption(new Deno)
@@ -64,7 +64,7 @@ $detector
 $runtime = $detector->detect();
 if ($runtime) {
     echo 'Detected runtime: '.$runtime->getName()."\n";
-    echo 'Install command: '.$runtime->getCommand()."\n";
+    echo 'Install command: '.$runtime->getCommands()."\n";
 }
 
 /**

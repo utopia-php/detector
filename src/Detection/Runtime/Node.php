@@ -19,12 +19,12 @@ class Node extends Runtime
         return ['JavaScript', 'TypeScript'];
     }
 
-    public function getCommand(): string
+    public function getCommands(): string
     {
         return match ($this->packager) {
-            'yarn' => 'yarn install',
-            'pnpm' => 'pnpm install',
-            default => 'npm install',
+            'yarn' => 'yarn install && yarn build',
+            'pnpm' => 'pnpm install && pnpm run build',
+            default => 'npm install && npm run build',
         };
     }
 

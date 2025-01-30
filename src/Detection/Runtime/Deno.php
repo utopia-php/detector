@@ -19,7 +19,7 @@ class Deno extends Runtime
         return ['TypeScript'];
     }
 
-    public function getCommand(): string
+    public function getCommands(): string
     {
         return 'deno cache main.ts';
     }

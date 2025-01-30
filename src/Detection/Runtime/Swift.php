@@ -19,7 +19,7 @@ class Swift extends Runtime
         return ['Swift'];
     }
 
-    public function getCommand(): string
+    public function getCommands(): string
     {
         return 'swift build';
     }

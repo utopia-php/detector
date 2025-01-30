@@ -19,9 +19,9 @@ class Ruby extends Runtime
         return ['Ruby'];
     }
 
-    public function getCommand(): string
+    public function getCommands(): string
     {
-        return 'bundle install';
+        return 'bundle install && bundle exec rake build';
     }
 
     /**

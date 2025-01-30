@@ -19,7 +19,7 @@ class Java extends Runtime
         return ['Java'];
     }
 
-    public function getCommand(): string
+    public function getCommands(): string
     {
         return 'mvn install && mvn package';
     }

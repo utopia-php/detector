@@ -19,7 +19,7 @@ class Bun extends Runtime
         return ['JavaScript', 'TypeScript'];
     }
 
-    public function getCommand(): string
+    public function getCommands(): string
     {
         return 'bun install && bun build';
     }

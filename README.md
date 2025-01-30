@@ -1,0 +1,1 @@
+Use `composer test` for running tests

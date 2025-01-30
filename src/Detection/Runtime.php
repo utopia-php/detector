@@ -21,7 +21,7 @@ abstract class Runtime extends Detection
 
     abstract public function getLanguages(): array;
 
-    abstract public function getCommand(): string;
+    abstract public function getCommands(): string;
 
     abstract public function getFileExtensions(): array;
 

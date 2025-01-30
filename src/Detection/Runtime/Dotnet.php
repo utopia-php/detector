@@ -19,7 +19,7 @@ class Dotnet extends Runtime
         return ['C#', 'Visual Basic .NET'];
     }
 
-    public function getCommand(): string
+    public function getCommands(): string
     {
         return 'dotnet restore && dotnet build';
     }

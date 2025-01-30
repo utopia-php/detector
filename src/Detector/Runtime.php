@@ -4,7 +4,30 @@ namespace Utopia\Detector\Detector;
 
 use Utopia\Detector\Detection\Runtime as DetectionRuntime;
 use Utopia\Detector\Detector;
-use Utopia\Detector\Strategy;
+
+class Strategy
+{
+    public const FILEMATCH = 'filematch';
+
+    public const EXTENSION = 'extension';
+
+    public const LANGUAGES = 'languages';
+
+    private string $value;
+
+    public function __construct(string $value)
+    {
+        if (! in_array($value, [self::FILEMATCH, self::EXTENSION, self::LANGUAGES])) {
+            throw new \InvalidArgumentException("Invalid strategy: {$value}");
+        }
+        $this->value = $value;
+    }
+
+    public function getValue(): string
+    {
+        return $this->value;
+    }
+}
 
 class Runtime extends Detector
 {
@@ -16,7 +39,7 @@ class Runtime extends Detector
 
     public function detect(): ?DetectionRuntime
     {
-        switch ($this->strategy) {
+        switch ($this->strategy->getValue()) {
             case Strategy::FILEMATCH:
                 foreach ($this->options as $detector) {
                     $detectorFiles = $detector->getFiles();
@@ -34,6 +57,8 @@ class Runtime extends Detector
                 foreach ($this->options as $detector) {
                     foreach ($this->inputs as $file) {
                         if (\in_array(pathinfo($file, PATHINFO_EXTENSION), $detector->getFileExtensions())) {
+                            $detector->setPackager($this->packager);
+
                             return $detector;
                         }
                     }
@@ -44,6 +69,8 @@ class Runtime extends Detector
                 foreach ($this->options as $detector) {
                     foreach ($this->inputs as $language) {
                         if (\in_array($language, $detector->getLanguages())) {
+                            $detector->setPackager($this->packager);
+
                             return $detector;
                         }
                     }

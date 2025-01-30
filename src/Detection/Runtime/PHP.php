@@ -19,9 +19,9 @@ class PHP extends Runtime
         return ['PHP'];
     }
 
-    public function getCommand(): string
+    public function getCommands(): string
     {
-        return 'composer install';
+        return 'composer install && composer run build';
     }
 
     /**
