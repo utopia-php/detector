@@ -93,10 +93,10 @@ echo 'Detected package manager: '.$packager->getName()."\n";
 // 2. Detect Next.js
 $detector = new Framework($files, $packager->getName());
 $detector
+    ->addOption(new Flutter)
     ->addOption(new NextJs)
     ->addOption(new Nuxt)
     ->addOption(new Astro)
-    ->addOption(new Flutter)
     ->addOption(new Remix)
     ->addOption(new SvelteKit);
 
@@ -122,7 +122,7 @@ if ($framework) {
     // $files = [
     //     'server/index.mjs',
     //     'nitro.json'
-    // ]; //next SSR
+    // ]; //nuxt SSR
     // $files = [
     //     'index.html',
     //     '_nuxt/something.js'

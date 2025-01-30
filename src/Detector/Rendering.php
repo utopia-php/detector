@@ -9,62 +9,35 @@ use Utopia\Detector\Detector;
 
 class Rendering extends Detector
 {
-    public function __construct(protected array $inputs, protected string $framework) {}
-
-    private const FRAMEWORK_PATTERNS = [
-        'Next.js' => [
-            'ssr' => ['/server\/pages\/[^.]+\.html/', '/server\/pages\/api\/.*/'],
-            'ssg' => ['/.*\.html/'],
-        ],
-        'Nuxt' => [
-            'ssr' => ['/server\/.*/', '/nitro\.json/'],
-            'ssg' => ['/.*\.html/'],
-        ],
+    private const FRAMEWORK_SSR_FILES = [
+        'Next.js' => ['server/pages/', 'server/app/'],
+        'Nuxt' => ['.output/server/', 'server/'],
         'SvelteKit' => [
-            'ssr' => ['/server\/.*/', '/prerendered\/.*/'],
-            'ssg' => ['/.*\.html/'],
+            'src/hooks.server.js', 'src/hooks.server.ts',
+            'src/routes/+page.server.js', 'src/routes/+page.server.ts',
+            'build/server/', 'server/',
         ],
-        'Astro' => [
-            'ssr' => ['/_render-page\.js/', '/_middleware\.js/'],
-            'ssg' => ['/.*\.html/'],
-        ],
-        'Remix' => [
-            'ssr' => ['/server\/.*/'],
-            'ssg' => ['/.*\.html/'],
-        ],
-        'Flutter' => [
-            'ssg' => ['/index\.html/'],
-        ],
+        'Astro' => ['server/', 'server.mjs'],
+        'Remix' => ['server.js', 'server.ts', 'entry.server.tsx', 'entry.server.js', 'index.js', 'server/'],
+        'Flutter' => [],
     ];
 
-    public function detect(): ?RenderingDetection
+    public function __construct(protected array $inputs, protected string $framework) {}
+
+    public function detect(): RenderingDetection
     {
-        if (! isset(self::FRAMEWORK_PATTERNS[$this->framework])) {
+        if (! isset(self::FRAMEWORK_SSR_FILES[$this->framework])) {
             throw new \InvalidArgumentException("Unsupported framework: {$this->framework}");
         }
 
-        $patterns = self::FRAMEWORK_PATTERNS[$this->framework];
-
-        if (isset($patterns['ssr'])) {
-            foreach ($patterns['ssr'] as $pattern) {
-                foreach ($this->inputs as $input) {
-                    if (preg_match($pattern, $input)) {
-                        return new SSR;
-                    }
+        foreach ($this->inputs as $input) {
+            foreach (self::FRAMEWORK_SSR_FILES[$this->framework] as $ssrPath) {
+                if (str_contains($input, $ssrPath)) {
+                    return new SSR;
                 }
             }
         }
 
-        if (isset($patterns['ssg'])) {
-            foreach ($patterns['ssg'] as $pattern) {
-                foreach ($this->inputs as $input) {
-                    if (preg_match($pattern, $input)) {
-                        return new SSG;
-                    }
-                }
-            }
-        }
-
-        return null;
+        return new SSG;
     }
 }
