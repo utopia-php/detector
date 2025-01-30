@@ -276,11 +276,11 @@ class DetectorTest extends TestCase
             $detector = new Framework($data['files'], $data['packager'] ?? 'npm');
             $detector
                 ->addOption(new Flutter)
-                ->addOption(new NextJs)
                 ->addOption(new Nuxt)
                 ->addOption(new Astro)
                 ->addOption(new Remix)
-                ->addOption(new SvelteKit);
+                ->addOption(new SvelteKit)
+                ->addOption(new NextJs);
 
             $framework = $detector->detect();
 
@@ -385,12 +385,12 @@ class DetectorTest extends TestCase
     {
         return [
             [
-                'files' => ['server/pages/index.html', 'server/pages/api/users.js'],
+                'files' => ['server/pages/index.html', 'server/pages/api/users.js', './.next/server/pages/_app.js'],
                 'framework' => 'Next.js',
                 'rendering' => 'SSR',
             ],
             [
-                'files' => ['server/pages/index.html', 'server/pages/api/users.js'],
+                'files' => ['server/pages/index.html', 'server/pages/api/users.js', './.next/server/pages/_app.js'],
                 'framework' => 'Next.js',
                 'rendering' => 'SSR',
             ],
@@ -400,7 +400,7 @@ class DetectorTest extends TestCase
                 'rendering' => 'SSG',
             ],
             [
-                'files' => ['server/index.mjs', 'nitro.json'],
+                'files' => ['nitro.json', './server/index.mjs'],
                 'framework' => 'Nuxt',
                 'rendering' => 'SSR',
             ],
@@ -410,7 +410,7 @@ class DetectorTest extends TestCase
                 'rendering' => 'SSG',
             ],
             [
-                'files' => ['server/pages/index.js', 'prerendered/about.html'],
+                'files' => ['server/pages/index.js', 'prerendered/about.html', './handler.js'],
                 'framework' => 'SvelteKit',
                 'rendering' => 'SSR',
             ],
@@ -422,6 +422,36 @@ class DetectorTest extends TestCase
             [
                 'files' => ['index.html', 'style.css'],
                 'framework' => 'Next.js',
+                'rendering' => 'SSG',
+            ],
+            [
+                'files' => ['./server/entry.mjs', './server/renderers.mjs', './server/pages/'],
+                'framework' => 'Astro',
+                'rendering' => 'SSR',
+            ],
+            [
+                'files' => ['index.html', 'about.html'],
+                'framework' => 'Astro',
+                'rendering' => 'SSG',
+            ],
+            [
+                'files' => ['./build/server/index.js', './build/server/renderers.js'],
+                'framework' => 'Remix',
+                'rendering' => 'SSR',
+            ],
+            [
+                'files' => ['index.html', 'about.html'],
+                'framework' => 'Remix',
+                'rendering' => 'SSG',
+            ],
+            [
+                'files' => ['index.html', 'style.css'],
+                'framework' => 'Remix',
+                'rendering' => 'SSG',
+            ],
+            [
+                'files' => ['index.html', 'style.css'],
+                'framework' => 'Flutter',
                 'rendering' => 'SSG',
             ],
         ];

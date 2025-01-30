@@ -7,15 +7,11 @@ use Utopia\Detector\Detection\Rendering;
 class SSR extends Rendering
 {
     public const FRAMEWORK_FILES = [
-        'Next.js' => ['server/pages/', 'server/app/'],
-        'Nuxt' => ['server/'],
-        'SvelteKit' => [
-            'src/hooks.server.js', 'src/hooks.server.ts',
-            'src/routes/+page.server.js', 'src/routes/+page.server.ts',
-            'build/server/', 'server/',
-        ],
-        'Astro' => ['server/', 'server.mjs'],
-        'Remix' => ['server.js', 'server.ts', 'entry.server.tsx', 'entry.server.js', 'index.js', 'server/'],
+        'Next.js' => ['./.next/server/pages/_app.js'],
+        'Nuxt' => ['./server/index.mjs'],
+        'SvelteKit' => ['./handler.js'],
+        'Astro' => ['./server/entry.mjs'],
+        'Remix' => ['./build/server/index.js'],
         'Flutter' => [],
         // TODO: Add Angular, Analog
     ];

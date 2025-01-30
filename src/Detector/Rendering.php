@@ -19,7 +19,7 @@ class Rendering extends Detector
 
         foreach ($this->inputs as $input) {
             foreach (SSR::FRAMEWORK_FILES[$this->framework] as $ssrPath) {
-                if (str_contains($input, $ssrPath)) {
+                if ($input === $ssrPath) {
                     return new SSR;
                 }
             }
