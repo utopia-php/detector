@@ -6,11 +6,11 @@ use Utopia\Detector\Detection\Framework\NextJs;
 use Utopia\Detector\Detection\Framework\Nuxt;
 use Utopia\Detector\Detection\Framework\Remix;
 use Utopia\Detector\Detection\Framework\SvelteKit;
-use Utopia\Detector\Detection\Packager\Npm;
-use Utopia\Detector\Detection\Packager\Pnpm;
+use Utopia\Detector\Detection\Packager\NPM;
+use Utopia\Detector\Detection\Packager\PNPM;
 use Utopia\Detector\Detection\Packager\Yarn;
 use Utopia\Detector\Detection\Runtime\Bun;
-use Utopia\Detector\Detection\Runtime\Cpp;
+use Utopia\Detector\Detection\Runtime\CPP;
 use Utopia\Detector\Detection\Runtime\Dart;
 use Utopia\Detector\Detection\Runtime\Deno;
 use Utopia\Detector\Detection\Runtime\Dotnet;
@@ -38,9 +38,9 @@ $files = ['bun.lockb', 'fly.toml', 'package.json', 'remix.config.js'];
 // 1. Detect NPM
 $detector = new Packager($files);
 $detector
-    ->addOption(new Pnpm)
+    ->addOption(new PNPM)
     ->addOption(new Yarn)
-    ->addOption(new Npm);
+    ->addOption(new NPM);
 
 $packager = $detector->detect();
 echo 'Detected package manager: '.$packager->getName()."\n";
@@ -58,7 +58,7 @@ $detector
     ->addOption(new Swift)
     ->addOption(new Ruby)
     ->addOption(new Java)
-    ->addOption(new Cpp)
+    ->addOption(new CPP)
     ->addOption(new Dotnet);
 
 $runtime = $detector->detect();
@@ -84,8 +84,8 @@ $files = ['assets', 'components', 'layouts', 'pages', 'babel.config.js', 'error.
 // 1. Detect NPM
 $detector = new Packager($files);
 $detector
-    ->addOption(new Npm)
-    ->addOption(new Pnpm)
+    ->addOption(new NPM)
+    ->addOption(new PNPM)
     ->addOption(new Yarn);
 $packager = $detector->detect();
 echo 'Detected package manager: '.$packager->getName()."\n";

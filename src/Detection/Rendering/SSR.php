@@ -22,6 +22,6 @@ class SSR extends Rendering
 
     public function getName(): string
     {
-        return 'ssr';
+        return 'SSR';
     }
 }

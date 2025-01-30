@@ -42,6 +42,6 @@ class Dart extends Runtime
 
     public function getEntrypoint(): string
     {
-        return 'lib/main.dart';
+        return 'main.dart';
     }
 }

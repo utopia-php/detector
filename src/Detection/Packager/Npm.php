@@ -4,7 +4,7 @@ namespace Utopia\Detector\Detection\Packager;
 
 use Utopia\Detector\Detection\Packager;
 
-class Npm extends Packager
+class NPM extends Packager
 {
     public function getName(): string
     {

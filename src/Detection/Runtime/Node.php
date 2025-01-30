@@ -46,6 +46,6 @@ class Node extends Runtime
 
     public function getEntrypoint(): string
     {
-        return 'src/index.js';
+        return 'index.js';
     }
 }

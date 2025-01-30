@@ -4,11 +4,11 @@ namespace Utopia\Detector\Detection\Runtime;
 
 use Utopia\Detector\Detection\Runtime;
 
-class Cpp extends Runtime
+class CPP extends Runtime
 {
     public function getName(): string
     {
-        return 'cpp';
+        return 'CPP';
     }
 
     /**
