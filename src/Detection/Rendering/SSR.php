@@ -7,17 +7,17 @@ use Utopia\Detector\Detection\Rendering;
 class SSR extends Rendering
 {
     public const FRAMEWORK_FILES = [
-        'Next.js' => ['./.next/server/pages/_app.js'],
-        'Nuxt' => ['./server/index.mjs'],
-        'SvelteKit' => ['./handler.js'],
-        'Astro' => ['./server/entry.mjs'],
-        'Remix' => ['./build/server/index.js'],
-        'Flutter' => [],
+        'next.js' => ['./.next/server/pages/_app.js'],
+        'nuxt' => ['./server/index.mjs'],
+        'sveltekit' => ['./handler.js'],
+        'astro' => ['./server/entry.mjs'],
+        'remix' => ['./build/server/index.js'],
+        'flutter' => [],
         // TODO: Add Angular, Analog
     ];
 
     public function getName(): string
     {
-        return 'SSR';
+        return 'ssr';
     }
 }

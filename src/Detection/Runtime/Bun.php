@@ -12,7 +12,7 @@ class Bun extends Runtime
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getLanguages(): array
     {
@@ -26,7 +26,7 @@ class Bun extends Runtime
     // TODO: Verify commands for all runtimes
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getFileExtensions(): array
     {
@@ -34,7 +34,7 @@ class Bun extends Runtime
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getFiles(): array
     {

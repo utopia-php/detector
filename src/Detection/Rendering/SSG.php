@@ -8,6 +8,6 @@ class SSG extends Rendering
 {
     public function getName(): string
     {
-        return 'SSG';
+        return 'ssg';
     }
 }

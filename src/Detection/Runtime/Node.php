@@ -12,7 +12,7 @@ class Node extends Runtime
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getLanguages(): array
     {
@@ -29,7 +29,7 @@ class Node extends Runtime
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getFileExtensions(): array
     {
@@ -37,7 +37,7 @@ class Node extends Runtime
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getFiles(): array
     {

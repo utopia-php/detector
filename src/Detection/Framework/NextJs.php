@@ -8,22 +8,15 @@ class NextJs extends Framework
 {
     public function getName(): string
     {
-        return 'Next.js';
+        return 'next.js';
     }
 
+    /**
+     * @return array<string>
+     */
     public function getFiles(): array
     {
         return ['next.config.js', 'next.config.ts', 'next.config.mjs', '.next/'];
-    }
-
-    public function getFileExtensions(): array
-    {
-        return ['js', 'ts', 'mjs', 'jsx', 'tsx'];
-    }
-
-    public function getLanguages(): array
-    {
-        return ['JavaScript', 'TypeScript'];
     }
 
     public function getInstallCommand(): string

@@ -12,7 +12,7 @@ class PHP extends Runtime
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getLanguages(): array
     {
@@ -25,7 +25,7 @@ class PHP extends Runtime
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getFileExtensions(): array
     {
@@ -33,7 +33,7 @@ class PHP extends Runtime
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getFiles(): array
     {

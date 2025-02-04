@@ -8,11 +8,11 @@ class CPP extends Runtime
 {
     public function getName(): string
     {
-        return 'CPP';
+        return 'cpp';
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getLanguages(): array
     {
@@ -26,7 +26,7 @@ class CPP extends Runtime
     // TODO: Verify commands for all runtimes
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getFileExtensions(): array
     {
@@ -34,7 +34,7 @@ class CPP extends Runtime
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getFiles(): array
     {

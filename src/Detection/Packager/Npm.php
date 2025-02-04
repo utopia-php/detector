@@ -11,6 +11,9 @@ class NPM extends Packager
         return 'npm';
     }
 
+    /**
+     * @return array<string>
+     */
     public function getFiles(): array
     {
         return ['package.json', 'package-lock.json'];

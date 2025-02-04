@@ -4,11 +4,11 @@ We would ❤️ for you to contribute to Utopia-php and help make it better! We 
 
 ## How to Start?
 
-If you are worried or don’t know where to start, check out our next section explaining what kind of help we could use and where can you get involved. You can reach out with questions to [Eldad Fux (@eldadfux)](https://twitter.com/eldadfux) or anyone from the [Appwrite team on Discord](https://appwrite.io/discord). You can also submit an issue, and a maintainer can guide you!
+If you are worried or don’t know where to start, check out our next section explaining what kind of help we could use and where can you get involved. You can reach out with questions to anyone from the [Appwrite team on Discord](https://appwrite.io/discord). You can also submit an issue, and a maintainer can guide you!
 
 ## Code of Conduct
 
-Help us keep Utopia-php open and inclusive. Please read and follow our [Code of Conduct](https://github.com/utopia-php/abuse/blob/master/CODE_OF_CONDUCT.md).
+Help us keep Utopia-php open and inclusive. Please read and follow our [Code of Conduct](https://github.com/utopia-php/detector/blob/master/CODE_OF_CONDUCT.md).
 
 ## Submit a Pull Request 🚀
 
@@ -94,7 +94,7 @@ Presenting at meetups and conferences about your Utopia-php projects. Your uniqu
 
 ### Sending Feedbacks & Reporting Bugs
 
-Sending feedback is a great way for us to understand your different use cases of Utopia-php better. If you had any issues, bugs, or want to share about your experience, feel free to do so on our GitHub issues page or at our [Discord channel](https://discord.gg/GSeTUeA).
+Sending feedback is a great way for us to understand your different use cases of Utopia-php better. If you had any issues, bugs, or want to share about your experience, feel free to do so on our GitHub issues page or at our [Discord channel](http://appwrite.io/discord).
 
 ### Submitting New Ideas
 

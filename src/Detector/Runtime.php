@@ -31,6 +31,9 @@ class Strategy
 
 class Runtime extends Detector
 {
+    /**
+     * @param  array<string>  $inputs
+     */
     public function __construct(
         protected array $inputs,
         protected Strategy $strategy,

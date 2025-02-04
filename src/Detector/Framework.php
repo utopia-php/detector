@@ -7,11 +7,19 @@ use Utopia\Detector\Detector;
 
 class Framework extends Detector
 {
+    /**
+     * @param  array<string>  $inputs
+     */
     public function __construct(
         protected array $inputs,
         protected string $packager = 'npm'
     ) {}
 
+    /**
+     * Performs framework detection based on input patterns.
+     *
+     * @return FrameworkDetection|null The detected framework or null if no match is found.
+     */
     public function detect(): ?FrameworkDetection
     {
         foreach ($this->options as $detector) {

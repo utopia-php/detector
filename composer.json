@@ -1,6 +1,6 @@
 {
   "name": "utopia-php/detector",
-  "description": "A simple library to detect popular runtimes, frameworks and package managers etc.",
+  "description": "A simple library for fast and reliable environment identification.",
   "type": "library",
   "license": "MIT",
   "keywords": [

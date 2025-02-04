@@ -4,8 +4,14 @@ namespace Utopia\Detector;
 
 abstract class Detector
 {
+    /**
+     * @var array<Detection>
+     */
     protected array $options = [];
 
+    /**
+     * @param  array<string>  $inputs
+     */
     public function __construct(protected array $inputs) {}
 
     abstract public function detect(): ?Detection;

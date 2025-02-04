@@ -8,22 +8,15 @@ class SvelteKit extends Framework
 {
     public function getName(): string
     {
-        return 'SvelteKit';
+        return 'sveltekit';
     }
 
+    /**
+     * @return array<string>
+     */
     public function getFiles(): array
     {
         return ['svelte.config.js', 'vite.config.js', 'vite.config.mjs', 'vite.config.ts'];
-    }
-
-    public function getFileExtensions(): array
-    {
-        return ['js', 'ts', 'svelte'];
-    }
-
-    public function getLanguages(): array
-    {
-        return ['JavaScript', 'TypeScript', 'Svelte'];
     }
 
     public function getInstallCommand(): string

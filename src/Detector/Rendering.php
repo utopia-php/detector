@@ -9,6 +9,9 @@ use Utopia\Detector\Detector;
 
 class Rendering extends Detector
 {
+    /**
+     * @param  array<string>  $inputs
+     */
     public function __construct(protected array $inputs, protected string $framework) {}
 
     public function detect(): RenderingDetection

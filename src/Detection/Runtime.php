@@ -19,13 +19,22 @@ abstract class Runtime extends Detection
 
     abstract public function getName(): string;
 
+    /**
+     * @return array<string> Programming languages used by the runtime.
+     */
     abstract public function getLanguages(): array;
 
-    abstract public function getCommands(): string;
-
+    /**
+     * @return array<string> List of file extensions associated with the runtime.
+     */
     abstract public function getFileExtensions(): array;
 
+    /**
+     * @return array<string> List of relevant files for detection.
+     */
     abstract public function getFiles(): array;
+
+    abstract public function getCommands(): string;
 
     abstract public function getEntrypoint(): string;
 }
