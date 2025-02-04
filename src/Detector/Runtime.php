@@ -49,7 +49,7 @@ class Runtime extends Detector
 
                     $matches = \array_intersect($detectorFiles, $this->inputs);
                     if (\count($matches) > 0) {
-                        $detector->setPackager($this->packager); // TODO: Fix it
+                        $detector->setPackager($this->packager);
 
                         return $detector;
                     }

@@ -14,9 +14,9 @@ class Flutter extends Framework
     /**
      * @return array<string>
      */
-    public function getFiles(): array // TODO: root level only and no nesting
+    public function getFiles(): array
     {
-        return ['pubspec.yaml', 'pubspec.lock', 'lib/main.dart', 'android/', 'ios/', 'web/']; // TODO: check what github returns
+        return ['pubspec.yaml', 'pubspec.lock'];
     }
 
     public function getInstallCommand(): string

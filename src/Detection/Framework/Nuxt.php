@@ -16,7 +16,7 @@ class Nuxt extends Framework
      */
     public function getFiles(): array
     {
-        return ['nuxt.config.js', 'nuxt.config.ts', '.nuxt/'];
+        return ['nuxt.config.js', 'nuxt.config.ts'];
     }
 
     public function getInstallCommand(): string

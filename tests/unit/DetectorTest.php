@@ -457,5 +457,3 @@ class DetectorTest extends TestCase
         ];
     }
 }
-
-// TODO: Check for SPA detection

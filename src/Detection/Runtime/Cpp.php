@@ -38,7 +38,7 @@ class CPP extends Runtime
      */
     public function getFiles(): array
     {
-        return ['main.cpp', 'Solution', 'CMakeLists.txt', '.clang-format'];
+        return ['main.cpp', 'Solution', 'CMakeLists.txt'];
     }
 
     public function getEntrypoint(): string
