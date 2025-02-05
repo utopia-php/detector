@@ -40,9 +40,9 @@ class DetectorTest extends TestCase
     {
         $detector = new Packager($files);
         $detector
-            ->addOption(new PNPM)
-            ->addOption(new Yarn)
-            ->addOption(new NPM);
+            ->addOption(new PNPM())
+            ->addOption(new Yarn())
+            ->addOption(new NPM());
 
         $detectedPackager = $detector->detect();
 
@@ -83,17 +83,17 @@ class DetectorTest extends TestCase
         );
 
         $detector
-            ->addOption(new Node)
-            ->addOption(new Bun)
-            ->addOption(new Deno)
-            ->addOption(new PHP)
-            ->addOption(new Python)
-            ->addOption(new Dart)
-            ->addOption(new Swift)
-            ->addOption(new Ruby)
-            ->addOption(new Java)
-            ->addOption(new CPP)
-            ->addOption(new Dotnet);
+            ->addOption(new Node())
+            ->addOption(new Bun())
+            ->addOption(new Deno())
+            ->addOption(new PHP())
+            ->addOption(new Python())
+            ->addOption(new Dart())
+            ->addOption(new Swift())
+            ->addOption(new Ruby())
+            ->addOption(new Java())
+            ->addOption(new CPP())
+            ->addOption(new Dotnet());
 
         $detectedRuntime = $detector->detect();
 
@@ -138,17 +138,17 @@ class DetectorTest extends TestCase
         );
 
         $detector
-            ->addOption(new Node)
-            ->addOption(new Bun)
-            ->addOption(new Deno)
-            ->addOption(new PHP)
-            ->addOption(new Python)
-            ->addOption(new Dart)
-            ->addOption(new Swift)
-            ->addOption(new Ruby)
-            ->addOption(new Java)
-            ->addOption(new CPP)
-            ->addOption(new Dotnet);
+            ->addOption(new Node())
+            ->addOption(new Bun())
+            ->addOption(new Deno())
+            ->addOption(new PHP())
+            ->addOption(new Python())
+            ->addOption(new Dart())
+            ->addOption(new Swift())
+            ->addOption(new Ruby())
+            ->addOption(new Java())
+            ->addOption(new CPP())
+            ->addOption(new Dotnet());
 
         $detectedRuntime = $detector->detect();
 
@@ -203,17 +203,17 @@ class DetectorTest extends TestCase
         );
 
         $detector
-            ->addOption(new Node)
-            ->addOption(new Bun)
-            ->addOption(new Deno)
-            ->addOption(new PHP)
-            ->addOption(new Python)
-            ->addOption(new Dart)
-            ->addOption(new Swift)
-            ->addOption(new Ruby)
-            ->addOption(new Java)
-            ->addOption(new CPP)
-            ->addOption(new Dotnet);
+            ->addOption(new Node())
+            ->addOption(new Bun())
+            ->addOption(new Deno())
+            ->addOption(new PHP())
+            ->addOption(new Python())
+            ->addOption(new Dart())
+            ->addOption(new Swift())
+            ->addOption(new Ruby())
+            ->addOption(new Java())
+            ->addOption(new CPP())
+            ->addOption(new Dotnet());
 
         $detectedRuntime = $detector->detect();
 
@@ -247,12 +247,12 @@ class DetectorTest extends TestCase
         $detector = new Framework($files, $packager);
 
         $detector
-            ->addOption(new Flutter)
-            ->addOption(new Nuxt)
-            ->addOption(new Astro)
-            ->addOption(new Remix)
-            ->addOption(new SvelteKit)
-            ->addOption(new NextJs);
+            ->addOption(new Flutter())
+            ->addOption(new Nuxt())
+            ->addOption(new Astro())
+            ->addOption(new Remix())
+            ->addOption(new SvelteKit())
+            ->addOption(new NextJs());
 
         $detectedFramework = $detector->detect();
 
@@ -290,8 +290,8 @@ class DetectorTest extends TestCase
     {
         $detector = new Rendering($files, $framework);
         $detector
-            ->addOption(new SSR)
-            ->addOption(new SSG);
+            ->addOption(new SSR())
+            ->addOption(new SSG());
 
         $detectedRendering = $detector->detect();
 

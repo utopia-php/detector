@@ -24,9 +24,9 @@ class Rendering extends Detector
 
         $matches = array_intersect($this->inputs, SSR::FRAMEWORK_FILES[$this->framework]);
         if (count($matches) > 0) {
-            return new SSR;
+            return new SSR();
         }
 
-        return new SSG;
+        return new SSG();
     }
 }
