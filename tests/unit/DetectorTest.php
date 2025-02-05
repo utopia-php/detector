@@ -120,7 +120,7 @@ class DetectorTest extends TestCase
             [['composer.json', 'composer.lock'], 'php', 'composer install && composer run build', 'index.php', 'npm'],
             [['pubspec.yaml'], 'dart', 'dart pub get', 'main.dart', 'npm'],
             [['Gemfile', 'Gemfile.lock'], 'ruby', 'bundle install && bundle exec rake build', 'main.rb', 'npm'],
-            [['index.html', 'style.css'], null, null, null], // Test for FAILURE
+            [['index.html', 'style.css'], null, null, null, 'npm'], // Test for FAILURE
         ];
     }
 
@@ -286,7 +286,7 @@ class DetectorTest extends TestCase
             [['app', 'public', 'remix.config.js', 'remix.env.d.ts', 'sandbox.config.js', 'tsconfig.json', 'package.json'], 'remix', 'npm install', 'npm run build', './build'],
             [['public', 'src', 'astro.config.mjs', 'package-lock.json', 'package.json', 'tsconfig.json'], 'astro', 'npm install', 'npm run build', './dist'],
             [['src', 'static', 'scripts', 'eslint.config.js', 'package.json', 'pnpm-lock.yaml', 'svelte.config.js', 'tsconfig.js', 'vite.config.js', 'vite.config.lib.js'], 'sveltekit', 'npm install', 'npm run build', './build'],
-            [['index.html', 'style.css'], null, null, null], // Test for FAILURE
+            [['index.html', 'style.css'], null, null, null, null], // Test for FAILURE
         ];
     }
 
