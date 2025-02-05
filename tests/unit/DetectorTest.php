@@ -47,15 +47,15 @@ class DetectorTest extends TestCase
         $detectedPackager = $detector->detect();
 
         if ($expectedPackager) {
-            $this->assertEquals($expectedPackager, $detectedPackager->getName());
+            $this->assertEquals($expectedPackager, $detectedPackager?->getName());
         } else {
             $this->assertNull($detectedPackager);
         }
     }
 
     /**
-     * @return array<mixed>
-     */
+     * @return array<array<string>, string|null>
+    */
     public function packagerDataProvider(): array
     {
         return [
@@ -99,16 +99,16 @@ class DetectorTest extends TestCase
 
         if ($runtime) {
             $this->assertNotNull($detectedRuntime);
-            $this->assertEquals($runtime, $detectedRuntime->getName());
-            $this->assertEquals($commands, $detectedRuntime->getCommands());
-            $this->assertEquals($entrypoint, $detectedRuntime->getEntrypoint());
+            $this->assertEquals($runtime, $detectedRuntime?->getName());
+            $this->assertEquals($commands, $detectedRuntime?->getCommands());
+            $this->assertEquals($entrypoint, $detectedRuntime?->getEntrypoint());
         } else {
             $this->assertNull($detectedRuntime);
         }
     }
 
     /**
-     * @return array[]
+     * @return array<array<string>, string|null, string|null, string|null>
      */
     public function runtimeDataProviderByFilematch(): array
     {
@@ -154,15 +154,15 @@ class DetectorTest extends TestCase
 
         if ($runtime) {
             $this->assertNotNull($detectedRuntime);
-            $this->assertEquals($runtime, $detectedRuntime->getName());
-            $this->assertEquals($commands, $detectedRuntime->getCommands());
+            $this->assertEquals($runtime, $detectedRuntime?->getName());
+            $this->assertEquals($commands, $detectedRuntime?->getCommands());
         } else {
             $this->assertNull($detectedRuntime);
         }
     }
 
     /**
-     * @return array[]
+     * @return array<array<string>, string|null, string|null, string|null>
      */
     public function runtimeDataProviderByLanguages(): array
     {
@@ -219,15 +219,15 @@ class DetectorTest extends TestCase
 
         if ($runtime) {
             $this->assertNotNull($detectedRuntime);
-            $this->assertEquals($runtime, $detectedRuntime->getName());
-            $this->assertEquals($commands, $detectedRuntime->getCommands());
+            $this->assertEquals($runtime, $detectedRuntime?->getName());
+            $this->assertEquals($commands, $detectedRuntime?->getCommands());
         } else {
             $this->assertNull($detectedRuntime);
         }
     }
 
     /**
-     * @return array[]
+     * @return array<array<string>, string|null, string|null, string|null>
      */
     public function runtimeDataProviderByFileExtensions(): array
     {
@@ -258,17 +258,17 @@ class DetectorTest extends TestCase
 
         if ($framework) {
             $this->assertNotNull($detectedFramework);
-            $this->assertEquals($framework, $detectedFramework->getName());
-            $this->assertEquals($installCommand, $detectedFramework->getInstallCommand());
-            $this->assertEquals($buildCommand, $detectedFramework->getBuildCommand());
-            $this->assertEquals($outputDirectory, $detectedFramework->getOutputDirectory());
+            $this->assertEquals($framework, $detectedFramework?->getName());
+            $this->assertEquals($installCommand, $detectedFramework?->getInstallCommand());
+            $this->assertEquals($buildCommand, $detectedFramework?->getBuildCommand());
+            $this->assertEquals($outputDirectory, $detectedFramework?->getOutputDirectory());
         } else {
             $this->assertNull($detectedFramework);
         }
     }
 
     /**
-     * @return array[]
+     * @return array<array<string>, string|null, string|null, string|null, string|null>
      */
     public function frameworkDataProvider(): array
     {
@@ -297,14 +297,14 @@ class DetectorTest extends TestCase
 
         if ($rendering) {
             $this->assertNotNull($detectedRendering);
-            $this->assertEquals($rendering, $detectedRendering->getName());
+            $this->assertEquals($rendering, $detectedRendering?->getName());
         } else {
             $this->assertNull($detectedRendering);
         }
     }
 
     /**
-     * @return array[]
+     * @return array<array<string>, string, string>
      */
     public function renderingDataProvider(): array
     {
