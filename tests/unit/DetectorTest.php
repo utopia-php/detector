@@ -71,7 +71,7 @@ class DetectorTest extends TestCase
      * @param string[] $files List of files to check
      * @dataProvider runtimeDataProviderByFilematch
      */
-    public function testDetectRuntimeByFileMatch(
+    public function testDetectRuntimeByFilematch(
         array $files,
         ?string $runtime,
         ?string $commands,
@@ -115,11 +115,11 @@ class DetectorTest extends TestCase
     public function runtimeDataProviderByFilematch(): array
     {
         return [
-            [['package-lock.json', 'yarn.lock', 'tsconfig.json'], 'node', 'npm install && npm run build', 'index.js'],
+            [['package-lock.json', 'yarn.lock', 'tsconfig.json'], 'node', 'npm install && npm run build', 'index.js', 'npm'],
             [['package-lock.json', 'yarn.lock', 'tsconfig.json'], 'node', 'yarn install && yarn build', 'index.js', 'yarn'],
-            [['composer.json', 'composer.lock'], 'php', 'composer install && composer run build', 'index.php'],
-            [['pubspec.yaml'], 'dart', 'dart pub get', 'main.dart'],
-            [['Gemfile', 'Gemfile.lock'], 'ruby', 'bundle install && bundle exec rake build', 'main.rb'],
+            [['composer.json', 'composer.lock'], 'php', 'composer install && composer run build', 'index.php', 'npm'],
+            [['pubspec.yaml'], 'dart', 'dart pub get', 'main.dart', 'npm'],
+            [['Gemfile', 'Gemfile.lock'], 'ruby', 'bundle install && bundle exec rake build', 'main.rb', 'npm'],
             [['index.html', 'style.css'], null, null, null], // Test for FAILURE
         ];
     }
@@ -286,7 +286,7 @@ class DetectorTest extends TestCase
             [['app', 'public', 'remix.config.js', 'remix.env.d.ts', 'sandbox.config.js', 'tsconfig.json', 'package.json'], 'remix', 'npm install', 'npm run build', './build'],
             [['public', 'src', 'astro.config.mjs', 'package-lock.json', 'package.json', 'tsconfig.json'], 'astro', 'npm install', 'npm run build', './dist'],
             [['src', 'static', 'scripts', 'eslint.config.js', 'package.json', 'pnpm-lock.yaml', 'svelte.config.js', 'tsconfig.js', 'vite.config.js', 'vite.config.lib.js'], 'sveltekit', 'npm install', 'npm run build', './build'],
-            [['index.html', 'style.css'], null], // Test for FAILURE
+            [['index.html', 'style.css'], null, null, null], // Test for FAILURE
         ];
     }
 
@@ -305,7 +305,7 @@ class DetectorTest extends TestCase
 
         if ($rendering) {
             $this->assertNotNull($detectedRendering);
-            $this->assertEquals($rendering, $detectedRendering?->getName());
+            $this->assertEquals($rendering, $detectedRendering->getName());
         } else {
             $this->assertNull($detectedRendering);
         }
