@@ -20,12 +20,9 @@ class Rendering extends Detector
             throw new \InvalidArgumentException("Unsupported framework: {$this->framework}");
         }
 
-        foreach ($this->inputs as $input) {
-            foreach (SSR::FRAMEWORK_FILES[$this->framework] as $ssrPath) {
-                if ($input === $ssrPath) {
-                    return new SSR;
-                }
-            }
+        $matches = array_intersect($this->inputs, SSR::FRAMEWORK_FILES[$this->framework]);
+        if (count($matches) > 0) {
+            return new SSR;
         }
 
         return new SSG;

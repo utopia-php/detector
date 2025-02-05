@@ -23,7 +23,6 @@ class Bun extends Runtime
     {
         return 'bun install && bun build';
     }
-    // TODO: Verify commands for all runtimes
 
     /**
      * @return array<string>

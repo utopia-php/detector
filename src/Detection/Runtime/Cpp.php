@@ -23,7 +23,6 @@ class CPP extends Runtime
     {
         return 'g++ -o main.cpp && ./output';
     }
-    // TODO: Verify commands for all runtimes
 
     /**
      * @return array<string>

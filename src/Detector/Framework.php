@@ -25,14 +25,11 @@ class Framework extends Detector
         foreach ($this->options as $detector) {
             $detectorFiles = $detector->getFiles();
 
-            foreach ($this->inputs as $input) {
-                foreach ($detectorFiles as $pattern) {
-                    if ($input === $pattern) {
-                        $detector->setPackager($this->packager);
+            $matches = array_intersect($detectorFiles, $this->inputs);
+            if (count($matches) > 0) {
+                $detector->setPackager($this->packager);
 
-                        return $detector;
-                    }
-                }
+                return $detector;
             }
         }
 

@@ -46,9 +46,8 @@ class Runtime extends Detector
             case Strategy::FILEMATCH:
                 foreach ($this->options as $detector) {
                     $detectorFiles = $detector->getFiles();
-
-                    $matches = \array_intersect($detectorFiles, $this->inputs);
-                    if (\count($matches) > 0) {
+                    $matches = array_intersect($detectorFiles, $this->inputs);
+                    if (count($matches) > 0) {
                         $detector->setPackager($this->packager);
 
                         return $detector;
@@ -58,24 +57,26 @@ class Runtime extends Detector
 
             case Strategy::EXTENSION:
                 foreach ($this->options as $detector) {
-                    foreach ($this->inputs as $file) {
-                        if (\in_array(pathinfo($file, PATHINFO_EXTENSION), $detector->getFileExtensions())) {
-                            $detector->setPackager($this->packager);
+                    $detectorExtensions = $detector->getFileExtensions();
+                    $matches = array_intersect($detectorExtensions, array_map(function ($file) {
+                        return pathinfo($file, PATHINFO_EXTENSION);
+                    }, $this->inputs));
+                    if (count($matches) > 0) {
+                        $detector->setPackager($this->packager);
 
-                            return $detector;
-                        }
+                        return $detector;
                     }
                 }
                 break;
 
             case Strategy::LANGUAGES:
                 foreach ($this->options as $detector) {
-                    foreach ($this->inputs as $language) {
-                        if (\in_array($language, $detector->getLanguages())) {
-                            $detector->setPackager($this->packager);
+                    $detectorLanguages = $detector->getLanguages();
+                    $matches = array_intersect($detectorLanguages, $this->inputs);
+                    if (count($matches) > 0) {
+                        $detector->setPackager($this->packager);
 
-                            return $detector;
-                        }
+                        return $detector;
                     }
                 }
                 break;
