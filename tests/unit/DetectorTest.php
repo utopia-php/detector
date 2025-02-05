@@ -34,6 +34,7 @@ use Utopia\Detector\Detector\Strategy;
 class DetectorTest extends TestCase
 {
     /**
+     * @param string[] $files List of files to check
      * @dataProvider packagerDataProvider
      */
     public function testDetectPackager(array $files, ?string $expectedPackager): void
@@ -54,7 +55,7 @@ class DetectorTest extends TestCase
     }
 
     /**
-     * @return array<array<string>, string|null>
+     * @return array<array<array<string>, string|null>>
     */
     public function packagerDataProvider(): array
     {
@@ -67,6 +68,7 @@ class DetectorTest extends TestCase
     }
 
     /**
+     * @param string[] $files List of files to check
      * @dataProvider runtimeDataProviderByFilematch
      */
     public function testDetectRuntimeByFileMatch(
@@ -108,7 +110,7 @@ class DetectorTest extends TestCase
     }
 
     /**
-     * @return array<array<string>, string|null, string|null, string|null>
+     * @return array<array<array<string>, string|null, string|null, string|null, string|null>>
      */
     public function runtimeDataProviderByFilematch(): array
     {
@@ -123,6 +125,7 @@ class DetectorTest extends TestCase
     }
 
     /**
+     * @param string[] $files List of files to check
      * @dataProvider runtimeDataProviderByLanguages
      */
     public function testDetectRuntimeByLanguage(
@@ -162,7 +165,7 @@ class DetectorTest extends TestCase
     }
 
     /**
-     * @return array<array<string>, string|null, string|null, string|null>
+     * @return array<array<array<string>, string|null, string|null, string|null>>
      */
     public function runtimeDataProviderByLanguages(): array
     {
@@ -188,6 +191,7 @@ class DetectorTest extends TestCase
     }
 
     /**
+     * @param string[] $files List of files to check
      * @dataProvider runtimeDataProviderByFileExtensions
      */
     public function testDetectRuntimeByFileExtension(
@@ -227,7 +231,7 @@ class DetectorTest extends TestCase
     }
 
     /**
-     * @return array<array<string>, string|null, string|null, string|null>
+     * @return array<array<array<string>, string|null, string|null>>
      */
     public function runtimeDataProviderByFileExtensions(): array
     {
@@ -240,6 +244,7 @@ class DetectorTest extends TestCase
     }
 
     /**
+     * @param string[] $files List of files to check
      * @dataProvider frameworkDataProvider
      */
     public function testFrameworkDetection(array $files, ?string $framework, ?string $installCommand = null, ?string $buildCommand = null, ?string $outputDirectory = null, string $packager = 'npm'): void
@@ -268,7 +273,7 @@ class DetectorTest extends TestCase
     }
 
     /**
-     * @return array<array<string>, string|null, string|null, string|null, string|null>
+     * @return array<array<array<string>, string|null, string|null, string|null, string|null>>
      */
     public function frameworkDataProvider(): array
     {
@@ -284,6 +289,7 @@ class DetectorTest extends TestCase
     }
 
     /**
+     * @param string[] $files List of files to check
      * @dataProvider renderingDataProvider
      */
     public function testRenderingDetection(array $files, string $framework, string $rendering): void
@@ -304,7 +310,7 @@ class DetectorTest extends TestCase
     }
 
     /**
-     * @return array<array<string>, string, string>
+     * @return array<array<array<string>, string, string>>
      */
     public function renderingDataProvider(): array
     {
