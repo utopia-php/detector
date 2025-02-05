@@ -1,0 +1,15 @@
+name: "CodeQL"
+
+on: [pull_request]
+jobs:
+  lint:
+    name: CodeQL
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out the repo
+      uses: actions/checkout@v2
+
+    - name: Run CodeQL
+      run: |
+        composer install --profile --ignore-platform-reqs && composer check
