@@ -12,4 +12,11 @@ jobs:
 
     - name: Run Tests
       run: |
-        docker run --rm -v $PWD:/app -w /app php:8.3-cli sh -c "composer install && composer test"
+        docker run --rm -v $PWD:/app -w /app php:8.3-cli
+
+        sh -c " \
+          apt-get update && \
+          apt-get install -y composer zip unzip git && \ 
+          composer install --no-interaction --no-dev --optimize-autoloader && \
+          ./vendor/bin/phpunit && composer test
+        "
