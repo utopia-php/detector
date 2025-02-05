@@ -8,7 +8,9 @@ abstract class Runtime extends Detection
 {
     protected string $packager = '';
 
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     public function setPackager(string $packager): self
     {

@@ -2,4 +2,6 @@
 
 namespace Utopia\Detector;
 
-abstract class Detection {}
+abstract class Detection
+{
+}

@@ -36,7 +36,7 @@ class DetectorTest extends TestCase
     /**
      * @dataProvider packagerDataProvider
      */
-    public function test_detect_packager(array $files, ?string $expectedPackager): void // TODO: rename
+    public function testDetectPackager(array $files, ?string $expectedPackager): void
     {
         $detector = new Packager($files);
         $detector
@@ -69,12 +69,12 @@ class DetectorTest extends TestCase
     /**
      * @dataProvider runtimeDataProviderByFilematch
      */
-    public function test_detect_runtime_by_filematch(
+    public function testDetectRuntimeByFileMatch(
         array $files,
         ?string $runtime,
         ?string $commands,
         ?string $entrypoint,
-        string $packager = 'npm' // Default packager is 'npm'
+        string $packager = 'npm'
     ): void {
         $detector = new Runtime(
             $files,
@@ -125,7 +125,7 @@ class DetectorTest extends TestCase
     /**
      * @dataProvider runtimeDataProviderByLanguages
      */
-    public function test_detect_runtime_by_languages(
+    public function testDetectRuntimeByLanguage(
         array $files,
         ?string $runtime,
         ?string $commands,
@@ -190,7 +190,7 @@ class DetectorTest extends TestCase
     /**
      * @dataProvider runtimeDataProviderByFileExtensions
      */
-    public function test_detect_runtime_by_file_extensions(
+    public function testDetectRuntimeByFileExtension(
         array $files,
         ?string $runtime,
         ?string $commands,
@@ -242,7 +242,7 @@ class DetectorTest extends TestCase
     /**
      * @dataProvider frameworkDataProvider
      */
-    public function test_framework_detection(array $files, ?string $framework, ?string $installCommand = null, ?string $buildCommand = null, ?string $outputDirectory = null, string $packager = 'npm'): void
+    public function testFrameworkDetection(array $files, ?string $framework, ?string $installCommand = null, ?string $buildCommand = null, ?string $outputDirectory = null, string $packager = 'npm'): void
     {
         $detector = new Framework($files, $packager);
 
@@ -286,7 +286,7 @@ class DetectorTest extends TestCase
     /**
      * @dataProvider renderingDataProvider
      */
-    public function test_rendering_detection(array $files, string $framework, string $rendering): void
+    public function testRenderingDetection(array $files, string $framework, string $rendering): void
     {
         $detector = new Rendering($files, $framework);
         $detector

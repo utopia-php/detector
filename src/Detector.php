@@ -12,7 +12,9 @@ abstract class Detector
     /**
      * @param  array<string>  $inputs
      */
-    public function __construct(protected array $inputs) {}
+    public function __construct(protected array $inputs)
+    {
+    }
 
     abstract public function detect(): ?Detection;
 

@@ -13,7 +13,8 @@ class Framework extends Detector
     public function __construct(
         protected array $inputs,
         protected string $packager = 'npm'
-    ) {}
+    ) {
+    }
 
     /**
      * Performs framework detection based on input patterns.

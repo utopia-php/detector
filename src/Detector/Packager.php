@@ -10,7 +10,9 @@ class Packager extends Detector
     /**
      * @param  array<string>  $inputs
      */
-    public function __construct(protected array $inputs) {}
+    public function __construct(protected array $inputs)
+    {
+    }
 
     public function detect(): ?PackagerDetection
     {

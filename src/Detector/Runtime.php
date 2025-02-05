@@ -38,7 +38,8 @@ class Runtime extends Detector
         protected array $inputs,
         protected Strategy $strategy,
         protected string $packager = 'npm'
-    ) {}
+    ) {
+    }
 
     public function detect(): ?DetectionRuntime
     {
