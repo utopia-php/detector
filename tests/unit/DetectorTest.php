@@ -33,427 +33,295 @@ use Utopia\Detector\Detector\Strategy;
 
 class DetectorTest extends TestCase
 {
-    public function test_detect_packager(): void // TODO: Rename to testDetectPackager
+    /**
+     * @dataProvider packagerDataProvider
+     */
+    public function test_detect_packager(array $files, ?string $expectedPackager): void // TODO: rename
     {
-        foreach ($this->packagerDataProvider() as $data) {
-            $detector = new Packager($data['files']);
-            $detector
-                ->addOption(new PNPM)
-                ->addOption(new Yarn)
-                ->addOption(new NPM);
+        $detector = new Packager($files);
+        $detector
+            ->addOption(new PNPM)
+            ->addOption(new Yarn)
+            ->addOption(new NPM);
 
-            $packager = $detector->detect();
-            if ($packager) {
-                $this->assertEquals($data['packager'], $packager->getName());
-            } else {
-                $this->assertEquals($data['packager'], null);
-            }
+        $detectedPackager = $detector->detect();
+
+        if ($expectedPackager) {
+            $this->assertEquals($expectedPackager, $detectedPackager->getName());
+        } else {
+            $this->assertNull($detectedPackager);
         }
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function packagerDataProvider(): array
     {
         return [
-            [
-                'files' => ['bun.lockb', 'fly.toml', 'package.json', 'remix.config.js'],
-                'packager' => 'npm',
-            ],
-            [
-                'files' => ['yarn.lock'],
-                'packager' => 'yarn',
-            ],
-            [
-                'files' => ['pnpm-lock.yaml'],
-                'packager' => 'pnpm',
-            ],
-            // test for FAILURE
-            [
-                'files' => ['composer.json'],
-                'packager' => null,
-            ],
+            [['bun.lockb', 'fly.toml', 'package.json', 'remix.config.js'], 'npm'],
+            [['yarn.lock'], 'yarn'],
+            [['pnpm-lock.yaml'], 'pnpm'],
+            [['composer.json'], null],  // test for FAILURE
         ];
     }
 
-    public function test_detect_runtime_by_filematch(): void
-    {
-        foreach ($this->runtimeDataProviderByFilematch() as $data) {
-            $detector = new Runtime(
-                $data['files'],
-                new Strategy(Strategy::FILEMATCH),
-                $data['packager'] ?? 'npm'
-            );
+    /**
+     * @dataProvider runtimeDataProviderByFilematch
+     */
+    public function test_detect_runtime_by_filematch(
+        array $files,
+        ?string $runtime,
+        ?string $commands,
+        ?string $entrypoint,
+        string $packager = 'npm' // Default packager is 'npm'
+    ): void {
+        $detector = new Runtime(
+            $files,
+            new Strategy(Strategy::FILEMATCH),
+            $packager
+        );
 
-            $detector
-                ->addOption(new Node)
-                ->addOption(new Bun)
-                ->addOption(new Deno)
-                ->addOption(new PHP)
-                ->addOption(new Python)
-                ->addOption(new Dart)
-                ->addOption(new Swift)
-                ->addOption(new Ruby)
-                ->addOption(new Java)
-                ->addOption(new CPP)
-                ->addOption(new Dotnet);
+        $detector
+            ->addOption(new Node)
+            ->addOption(new Bun)
+            ->addOption(new Deno)
+            ->addOption(new PHP)
+            ->addOption(new Python)
+            ->addOption(new Dart)
+            ->addOption(new Swift)
+            ->addOption(new Ruby)
+            ->addOption(new Java)
+            ->addOption(new CPP)
+            ->addOption(new Dotnet);
 
-            $runtime = $detector->detect();
-            if ($runtime) {
-                $this->assertEquals($data['runtime'], $runtime->getName());
-                $this->assertEquals($data['commands'], $runtime->getCommands());
-                $this->assertEquals($data['entrypoint'], $runtime->getEntrypoint());
-            } else {
-                $this->assertEquals($data['runtime'], null);
-                $this->assertEquals($data['commands'], null);
-                $this->assertEquals($data['entrypoint'], null);
-            }
+        $detectedRuntime = $detector->detect();
+
+        if ($runtime) {
+            $this->assertNotNull($detectedRuntime);
+            $this->assertEquals($runtime, $detectedRuntime->getName());
+            $this->assertEquals($commands, $detectedRuntime->getCommands());
+            $this->assertEquals($entrypoint, $detectedRuntime->getEntrypoint());
+        } else {
+            $this->assertNull($detectedRuntime);
         }
     }
 
+    /**
+     * @return array[]
+     */
     public function runtimeDataProviderByFilematch(): array
     {
         return [
-            [
-                'files' => ['package-lock.json', 'yarn.lock', 'tsconfig.json'],
-                'runtime' => 'node',
-                'commands' => 'npm install && npm run build',
-                'entrypoint' => 'index.js',
-            ],
-            [
-                'files' => ['package-lock.json', 'yarn.lock', 'tsconfig.json'],
-                'runtime' => 'node',
-                'commands' => 'yarn install && yarn build',
-                'entrypoint' => 'index.js',
-                'packager' => 'yarn',
-            ],
-            [
-                'files' => ['composer.json', 'composer.lock'],
-                'runtime' => 'php',
-                'commands' => 'composer install && composer run build',
-                'entrypoint' => 'index.php',
-            ],
-            [
-                'files' => ['pubspec.yaml'],
-                'runtime' => 'dart',
-                'commands' => 'dart pub get',
-                'entrypoint' => 'main.dart',
-            ],
-            [
-                'files' => ['Gemfile', 'Gemfile.lock'],
-                'runtime' => 'ruby',
-                'commands' => 'bundle install && bundle exec rake build',
-                'entrypoint' => 'main.rb',
-            ],
-            // test for FAILURE
-            [
-                'files' => ['index.html', 'style.css'],
-                'runtime' => null,
-                'commands' => null,
-                'entrypoint' => null,
-            ],
+            [['package-lock.json', 'yarn.lock', 'tsconfig.json'], 'node', 'npm install && npm run build', 'index.js'],
+            [['package-lock.json', 'yarn.lock', 'tsconfig.json'], 'node', 'yarn install && yarn build', 'index.js', 'yarn'],
+            [['composer.json', 'composer.lock'], 'php', 'composer install && composer run build', 'index.php'],
+            [['pubspec.yaml'], 'dart', 'dart pub get', 'main.dart'],
+            [['Gemfile', 'Gemfile.lock'], 'ruby', 'bundle install && bundle exec rake build', 'main.rb'],
+            [['index.html', 'style.css'], null, null, null], // Test for FAILURE
         ];
     }
 
-    public function test_detect_runtime_by_languages(): void
-    {
-        foreach ($this->runtimeDataProviderByLanguages() as $data) {
-            $detector = new Runtime(
-                $data['files'],
-                new Strategy(Strategy::LANGUAGES),
-                $data['packager'] ?? 'npm'
-            );
+    /**
+     * @dataProvider runtimeDataProviderByLanguages
+     */
+    public function test_detect_runtime_by_languages(
+        array $files,
+        ?string $runtime,
+        ?string $commands,
+        string $packager = 'npm'
+    ): void {
+        $detector = new Runtime(
+            $files,
+            new Strategy(Strategy::LANGUAGES),
+            $packager
+        );
 
-            $detector
-                ->addOption(new Node)
-                ->addOption(new Bun)
-                ->addOption(new Deno)
-                ->addOption(new PHP)
-                ->addOption(new Python)
-                ->addOption(new Dart)
-                ->addOption(new Swift)
-                ->addOption(new Ruby)
-                ->addOption(new Java)
-                ->addOption(new CPP)
-                ->addOption(new Dotnet);
+        $detector
+            ->addOption(new Node)
+            ->addOption(new Bun)
+            ->addOption(new Deno)
+            ->addOption(new PHP)
+            ->addOption(new Python)
+            ->addOption(new Dart)
+            ->addOption(new Swift)
+            ->addOption(new Ruby)
+            ->addOption(new Java)
+            ->addOption(new CPP)
+            ->addOption(new Dotnet);
 
-            $runtime = $detector->detect();
-            if ($runtime) {
-                $this->assertEquals($data['runtime'], $runtime->getName());
-                $this->assertEquals($data['commands'], $runtime->getCommands());
-            } else {
-                $this->assertEquals($data['runtime'], null);
-                $this->assertEquals($data['commands'], null);
-            }
+        $detectedRuntime = $detector->detect();
+
+        if ($runtime) {
+            $this->assertNotNull($detectedRuntime);
+            $this->assertEquals($runtime, $detectedRuntime->getName());
+            $this->assertEquals($commands, $detectedRuntime->getCommands());
+        } else {
+            $this->assertNull($detectedRuntime);
         }
     }
 
+    /**
+     * @return array[]
+     */
     public function runtimeDataProviderByLanguages(): array
     {
         return [
             [
-                'files' => ['TypeScript', 'JavaScript', 'DockerFile'],
-                'runtime' => 'node',
-                'commands' => 'npm install && npm run build',
+                ['TypeScript', 'JavaScript', 'DockerFile'],
+                'node',
+                'npm install && npm run build',
             ],
             [
-                'files' => ['TypeScript', 'JavaScript', 'DockerFile'],
-                'runtime' => 'node',
-                'commands' => 'yarn install && yarn build',
-                'packager' => 'yarn',
+                ['TypeScript', 'JavaScript', 'DockerFile'],
+                'node',
+                'yarn install && yarn build',
+                'yarn',
             ],
-            // test for FAILURE
+            // Test for FAILURE
             [
-                'files' => ['HTML'],
-                'runtime' => null,
-                'commands' => null,
+                ['HTML'],
+                null,
+                null,
             ],
         ];
     }
 
-    public function test_detect_runtime_by_file_extensions(): void
-    {
-        foreach ($this->runtimeDataProviderByFileExtensions() as $data) {
-            $detector = new Runtime(
-                $data['files'],
-                new Strategy(Strategy::EXTENSION),
-                $data['packager'] ?? 'npm'
-            );
+    /**
+     * @dataProvider runtimeDataProviderByFileExtensions
+     */
+    public function test_detect_runtime_by_file_extensions(
+        array $files,
+        ?string $runtime,
+        ?string $commands,
+        string $packager = 'npm'
+    ): void {
+        $detector = new Runtime(
+            $files,
+            new Strategy(Strategy::EXTENSION),
+            $packager
+        );
 
-            $detector
-                ->addOption(new Node)
-                ->addOption(new Bun)
-                ->addOption(new Deno)
-                ->addOption(new PHP)
-                ->addOption(new Python)
-                ->addOption(new Dart)
-                ->addOption(new Swift)
-                ->addOption(new Ruby)
-                ->addOption(new Java)
-                ->addOption(new CPP)
-                ->addOption(new Dotnet);
+        $detector
+            ->addOption(new Node)
+            ->addOption(new Bun)
+            ->addOption(new Deno)
+            ->addOption(new PHP)
+            ->addOption(new Python)
+            ->addOption(new Dart)
+            ->addOption(new Swift)
+            ->addOption(new Ruby)
+            ->addOption(new Java)
+            ->addOption(new CPP)
+            ->addOption(new Dotnet);
 
-            $runtime = $detector->detect();
-            if ($runtime) {
-                $this->assertEquals($data['runtime'], $runtime->getName());
-                $this->assertEquals($data['commands'], $runtime->getCommands());
-            } else {
-                $this->assertEquals($data['runtime'], null);
-                $this->assertEquals($data['commands'], null);
-            }
+        $detectedRuntime = $detector->detect();
+
+        if ($runtime) {
+            $this->assertNotNull($detectedRuntime);
+            $this->assertEquals($runtime, $detectedRuntime->getName());
+            $this->assertEquals($commands, $detectedRuntime->getCommands());
+        } else {
+            $this->assertNull($detectedRuntime);
         }
     }
 
+    /**
+     * @return array[]
+     */
     public function runtimeDataProviderByFileExtensions(): array
     {
         return [
-            [
-                'files' => ['main.ts', 'main.js', 'DockerFile'],
-                'runtime' => 'node',
-                'commands' => 'npm install && npm run build',
-            ],
-            [
-                'files' => ['main.ts', 'main.js', 'DockerFile'],
-                'runtime' => 'node',
-                'commands' => 'yarn install && yarn build',
-                'packager' => 'yarn',
-            ],
-            [
-                'files' => ['composer.json', 'index.php', 'DockerFile'],
-                'runtime' => 'php',
-                'commands' => 'composer install && composer run build',
-            ],
-            // test for FAILURE
-            [
-                'files' => ['index.html', 'style.css'],
-                'runtime' => null,
-                'commands' => null,
-            ],
+            [['main.ts', 'main.js', 'DockerFile'], 'node', 'npm install && npm run build'],
+            [['main.ts', 'main.js', 'DockerFile'], 'node', 'yarn install && yarn build', 'yarn'],
+            [['composer.json', 'index.php', 'DockerFile'], 'php', 'composer install && composer run build'],
+            [['index.html', 'style.css'], null, null], // Test for FAILURE
         ];
     }
 
-    public function test_framework_detection(): void
+    /**
+     * @dataProvider frameworkDataProvider
+     */
+    public function test_framework_detection(array $files, ?string $framework, ?string $installCommand = null, ?string $buildCommand = null, ?string $outputDirectory = null, string $packager = 'npm'): void
     {
-        foreach ($this->frameworkDataProvider() as $data) {
-            $detector = new Framework($data['files'], $data['packager'] ?? 'npm');
-            $detector
-                ->addOption(new Flutter)
-                ->addOption(new Nuxt)
-                ->addOption(new Astro)
-                ->addOption(new Remix)
-                ->addOption(new SvelteKit)
-                ->addOption(new NextJs);
+        $detector = new Framework($files, $packager);
 
-            $framework = $detector->detect();
+        $detector
+            ->addOption(new Flutter)
+            ->addOption(new Nuxt)
+            ->addOption(new Astro)
+            ->addOption(new Remix)
+            ->addOption(new SvelteKit)
+            ->addOption(new NextJs);
 
-            if ($framework) {
-                $this->assertEquals($data['framework'], $framework->getName());
-                $this->assertEquals($data['installCommand'], $framework->getInstallCommand());
-                $this->assertEquals($data['buildCommand'], $framework->getBuildCommand());
-                $this->assertEquals($data['outputDirectory'], $framework->getOutputDirectory());
-            } else {
-                $this->assertEquals($data['framework'], null);
-            }
+        $detectedFramework = $detector->detect();
+
+        if ($framework) {
+            $this->assertNotNull($detectedFramework);
+            $this->assertEquals($framework, $detectedFramework->getName());
+            $this->assertEquals($installCommand, $detectedFramework->getInstallCommand());
+            $this->assertEquals($buildCommand, $detectedFramework->getBuildCommand());
+            $this->assertEquals($outputDirectory, $detectedFramework->getOutputDirectory());
+        } else {
+            $this->assertNull($detectedFramework);
         }
     }
 
+    /**
+     * @return array[]
+     */
     public function frameworkDataProvider(): array
     {
         return [
-            [
-                'files' => ['src/main.js', '.gitignore', 'next.config.js', 'yarn.lock', 'index.html'],
-                'framework' => 'next.js',
-                'installCommand' => 'yarn install',
-                'buildCommand' => 'yarn build',
-                'outputDirectory' => './.next',
-                'packager' => 'yarn',
-            ],
-            [
-                'files' => ['public', 'server', 'app.vue', 'nuxt.config.ts', 'package-lock.json', 'package.json', 'tsconfig.json'],
-                'framework' => 'nuxt',
-                'installCommand' => 'npm install',
-                'buildCommand' => 'npm run build',
-                'outputDirectory' => './output',
-            ],
-            [
-                'files' => ['public', 'src', 'astro.config.mjs', 'package-lock.json', 'package.json', 'tsconfig.json'],
-                'framework' => 'astro',
-                'installCommand' => 'npm install',
-                'buildCommand' => 'npm run build',
-                'outputDirectory' => './dist',
-            ],
-            [
-                'files' => ['app', 'public', 'remix.config.js', 'remix.env.d.ts', 'sandbox.config.js', 'tsconfig.json', 'package.json'],
-                'framework' => 'remix',
-                'installCommand' => 'npm install',
-                'buildCommand' => 'npm run build',
-                'outputDirectory' => './build',
-            ],
-            [
-                'files' => ['src', 'static', 'scripts', 'eslint.config.js', 'package.json', 'pnpm-lock.yaml', 'svelte.config.js', 'tsconfig.js', 'vite.config.js', 'vite.config.lib.js'],
-                'framework' => 'sveltekit',
-                'installCommand' => 'npm install',
-                'buildCommand' => 'npm run build',
-                'outputDirectory' => './build',
-            ],
-            [
-                'files' => ['src', 'types', 'makefile', 'components.js', 'debug.js', 'package.json', 'svelte.config.js'],
-                'framework' => 'sveltekit',
-                'installCommand' => 'npm install',
-                'buildCommand' => 'npm run build',
-                'outputDirectory' => './build',
-            ],
-            [
-                'files' => ['app', 'backend', 'public', 'Dockerfile', 'docker-compose.yml', 'ecosystem.config.js', 'middleware.ts', 'next.config.js', 'package-lock.json', 'package.json', 'server.js', 'tsconfig.json'],
-                'framework' => 'next.js',
-                'installCommand' => 'npm install',
-                'buildCommand' => 'npm run build',
-                'outputDirectory' => './.next',
-            ],
-            [
-                'files' => ['assets', 'components', 'layouts', 'pages', 'babel.config.js', 'error.vue', 'nuxt.config.js', 'yarn.lock'],
-                'framework' => 'nuxt',
-                'installCommand' => 'npm install',
-                'buildCommand' => 'npm run build',
-                'outputDirectory' => './output',
-            ],
-            // test for FAILURE
-            [
-                'files' => ['index.html', 'style.css'],
-                'framework' => null,
-            ],
+            [['src', 'types', 'makefile', 'components.js', 'debug.js', 'package.json', 'svelte.config.js'], 'sveltekit', 'npm install', 'npm run build', './build'],
+            [['app', 'backend', 'public', 'Dockerfile', 'docker-compose.yml', 'ecosystem.config.js', 'middleware.ts', 'next.config.js', 'package-lock.json', 'package.json', 'server.js', 'tsconfig.json'], 'next.js', 'npm install', 'npm run build', './.next'],
+            [['assets', 'components', 'layouts', 'pages', 'babel.config.js', 'error.vue', 'nuxt.config.js', 'yarn.lock'], 'nuxt', 'npm install', 'npm run build', './output'],
+            [['app', 'public', 'remix.config.js', 'remix.env.d.ts', 'sandbox.config.js', 'tsconfig.json', 'package.json'], 'remix', 'npm install', 'npm run build', './build'],
+            [['public', 'src', 'astro.config.mjs', 'package-lock.json', 'package.json', 'tsconfig.json'], 'astro', 'npm install', 'npm run build', './dist'],
+            [['src', 'static', 'scripts', 'eslint.config.js', 'package.json', 'pnpm-lock.yaml', 'svelte.config.js', 'tsconfig.js', 'vite.config.js', 'vite.config.lib.js'], 'sveltekit', 'npm install', 'npm run build', './build'],
+            [['index.html', 'style.css'], null], // Test for FAILURE
         ];
     }
 
-    public function test_rendering_detection(): void
+    /**
+     * @dataProvider renderingDataProvider
+     */
+    public function test_rendering_detection(array $files, string $framework, string $rendering): void
     {
-        foreach ($this->renderingDataProvider() as $data) {
-            $detector = new Rendering($data['files'], $data['framework']);
-            $detector
-                ->addOption(new SSR)
-                ->addOption(new SSG);
+        $detector = new Rendering($files, $framework);
+        $detector
+            ->addOption(new SSR)
+            ->addOption(new SSG);
 
-            $rendering = $detector->detect();
+        $detectedRendering = $detector->detect();
 
-            if ($rendering) {
-                $this->assertEquals($data['rendering'], $rendering->getName());
-            } else {
-                $this->assertEquals($data['rendering'], null);
-            }
+        if ($rendering) {
+            $this->assertNotNull($detectedRendering);
+            $this->assertEquals($rendering, $detectedRendering->getName());
+        } else {
+            $this->assertNull($detectedRendering);
         }
     }
 
+    /**
+     * @return array[]
+     */
     public function renderingDataProvider(): array
     {
         return [
-            [
-                'files' => ['server/pages/index.html', 'server/pages/api/users.js', './.next/server/pages/_app.js'],
-                'framework' => 'next.js',
-                'rendering' => 'ssr',
-            ],
-            [
-                'files' => ['server/pages/index.html', 'server/pages/api/users.js', './.next/server/pages/_app.js'],
-                'framework' => 'next.js',
-                'rendering' => 'ssr',
-            ],
-            [
-                'files' => ['index.html', 'about.html', '404.html'],
-                'framework' => 'next.js',
-                'rendering' => 'ssg',
-            ],
-            [
-                'files' => ['nitro.json', './server/index.mjs'],
-                'framework' => 'nuxt',
-                'rendering' => 'ssr',
-            ],
-            [
-                'files' => ['index.html', '_nuxt/something.js'],
-                'framework' => 'nuxt',
-                'rendering' => 'ssg',
-            ],
-            [
-                'files' => ['server/pages/index.js', 'prerendered/about.html', './handler.js'],
-                'framework' => 'sveltekit',
-                'rendering' => 'ssr',
-            ],
-            [
-                'files' => ['index.html', 'about.html'],
-                'framework' => 'sveltekit',
-                'rendering' => 'ssg',
-            ],
-            [
-                'files' => ['index.html', 'style.css'],
-                'framework' => 'next.js',
-                'rendering' => 'ssg',
-            ],
-            [
-                'files' => ['./server/entry.mjs', './server/renderers.mjs', './server/pages/'],
-                'framework' => 'astro',
-                'rendering' => 'ssr',
-            ],
-            [
-                'files' => ['index.html', 'about.html'],
-                'framework' => 'astro',
-                'rendering' => 'ssg',
-            ],
-            [
-                'files' => ['./build/server/index.js', './build/server/renderers.js'],
-                'framework' => 'remix',
-                'rendering' => 'ssr',
-            ],
-            [
-                'files' => ['index.html', 'about.html'],
-                'framework' => 'remix',
-                'rendering' => 'ssg',
-            ],
-            [
-                'files' => ['index.html', 'style.css'],
-                'framework' => 'remix',
-                'rendering' => 'ssg',
-            ],
-            [
-                'files' => ['index.html', 'style.css'],
-                'framework' => 'flutter',
-                'rendering' => 'ssg',
-            ],
+            [['server/pages/index.html', 'server/pages/api/users.js', './.next/server/pages/_app.js'], 'next.js', 'ssr'],
+            [['index.html', 'about.html', '404.html'], 'next.js', 'ssg'],
+            [['nitro.json', './server/index.mjs'], 'nuxt', 'ssr'],
+            [['index.html', '_nuxt/something.js'], 'nuxt', 'ssg'],
+            [['server/pages/index.js', 'prerendered/about.html', './handler.js'], 'sveltekit', 'ssr'],
+            [['index.html', 'about.html'], 'sveltekit', 'ssg'],
+            [['index.html', 'style.css'], 'next.js', 'ssg'],
+            [['./server/entry.mjs', './server/renderers.mjs', './server/pages/'], 'astro', 'ssr'],
+            [['index.html', 'about.html'], 'astro', 'ssg'],
+            [['./build/server/index.js', './build/server/renderers.js'], 'remix', 'ssr'],
+            [['index.html', 'about.html'], 'remix', 'ssg'],
+            [['index.html', 'style.css'], 'remix', 'ssg'],
+            [['index.html', 'style.css'], 'flutter', 'ssg'],
         ];
     }
 }
