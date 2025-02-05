@@ -55,7 +55,7 @@ class DetectorTest extends TestCase
     }
 
     /**
-     * @return array<array<array<string>, string|null>>
+     * @return array<array{array<string>, string|null}>
     */
     public function packagerDataProvider(): array
     {
@@ -110,8 +110,8 @@ class DetectorTest extends TestCase
     }
 
     /**
-     * @return array<array<array<string>, string|null, string|null, string|null, string|null>>
-     */
+    * @return array<array{array<string>, string|null, string|null, string|null, string|null}>
+    */
     public function runtimeDataProviderByFilematch(): array
     {
         return [
@@ -165,7 +165,7 @@ class DetectorTest extends TestCase
     }
 
     /**
-     * @return array<array<array<string>, string|null, string|null, string|null>>
+     * @return array<array{array<string>, string|null, string|null, string|null}>
      */
     public function runtimeDataProviderByLanguages(): array
     {
@@ -174,6 +174,7 @@ class DetectorTest extends TestCase
                 ['TypeScript', 'JavaScript', 'DockerFile'],
                 'node',
                 'npm install && npm run build',
+                'npm',
             ],
             [
                 ['TypeScript', 'JavaScript', 'DockerFile'],
@@ -186,6 +187,7 @@ class DetectorTest extends TestCase
                 ['HTML'],
                 null,
                 null,
+                'npm',
             ],
         ];
     }
@@ -231,7 +233,7 @@ class DetectorTest extends TestCase
     }
 
     /**
-     * @return array<array<array<string>, string|null, string|null>>
+     * @return array<array{array<string>, string|null, string|null}>
      */
     public function runtimeDataProviderByFileExtensions(): array
     {
@@ -273,7 +275,7 @@ class DetectorTest extends TestCase
     }
 
     /**
-     * @return array<array<array<string>, string|null, string|null, string|null, string|null>>
+     * @return array<array{array<string>, string|null, string|null, string|null, string|null}>
      */
     public function frameworkDataProvider(): array
     {
@@ -310,7 +312,7 @@ class DetectorTest extends TestCase
     }
 
     /**
-     * @return array<array<array<string>, string, string>>
+     * @return array<array{array<string>, string, string}>
      */
     public function renderingDataProvider(): array
     {
