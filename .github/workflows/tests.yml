@@ -12,4 +12,4 @@ jobs:
 
     - name: Run Tests
       run: |
-        composer test
+        composer install --no-dev --prefer-dist --no-scripts && composer test
