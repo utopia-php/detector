@@ -2,7 +2,7 @@
 
 namespace Utopia\Detector\Detector;
 
-use Utopia\Detector\Detection\Runtime as DetectionRuntime;
+use Utopia\Detector\Detection\Runtime as RuntimeDetection;
 use Utopia\Detector\Detector;
 
 class Strategy
@@ -32,6 +32,11 @@ class Strategy
 class Runtime extends Detector
 {
     /**
+     * @var array<RuntimeDetection>
+     */
+    protected array $options = [];
+
+    /**
      * @param  array<string>  $inputs
      */
     public function __construct(
@@ -41,7 +46,7 @@ class Runtime extends Detector
     ) {
     }
 
-    public function detect(): ?DetectionRuntime
+    public function detect(): ?RuntimeDetection
     {
         switch ($this->strategy->getValue()) {
             case Strategy::FILEMATCH:

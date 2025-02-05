@@ -8,6 +8,11 @@ use Utopia\Detector\Detector;
 class Framework extends Detector
 {
     /**
+     * @var array<FrameworkDetection>
+     */
+    protected array $options = [];
+
+    /**
      * @param  array<string>  $inputs
      */
     public function __construct(

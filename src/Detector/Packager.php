@@ -8,6 +8,11 @@ use Utopia\Detector\Detector;
 class Packager extends Detector
 {
     /**
+     * @var array<PackagerDetection>
+     */
+    protected array $options = [];
+
+    /**
      * @param  array<string>  $inputs
      */
     public function __construct(protected array $inputs)

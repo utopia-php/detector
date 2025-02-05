@@ -12,4 +12,5 @@ jobs:
 
     - name: Run CodeQL
       run: |
-        composer install --profile --ignore-platform-reqs && composer check
+        docker run --rm -v $PWD:/app composer:2.6 sh -c \
+        "composer install --profile --ignore-platform-reqs && composer check"
