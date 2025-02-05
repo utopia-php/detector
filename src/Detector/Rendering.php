@@ -19,7 +19,7 @@ class Rendering extends Detector
     public function detect(): RenderingDetection
     {
         if (! isset(SSR::FRAMEWORK_FILES[$this->framework])) {
-            throw new \InvalidArgumentException("Unsupported framework: {$this->framework}");
+            throw new \Exception("Unsupported framework: {$this->framework}");
         }
 
         $matches = array_intersect($this->inputs, SSR::FRAMEWORK_FILES[$this->framework]);

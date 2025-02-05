@@ -13,7 +13,6 @@ class SSR extends Rendering
         'astro' => ['./server/entry.mjs'],
         'remix' => ['./build/server/index.js'],
         'flutter' => [],
-        // TODO: Add Angular, Analog
     ];
 
     public function getName(): string

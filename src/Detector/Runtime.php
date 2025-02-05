@@ -18,7 +18,7 @@ class Strategy
     public function __construct(string $value)
     {
         if (! in_array($value, [self::FILEMATCH, self::EXTENSION, self::LANGUAGES])) {
-            throw new \InvalidArgumentException("Invalid strategy: {$value}");
+            throw new \Exception("Invalid strategy: {$value}");
         }
         $this->value = $value;
     }
