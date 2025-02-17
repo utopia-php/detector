@@ -308,12 +308,7 @@ class DetectorTest extends TestCase
 
         $this->assertNotNull($detectedRendering);
         $this->assertEquals($rendering, $detectedRendering->getName());
-
-        if ($detectedRendering instanceof SSG && $fallbackFile) {
-            $this->assertEquals($fallbackFile, $detectedRendering->getFallbackFile());
-        } else {
-            $this->assertNull($detectedRendering->getFallbackFile());
-        }
+        $this->assertEquals($fallbackFile, $detectedRendering->getFallbackFile());
     }
 
     /**
