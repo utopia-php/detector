@@ -23,10 +23,20 @@ class Rendering extends Detector
         }
 
         $matches = array_intersect($this->inputs, SSR::FRAMEWORK_FILES[$this->framework]);
+
         if (count($matches) > 0) {
-            return new SSR();
+            return new SSR(null);
         }
 
-        return new SSG();
+        // set fallback file for SSG if there is only one html file
+        $htmlFiles = array_filter($this->inputs, function ($file) {
+            return pathinfo($file, PATHINFO_EXTENSION) === 'html';
+        });
+
+        if (count($htmlFiles) === 1) {
+            return new SSG($htmlFiles[0]);
+        } else {
+            return new SSG(null);
+        }
     }
 }

@@ -56,7 +56,7 @@ class DetectorTest extends TestCase
 
     /**
      * @return array<array{array<string>, string|null}>
-    */
+     */
     public function packagerDataProvider(): array
     {
         return [
@@ -110,8 +110,8 @@ class DetectorTest extends TestCase
     }
 
     /**
-    * @return array<array{array<string>, string|null, string|null, string|null, string|null}>
-    */
+     * @return array<array{array<string>, string|null, string|null, string|null, string|null}>
+     */
     public function runtimeDataProviderByFilematch(): array
     {
         return [
@@ -292,9 +292,12 @@ class DetectorTest extends TestCase
 
     /**
      * @param string[] $files List of files to check
+     * @param string $framework The framework
+     * @param string $rendering The expected rendering type
+     * @param string|null $fallbackFile The expected fallback file
      * @dataProvider renderingDataProvider
      */
-    public function testRenderingDetection(array $files, string $framework, string $rendering): void
+    public function testRenderingDetection(array $files, string $framework, string $rendering, ?string $fallbackFile): void
     {
         $detector = new Rendering($files, $framework);
         $detector
@@ -303,33 +306,35 @@ class DetectorTest extends TestCase
 
         $detectedRendering = $detector->detect();
 
-        if ($rendering) {
-            $this->assertNotNull($detectedRendering);
-            $this->assertEquals($rendering, $detectedRendering->getName());
+        $this->assertNotNull($detectedRendering);
+        $this->assertEquals($rendering, $detectedRendering->getName());
+
+        if ($detectedRendering instanceof SSG && $fallbackFile) {
+            $this->assertEquals($fallbackFile, $detectedRendering->getFallbackFile());
         } else {
-            $this->assertNull($detectedRendering);
+            $this->assertNull($detectedRendering->getFallbackFile());
         }
     }
 
     /**
-     * @return array<array{array<string>, string, string}>
+     * @return array<array{array<string>, string, string|null, string|null}>
      */
     public function renderingDataProvider(): array
     {
         return [
-            [['server/pages/index.html', 'server/pages/api/users.js', './.next/server/pages/_app.js'], 'next.js', 'ssr'],
-            [['index.html', 'about.html', '404.html'], 'next.js', 'ssg'],
-            [['nitro.json', './server/index.mjs'], 'nuxt', 'ssr'],
-            [['index.html', '_nuxt/something.js'], 'nuxt', 'ssg'],
-            [['server/pages/index.js', 'prerendered/about.html', './handler.js'], 'sveltekit', 'ssr'],
-            [['index.html', 'about.html'], 'sveltekit', 'ssg'],
-            [['index.html', 'style.css'], 'next.js', 'ssg'],
-            [['./server/entry.mjs', './server/renderers.mjs', './server/pages/'], 'astro', 'ssr'],
-            [['index.html', 'about.html'], 'astro', 'ssg'],
-            [['./build/server/index.js', './build/server/renderers.js'], 'remix', 'ssr'],
-            [['index.html', 'about.html'], 'remix', 'ssg'],
-            [['index.html', 'style.css'], 'remix', 'ssg'],
-            [['index.html', 'style.css'], 'flutter', 'ssg'],
+            [['server/pages/index.html', 'server/pages/api/users.js', './.next/server/pages/_app.js'], 'next.js', 'ssr', null],
+            [['index.html', 'about.html', '404.html'], 'next.js', 'ssg', null],
+            [['nitro.json', './server/index.mjs'], 'nuxt', 'ssr', null],
+            [['index.html', '_nuxt/something.js'], 'nuxt', 'ssg', 'index.html'],
+            [['server/pages/index.js', 'prerendered/about.html', './handler.js'], 'sveltekit', 'ssr', null],
+            [['index.html', 'about.html'], 'sveltekit', 'ssg', null],
+            [['index.html', 'style.css'], 'next.js', 'ssg', 'index.html'],
+            [['./server/entry.mjs', './server/renderers.mjs', './server/pages/'], 'astro', 'ssr', null],
+            [['index.html', 'about.html'], 'astro', 'ssg', null],
+            [['./build/server/index.js', './build/server/renderers.js'], 'remix', 'ssr', null],
+            [['index.html', 'about.html'], 'remix', 'ssg', null],
+            [['about.html', 'style.css'], 'remix', 'ssg', 'about.html'],
+            [['index.html', 'style.css'], 'flutter', 'ssg', 'index.html'],
         ];
     }
 }
