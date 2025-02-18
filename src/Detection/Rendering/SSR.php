@@ -7,7 +7,7 @@ use Utopia\Detector\Detection\Rendering;
 class SSR extends Rendering
 {
     public const FRAMEWORK_FILES = [
-        'next.js' => ['./.next/server/pages/_app.js'],
+        'nextjs' => ['./.next/server/pages/_app.js'],
         'nuxt' => ['./server/index.mjs'],
         'sveltekit' => ['./handler.js'],
         'astro' => ['./server/entry.mjs'],

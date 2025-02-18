@@ -281,7 +281,7 @@ class DetectorTest extends TestCase
     {
         return [
             [['src', 'types', 'makefile', 'components.js', 'debug.js', 'package.json', 'svelte.config.js'], 'sveltekit', 'npm install', 'npm run build', './build'],
-            [['app', 'backend', 'public', 'Dockerfile', 'docker-compose.yml', 'ecosystem.config.js', 'middleware.ts', 'next.config.js', 'package-lock.json', 'package.json', 'server.js', 'tsconfig.json'], 'next.js', 'npm install', 'npm run build', './.next'],
+            [['app', 'backend', 'public', 'Dockerfile', 'docker-compose.yml', 'ecosystem.config.js', 'middleware.ts', 'next.config.js', 'package-lock.json', 'package.json', 'server.js', 'tsconfig.json'], 'nextjs', 'npm install', 'npm run build', './.next'],
             [['assets', 'components', 'layouts', 'pages', 'babel.config.js', 'error.vue', 'nuxt.config.js', 'yarn.lock'], 'nuxt', 'npm install', 'npm run build', './output'],
             [['app', 'public', 'remix.config.js', 'remix.env.d.ts', 'sandbox.config.js', 'tsconfig.json', 'package.json'], 'remix', 'npm install', 'npm run build', './build'],
             [['public', 'src', 'astro.config.mjs', 'package-lock.json', 'package.json', 'tsconfig.json'], 'astro', 'npm install', 'npm run build', './dist'],
@@ -317,13 +317,13 @@ class DetectorTest extends TestCase
     public function renderingDataProvider(): array
     {
         return [
-            [['server/pages/index.html', 'server/pages/api/users.js', './.next/server/pages/_app.js'], 'next.js', 'ssr', null],
-            [['index.html', 'about.html', '404.html'], 'next.js', 'ssg', null],
+            [['server/pages/index.html', 'server/pages/api/users.js', './.next/server/pages/_app.js'], 'nextjs', 'ssr', null],
+            [['index.html', 'about.html', '404.html'], 'nextjs', 'ssg', null],
             [['nitro.json', './server/index.mjs'], 'nuxt', 'ssr', null],
             [['index.html', '_nuxt/something.js'], 'nuxt', 'ssg', 'index.html'],
             [['server/pages/index.js', 'prerendered/about.html', './handler.js'], 'sveltekit', 'ssr', null],
             [['index.html', 'about.html'], 'sveltekit', 'ssg', null],
-            [['index.html', 'style.css'], 'next.js', 'ssg', 'index.html'],
+            [['index.html', 'style.css'], 'nextjs', 'ssg', 'index.html'],
             [['./server/entry.mjs', './server/renderers.mjs', './server/pages/'], 'astro', 'ssr', null],
             [['index.html', 'about.html'], 'astro', 'ssg', null],
             [['./build/server/index.js', './build/server/renderers.js'], 'remix', 'ssr', null],

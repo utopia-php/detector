@@ -8,7 +8,7 @@ class NextJs extends Framework
 {
     public function getName(): string
     {
-        return 'next.js';
+        return 'nextjs';
     }
 
     /**
