@@ -3,7 +3,7 @@
 namespace Utopia\Detector\Detector;
 
 use Utopia\Detector\Detection\Rendering as RenderingDetection;
-use Utopia\Detector\Detection\Rendering\SSG;
+use Utopia\Detector\Detection\Rendering\XStatic;
 use Utopia\Detector\Detection\Rendering\SSR;
 use Utopia\Detector\Detector;
 
@@ -28,15 +28,15 @@ class Rendering extends Detector
             return new SSR(null);
         }
 
-        // set fallback file for SSG if there is only one html file
+        // set fallback file for Static if there is only one html file
         $htmlFiles = array_filter($this->inputs, function ($file) {
             return pathinfo($file, PATHINFO_EXTENSION) === 'html';
         });
 
         if (count($htmlFiles) === 1) {
-            return new SSG($htmlFiles[0]);
+            return new XStatic($htmlFiles[0]);
         } else {
-            return new SSG(null);
+            return new XStatic(null);
         }
     }
 }

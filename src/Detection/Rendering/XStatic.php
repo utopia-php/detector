@@ -4,10 +4,10 @@ namespace Utopia\Detector\Detection\Rendering;
 
 use Utopia\Detector\Detection\Rendering;
 
-class SSG extends Rendering
+class XStatic extends Rendering
 {
     public function getName(): string
     {
-        return 'ssg';
+        return 'static';
     }
 }

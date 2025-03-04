@@ -83,7 +83,7 @@ $framework = 'remix';
 $detector = new Rendering($files, $framework);
 $detector
     ->addOption(new SSR())
-    ->addOption(new SSG());
+    ->addOption(new Static());
 
 $detectedRendering = $detector->detect();
 $rendering = $detectedRendering->getName();
@@ -142,7 +142,7 @@ Rendering Adapters:
 | Adapter | Status |
 |---------|---------|
 | SSR | ✅ |
-| SSG | ✅ |
+| Static | ✅ |
 
 `✅  - supported, 🛠  - work in progress`
 

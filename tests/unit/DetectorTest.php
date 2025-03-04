@@ -12,7 +12,7 @@ use Utopia\Detector\Detection\Framework\SvelteKit;
 use Utopia\Detector\Detection\Packager\NPM;
 use Utopia\Detector\Detection\Packager\PNPM;
 use Utopia\Detector\Detection\Packager\Yarn;
-use Utopia\Detector\Detection\Rendering\SSG;
+use Utopia\Detector\Detection\Rendering\XStatic;
 use Utopia\Detector\Detection\Rendering\SSR;
 use Utopia\Detector\Detection\Runtime\Bun;
 use Utopia\Detector\Detection\Runtime\CPP;
@@ -302,7 +302,7 @@ class DetectorTest extends TestCase
         $detector = new Rendering($files, $framework);
         $detector
             ->addOption(new SSR())
-            ->addOption(new SSG());
+            ->addOption(new XStatic());
 
         $detectedRendering = $detector->detect();
 
@@ -318,18 +318,18 @@ class DetectorTest extends TestCase
     {
         return [
             [['server/pages/index.html', 'server/pages/api/users.js', './.next/server/pages/_app.js'], 'nextjs', 'ssr', null],
-            [['index.html', 'about.html', '404.html'], 'nextjs', 'ssg', null],
+            [['index.html', 'about.html', '404.html'], 'nextjs', 'static', null],
             [['nitro.json', './server/index.mjs'], 'nuxt', 'ssr', null],
-            [['index.html', '_nuxt/something.js'], 'nuxt', 'ssg', 'index.html'],
+            [['index.html', '_nuxt/something.js'], 'nuxt', 'static', 'index.html'],
             [['server/pages/index.js', 'prerendered/about.html', './handler.js'], 'sveltekit', 'ssr', null],
-            [['index.html', 'about.html'], 'sveltekit', 'ssg', null],
-            [['index.html', 'style.css'], 'nextjs', 'ssg', 'index.html'],
+            [['index.html', 'about.html'], 'sveltekit', 'static', null],
+            [['index.html', 'style.css'], 'nextjs', 'static', 'index.html'],
             [['./server/entry.mjs', './server/renderers.mjs', './server/pages/'], 'astro', 'ssr', null],
-            [['index.html', 'about.html'], 'astro', 'ssg', null],
+            [['index.html', 'about.html'], 'astro', 'static', null],
             [['./build/server/index.js', './build/server/renderers.js'], 'remix', 'ssr', null],
-            [['index.html', 'about.html'], 'remix', 'ssg', null],
-            [['about.html', 'style.css'], 'remix', 'ssg', 'about.html'],
-            [['index.html', 'style.css'], 'flutter', 'ssg', 'index.html'],
+            [['index.html', 'about.html'], 'remix', 'static', null],
+            [['about.html', 'style.css'], 'remix', 'static', 'about.html'],
+            [['index.html', 'style.css'], 'flutter', 'static', 'index.html'],
         ];
     }
 }
