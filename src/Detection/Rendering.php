@@ -6,9 +6,7 @@ use Utopia\Detector\Detection;
 
 abstract class Rendering extends Detection
 {
-    protected ?string $fallbackFile;
-
-    public function __construct(?string $fallbackFile = null)
+    public function __construct(protected ?string $fallbackFile = null)
     {
         $this->fallbackFile = $fallbackFile;
     }
