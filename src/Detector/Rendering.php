@@ -26,9 +26,12 @@ class Rendering extends Detector
         }
 
         // set fallback file for Static if there is only one html file
-        $htmlFiles = \array_filter($this->inputs, function ($file) {
-            return \pathinfo($file, PATHINFO_EXTENSION) === 'html';
-        });
+        $htmlFiles = [];
+        foreach ($this->inputs as $file) {
+            if (\pathinfo($file, PATHINFO_EXTENSION) === 'html') {
+                $htmlFiles[] = $file;
+            }
+        }
 
         if (\count($htmlFiles) === 1) {
             return new XStatic($htmlFiles[0]);
