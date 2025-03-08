@@ -18,25 +18,22 @@ class Rendering extends Detector
 
     public function detect(): RenderingDetection
     {
-        if (! isset(SSR::FRAMEWORK_FILES[$this->framework])) {
-            throw new \Exception("Unsupported framework: {$this->framework}");
-        }
-
-        $matches = array_intersect($this->inputs, SSR::FRAMEWORK_FILES[$this->framework]);
+        $files = SSR::FRAMEWORK_FILES[$this->framework] ?? [];
+        $matches = array_intersect($this->inputs, $files);
 
         if (count($matches) > 0) {
-            return new SSR(null);
+            return new SSR();
         }
 
         // set fallback file for Static if there is only one html file
-        $htmlFiles = array_filter($this->inputs, function ($file) {
-            return pathinfo($file, PATHINFO_EXTENSION) === 'html';
+        $htmlFiles = \array_filter($this->inputs, function ($file) {
+            return \pathinfo($file, PATHINFO_EXTENSION) === 'html';
         });
 
-        if (count($htmlFiles) === 1) {
+        if (\count($htmlFiles) === 1) {
             return new XStatic($htmlFiles[0]);
         } else {
-            return new XStatic(null);
+            return new XStatic();
         }
     }
 }
