@@ -3,6 +3,8 @@
 namespace Utopia\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Utopia\Detector\Detection\Framework\Analog;
+use Utopia\Detector\Detection\Framework\Angular;
 use Utopia\Detector\Detection\Framework\Astro;
 use Utopia\Detector\Detection\Framework\Flutter;
 use Utopia\Detector\Detection\Framework\NextJs;
@@ -259,7 +261,9 @@ class DetectorTest extends TestCase
             ->addOption(new Astro())
             ->addOption(new Remix())
             ->addOption(new SvelteKit())
-            ->addOption(new NextJs());
+            ->addOption(new NextJs())
+            ->addOption(new Angular())
+            ->addOption(new Analog());
 
         $detectedFramework = $detector->detect();
 
@@ -283,6 +287,7 @@ class DetectorTest extends TestCase
             [['src', 'types', 'makefile', 'components.js', 'debug.js', 'package.json', 'svelte.config.js'], 'sveltekit', 'npm install', 'npm run build', './build'],
             [['app', 'backend', 'public', 'Dockerfile', 'docker-compose.yml', 'ecosystem.config.js', 'middleware.ts', 'next.config.js', 'package-lock.json', 'package.json', 'server.js', 'tsconfig.json'], 'nextjs', 'npm install', 'npm run build', './.next'],
             [['assets', 'components', 'layouts', 'pages', 'babel.config.js', 'error.vue', 'nuxt.config.js', 'yarn.lock'], 'nuxt', 'npm install', 'npm run build', './output'],
+            [['src', 'package.json', 'tsconfig.json', 'angular.json', 'logo.png'], 'angular', 'npm install', 'npm run build', './dist/angular'],
             [['app', 'public', 'remix.config.js', 'remix.env.d.ts', 'sandbox.config.js', 'tsconfig.json', 'package.json'], 'remix', 'npm install', 'npm run build', './build'],
             [['public', 'src', 'astro.config.mjs', 'package-lock.json', 'package.json', 'tsconfig.json'], 'astro', 'npm install', 'npm run build', './dist'],
             [['src', 'static', 'scripts', 'eslint.config.js', 'package.json', 'pnpm-lock.yaml', 'svelte.config.js', 'tsconfig.js', 'vite.config.js', 'vite.config.lib.js'], 'sveltekit', 'npm install', 'npm run build', './build'],
@@ -320,6 +325,8 @@ class DetectorTest extends TestCase
             [['server/pages/index.html', 'server/pages/api/users.js', '.next/server/pages/_app.js'], 'nextjs', 'ssr', null],
             [['index.html', 'about.html', '404.html'], 'nextjs', 'static', null],
             [['nitro.json', 'server/index.mjs'], 'nuxt', 'ssr', null],
+            [['server/server.mjs'], 'angular', 'ssr', null],
+            [['server/index.mjs'], 'analog', 'ssr', null],
             [['index.html', '_nuxt/something.js'], 'nuxt', 'static', 'index.html'],
             [['server/pages/index.js', 'prerendered/about.html', 'handler.js'], 'sveltekit', 'ssr', null],
             [['index.html', 'about.html'], 'sveltekit', 'static', null],

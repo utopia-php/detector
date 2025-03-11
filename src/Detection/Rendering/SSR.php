@@ -12,6 +12,8 @@ class SSR extends Rendering
         'sveltekit' => ['handler.js'],
         'astro' => ['server/entry.mjs'],
         'remix' => ['build/server/index.js'],
+        'angular' => ['server/server.mjs'],
+        'analog' => ['server/index.mjs'],
         'flutter' => [],
     ];
 
