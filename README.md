@@ -69,6 +69,8 @@ $detector
     ->addOption(new Flutter())
     ->addOption(new Nuxt())
     ->addOption(new Astro())
+    ->addOption(new Analog())
+    ->addOption(new Angular())
     ->addOption(new Remix())
     ->addOption(new SvelteKit())
     ->addOption(new NextJs());
@@ -126,8 +128,8 @@ Framework Adapters:
 | Nuxt | ✅ |
 | Remix | ✅ |
 | SvelteKit | ✅ |
-| Angular | 🛠 |
-| Analog | 🛠 |
+| Angular | ✅ |
+| Analog | ✅ |
 
 Packager Adapters:
 
