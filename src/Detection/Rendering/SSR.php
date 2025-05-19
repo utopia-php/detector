@@ -15,6 +15,7 @@ class SSR extends Rendering
         'angular' => ['server/server.mjs'],
         'analog' => ['server/index.mjs'],
         'flutter' => [],
+        'lynx' => [],
     ];
 
     public function getName(): string

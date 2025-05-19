@@ -4,11 +4,11 @@ namespace Utopia\Detector\Detection\Framework;
 
 use Utopia\Detector\Detection\Framework;
 
-class Analog extends Framework
+class Lynx extends Framework
 {
     public function getName(): string
     {
-        return 'analog';
+        return 'lynx';
     }
 
     /**
@@ -16,7 +16,7 @@ class Analog extends Framework
      */
     public function getFiles(): array
     {
-        return ['angular.json'];
+        return ['lynx.config.ts', 'lynx.config.js'];
     }
 
     public function getInstallCommand(): string
@@ -39,6 +39,6 @@ class Analog extends Framework
 
     public function getOutputDirectory(): string
     {
-        return './dist/analog';
+        return './dist';
     }
 }

@@ -73,6 +73,7 @@ $detector
     ->addOption(new Angular())
     ->addOption(new Remix())
     ->addOption(new SvelteKit())
+    ->addOption(new Lynx())
     ->addOption(new NextJs());
 
 $detectedFramework = $detector->detect();
@@ -130,6 +131,7 @@ Framework Adapters:
 | SvelteKit | ✅ |
 | Angular | ✅ |
 | Analog | ✅ |
+| Lynx | ✅ |
 
 Packager Adapters:
 
