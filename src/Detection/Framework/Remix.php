@@ -16,7 +16,7 @@ class Remix extends Framework
      */
     public function getFiles(): array
     {
-        return ['remix.config.js', 'remix.config.ts', 'vite.config.ts', 'vite.config.mjs'];
+        return ['remix.config.js', 'remix.config.ts'];
     }
 
     public function getInstallCommand(): string

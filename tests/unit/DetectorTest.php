@@ -7,6 +7,7 @@ use Utopia\Detector\Detection\Framework\Analog;
 use Utopia\Detector\Detection\Framework\Angular;
 use Utopia\Detector\Detection\Framework\Astro;
 use Utopia\Detector\Detection\Framework\Flutter;
+use Utopia\Detector\Detection\Framework\Lynx;
 use Utopia\Detector\Detection\Framework\NextJs;
 use Utopia\Detector\Detection\Framework\Nuxt;
 use Utopia\Detector\Detection\Framework\Remix;
@@ -262,6 +263,7 @@ class DetectorTest extends TestCase
             ->addOption(new Remix())
             ->addOption(new SvelteKit())
             ->addOption(new NextJs())
+            ->addOption(new Lynx())
             ->addOption(new Angular())
             ->addOption(new Analog());
 
@@ -287,6 +289,7 @@ class DetectorTest extends TestCase
             [['src', 'types', 'makefile', 'components.js', 'debug.js', 'package.json', 'svelte.config.js'], 'sveltekit', 'npm install', 'npm run build', './build'],
             [['app', 'backend', 'public', 'Dockerfile', 'docker-compose.yml', 'ecosystem.config.js', 'middleware.ts', 'next.config.js', 'package-lock.json', 'package.json', 'server.js', 'tsconfig.json'], 'nextjs', 'npm install', 'npm run build', './.next'],
             [['assets', 'components', 'layouts', 'pages', 'babel.config.js', 'error.vue', 'nuxt.config.js', 'yarn.lock'], 'nuxt', 'npm install', 'npm run build', './output'],
+            [['lynx.config.js'], 'lynx', 'npm install', 'npm run build', './dist'],
             [['src', 'package.json', 'tsconfig.json', 'angular.json', 'logo.png'], 'angular', 'npm install', 'npm run build', './dist/angular'],
             [['app', 'public', 'remix.config.js', 'remix.env.d.ts', 'sandbox.config.js', 'tsconfig.json', 'package.json'], 'remix', 'npm install', 'npm run build', './build'],
             [['public', 'src', 'astro.config.mjs', 'package-lock.json', 'package.json', 'tsconfig.json'], 'astro', 'npm install', 'npm run build', './dist'],

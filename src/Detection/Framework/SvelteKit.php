@@ -16,7 +16,7 @@ class SvelteKit extends Framework
      */
     public function getFiles(): array
     {
-        return ['svelte.config.js', 'vite.config.js', 'vite.config.mjs', 'vite.config.ts'];
+        return ['svelte.config.js'];
     }
 
     public function getInstallCommand(): string
