@@ -78,7 +78,7 @@ This is also important for the Utopia-php lead developers to be able to give tec
 
 ## Adding A New Adapter
 
-You can follow our [Adding new Detector Adapter](docs/add-new-detector-adapter.md) tutorial to add a new Detector adapter.
+You can follow our [Adding new Detector Adapter](docs/add-new-adapter.md) tutorial to add a new Detector adapter.
 
 ## Other Ways to Help
 
