@@ -1,6 +1,6 @@
 # Add new Detector and Detection Adapters
 
-To get started with implementing a new detector and detection adapters, start by reviewing the [README](/README.md) to understand the goals of this library. ❤
+To get started with implementing a new detector and detection adapters, start by reviewing the [README](/README.md) to understand the goals of this library.
 
 ### Introduction 📝
 - A `Detector` is a class that analyzes input files to identify specific characteristics of a project.
