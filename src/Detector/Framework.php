@@ -71,9 +71,9 @@ class Framework extends Detector
                 return $detector;
             }
 
-            // Check package-based detection (for frameworks that support it)
-            if (method_exists($detector, 'getPackages')) {
-                $detectorPackages = $detector->getPackages();
+            // Check package-based detection
+            $detectorPackages = $detector->getPackages();
+            if (count($detectorPackages) > 0) {
                 foreach ($this->packageInputs as $packageInput) {
                     foreach ($detectorPackages as $package) {
                         if (str_contains($packageInput, $package)) {

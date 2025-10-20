@@ -12,6 +12,7 @@ use Utopia\Detector\Detection\Framework\NextJs;
 use Utopia\Detector\Detection\Framework\Nuxt;
 use Utopia\Detector\Detection\Framework\Remix;
 use Utopia\Detector\Detection\Framework\SvelteKit;
+use Utopia\Detector\Detection\Framework\TanStackStart;
 use Utopia\Detector\Detection\Packager\NPM;
 use Utopia\Detector\Detection\Packager\PNPM;
 use Utopia\Detector\Detection\Packager\Yarn;
@@ -42,11 +43,15 @@ class DetectorTest extends TestCase
      */
     public function testDetectPackager(array $files, ?string $expectedPackager): void
     {
-        $detector = new Packager($files);
+        $detector = new Packager();
         $detector
             ->addOption(new PNPM())
             ->addOption(new Yarn())
             ->addOption(new NPM());
+
+        foreach ($files as $file) {
+            $detector->addInput('path', $file);
+        }
 
         $detectedPackager = $detector->detect();
 
@@ -82,7 +87,6 @@ class DetectorTest extends TestCase
         string $packager = 'npm'
     ): void {
         $detector = new Runtime(
-            $files,
             new Strategy(Strategy::FILEMATCH),
             $packager
         );
@@ -99,6 +103,10 @@ class DetectorTest extends TestCase
             ->addOption(new Java())
             ->addOption(new CPP())
             ->addOption(new Dotnet());
+
+        foreach ($files as $file) {
+            $detector->addInput('path', $file);
+        }
 
         $detectedRuntime = $detector->detect();
 
@@ -138,7 +146,6 @@ class DetectorTest extends TestCase
         string $packager = 'npm'
     ): void {
         $detector = new Runtime(
-            $files,
             new Strategy(Strategy::LANGUAGES),
             $packager
         );
@@ -155,6 +162,10 @@ class DetectorTest extends TestCase
             ->addOption(new Java())
             ->addOption(new CPP())
             ->addOption(new Dotnet());
+
+        foreach ($files as $file) {
+            $detector->addInput('language', $file);
+        }
 
         $detectedRuntime = $detector->detect();
 
@@ -206,7 +217,6 @@ class DetectorTest extends TestCase
         string $packager = 'npm'
     ): void {
         $detector = new Runtime(
-            $files,
             new Strategy(Strategy::EXTENSION),
             $packager
         );
@@ -223,6 +233,10 @@ class DetectorTest extends TestCase
             ->addOption(new Java())
             ->addOption(new CPP())
             ->addOption(new Dotnet());
+
+        foreach ($files as $file) {
+            $detector->addInput('path', $file);
+        }
 
         $detectedRuntime = $detector->detect();
 
@@ -254,7 +268,7 @@ class DetectorTest extends TestCase
      */
     public function testFrameworkDetection(array $files, ?string $framework, ?string $installCommand = null, ?string $buildCommand = null, ?string $outputDirectory = null, string $packager = 'npm'): void
     {
-        $detector = new Framework($files, $packager);
+        $detector = new Framework($packager);
 
         $detector
             ->addOption(new Flutter())
@@ -265,7 +279,12 @@ class DetectorTest extends TestCase
             ->addOption(new NextJs())
             ->addOption(new Lynx())
             ->addOption(new Angular())
-            ->addOption(new Analog());
+            ->addOption(new Analog())
+            ->addOption(new TanStackStart());
+
+        foreach ($files as $file) {
+            $detector->addInput('path', $file);
+        }
 
         $detectedFramework = $detector->detect();
 
@@ -307,10 +326,14 @@ class DetectorTest extends TestCase
      */
     public function testRenderingDetection(array $files, string $framework, string $rendering, ?string $fallbackFile): void
     {
-        $detector = new Rendering($files, $framework);
+        $detector = new Rendering($framework);
         $detector
             ->addOption(new SSR())
             ->addOption(new XStatic());
+
+        foreach ($files as $file) {
+            $detector->addInput('path', $file);
+        }
 
         $detectedRendering = $detector->detect();
 
@@ -330,6 +353,7 @@ class DetectorTest extends TestCase
             [['nitro.json', 'server/index.mjs'], 'nuxt', 'ssr', null],
             [['server/server.mjs'], 'angular', 'ssr', null],
             [['server/index.mjs'], 'analog', 'ssr', null],
+            [['server/index.mjs'], 'tanstack-start', 'ssr', null],
             [['index.html', '_nuxt/something.js'], 'nuxt', 'static', 'index.html'],
             [['server/pages/index.js', 'prerendered/about.html', 'handler.js'], 'sveltekit', 'ssr', null],
             [['index.html', 'about.html'], 'sveltekit', 'static', null],
@@ -340,6 +364,83 @@ class DetectorTest extends TestCase
             [['index.html', 'about.html'], 'remix', 'static', null],
             [['about.html', 'style.css'], 'remix', 'static', 'about.html'],
             [['index.html', 'style.css'], 'flutter', 'static', 'index.html'],
+            [['index.html', 'about.html'], 'tanstack-start', 'static', null],
         ];
+    }
+
+    /**
+     * Test TanStack Start framework detection with packages type input
+     */
+    public function testTanStackStartDetectionWithPackages(): void
+    {
+        $detector = new Framework('npm');
+
+        $detector
+            ->addOption(new Flutter())
+            ->addOption(new Nuxt())
+            ->addOption(new Astro())
+            ->addOption(new Remix())
+            ->addOption(new SvelteKit())
+            ->addOption(new NextJs())
+            ->addOption(new Lynx())
+            ->addOption(new Angular())
+            ->addOption(new Analog())
+            ->addOption(new TanStackStart());
+
+        $packageJson = json_encode([
+            'name' => 'my-app',
+            'dependencies' => [
+                '@tanstack/react-start' => '^1.0.0',
+                'react' => '^18.0.0',
+            ],
+        ]);
+
+        $detector->addInput('packages', $packageJson);
+
+        $detectedFramework = $detector->detect();
+
+        $this->assertNotNull($detectedFramework);
+        $this->assertEquals('tanstack-start', $detectedFramework->getName());
+        $this->assertEquals('npm install', $detectedFramework->getInstallCommand());
+        $this->assertEquals('npm run build', $detectedFramework->getBuildCommand());
+        $this->assertEquals('./dist', $detectedFramework->getOutputDirectory());
+    }
+
+    /**
+     * Test TanStack Start framework detection with devDependencies
+     */
+    public function testTanStackStartDetectionWithDevPackages(): void
+    {
+        $detector = new Framework('pnpm');
+
+        $detector->addOption(new TanStackStart());
+
+        $packageJson = json_encode([
+            'name' => 'my-app',
+            'devDependencies' => [
+                '@tanstack/react-start' => '^1.0.0',
+            ],
+        ]);
+
+        $detector->addInput('packages', $packageJson);
+
+        $detectedFramework = $detector->detect();
+
+        $this->assertNotNull($detectedFramework);
+        $this->assertEquals('tanstack-start', $detectedFramework->getName());
+        $this->assertEquals('pnpm install', $detectedFramework->getInstallCommand());
+        $this->assertEquals('pnpm build', $detectedFramework->getBuildCommand());
+    }
+
+    /**
+     * Test that Framework detector rejects invalid input types
+     */
+    public function testFrameworkDetectorRejectsInvalidInputType(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage("Framework detector only accepts 'path' and 'packages' input types, got 'language'");
+
+        $detector = new Framework('npm');
+        $detector->addInput('language', 'JavaScript');
     }
 }
