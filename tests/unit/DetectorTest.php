@@ -393,7 +393,7 @@ class DetectorTest extends TestCase
                 '@tanstack/react-start' => '^1.0.0',
                 'react' => '^18.0.0',
             ],
-        ]);
+        ], JSON_UNESCAPED_SLASHES);
 
         $detector->addInput('packages', $packageJson);
 
@@ -420,7 +420,7 @@ class DetectorTest extends TestCase
             'devDependencies' => [
                 '@tanstack/react-start' => '^1.0.0',
             ],
-        ]);
+        ], JSON_UNESCAPED_SLASHES);
 
         $detector->addInput('packages', $packageJson);
 
