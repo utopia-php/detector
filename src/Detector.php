@@ -10,10 +10,28 @@ abstract class Detector
     protected array $options = [];
 
     /**
-     * @param  array<string>  $inputs
+     * @var array<array{type: string, content: string}>
      */
-    public function __construct(protected array $inputs)
+    protected array $inputs = [];
+
+    public function __construct()
     {
+    }
+
+    /**
+     * Add input with its type
+     *
+     * @param string $type Input type (e.g., 'path', 'packages', 'extension', 'language')
+     * @param string $content Input content
+     */
+    public function addInput(string $type, string $content): self
+    {
+        $this->inputs[] = [
+            'type' => $type,
+            'content' => $content,
+        ];
+
+        return $this;
     }
 
     abstract public function detect(): ?Detection;

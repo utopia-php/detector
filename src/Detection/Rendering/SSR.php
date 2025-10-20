@@ -14,6 +14,7 @@ class SSR extends Rendering
         'remix' => ['build/server/index.js'],
         'angular' => ['server/server.mjs'],
         'analog' => ['server/index.mjs'],
+        'tanstack-start' => ['server/index.mjs'],
         'flutter' => [],
         'lynx' => [],
     ];
