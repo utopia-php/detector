@@ -21,10 +21,10 @@ abstract class Detector
     /**
      * Add input with its type
      *
-     * @param string $type Input type (e.g., 'path', 'packages', 'extension', 'language')
      * @param string $content Input content
+     * @param string $type Input type (e.g., 'path', 'packages', 'extension', 'language', ..)
      */
-    public function addInput(string $type, string $content): self
+    public function addInput(string $content, string $type = ''): self
     {
         $this->inputs[] = [
             'type' => $type,

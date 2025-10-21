@@ -2,4 +2,4 @@
 /.idea/
 .phpunit.result.cache
 .env
-.DS_Storephpunit.phar
+.DS_Store

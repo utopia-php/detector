@@ -12,21 +12,6 @@ class Runtime extends Detector
      */
     protected array $options = [];
 
-    /**
-     * @var array<string>
-     */
-    protected array $pathInputs = [];
-
-    /**
-     * @var array<string>
-     */
-    protected array $extensionInputs = [];
-
-    /**
-     * @var array<string>
-     */
-    protected array $languageInputs = [];
-
     protected Strategy $strategy;
 
     protected string $packager = 'npm';
@@ -38,34 +23,15 @@ class Runtime extends Detector
         $this->packager = $packager;
     }
 
-    /**
-     * Add input with its type
-     *
-     * @param string $type Input type
-     * @param string $content Input content
-     */
-    public function addInput(string $type, string $content): self
-    {
-        parent::addInput($type, $content);
-
-        if ($type === 'path') {
-            $this->pathInputs[] = $content;
-        } elseif ($type === 'extension') {
-            $this->extensionInputs[] = $content;
-        } elseif ($type === 'language') {
-            $this->languageInputs[] = $content;
-        }
-
-        return $this;
-    }
-
     public function detect(): ?RuntimeDetection
     {
+        $inputs = array_map(fn ($input) => $input['content'], $this->inputs);
+
         switch ($this->strategy->getValue()) {
             case Strategy::FILEMATCH:
                 foreach ($this->options as $detector) {
                     $detectorFiles = $detector->getFiles();
-                    $matches = array_intersect($detectorFiles, $this->pathInputs);
+                    $matches = array_intersect($detectorFiles, $inputs);
                     if (count($matches) > 0) {
                         $detector->setPackager($this->packager);
 
@@ -79,7 +45,7 @@ class Runtime extends Detector
                     $detectorExtensions = $detector->getFileExtensions();
                     $inputExtensions = array_map(function ($file) {
                         return pathinfo($file, PATHINFO_EXTENSION);
-                    }, $this->pathInputs);
+                    }, $inputs);
                     $matches = array_intersect($detectorExtensions, $inputExtensions);
                     if (count($matches) > 0) {
                         $detector->setPackager($this->packager);
@@ -92,7 +58,7 @@ class Runtime extends Detector
             case Strategy::LANGUAGES:
                 foreach ($this->options as $detector) {
                     $detectorLanguages = $detector->getLanguages();
-                    $matches = array_intersect($detectorLanguages, $this->languageInputs);
+                    $matches = array_intersect($detectorLanguages, $inputs);
                     if (count($matches) > 0) {
                         $detector->setPackager($this->packager);
 

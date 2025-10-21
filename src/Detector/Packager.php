@@ -12,39 +12,17 @@ class Packager extends Detector
      */
     protected array $options = [];
 
-    /**
-     * @var array<string>
-     */
-    protected array $pathInputs = [];
-
     public function __construct()
     {
         parent::__construct();
     }
 
-    /**
-     * Add input with its type
-     *
-     * @param string $type Input type
-     * @param string $content Input content
-     */
-    public function addInput(string $type, string $content): self
-    {
-        parent::addInput($type, $content);
-
-        if ($type === 'path') {
-            $this->pathInputs[] = $content;
-        }
-
-        return $this;
-    }
-
     public function detect(): ?PackagerDetection
     {
-        foreach ($this->options as $packager) {
-            $packagerFiles = $packager->getFiles();
+        $files = array_map(fn ($input) => $input['content'], $this->inputs);
 
-            $matches = array_intersect($packagerFiles, $this->pathInputs);
+        foreach ($this->options as $packager) {
+            $matches = array_intersect($packager->getFiles(), $files);
             if (count($matches) > 0) {
                 return $packager;
             }

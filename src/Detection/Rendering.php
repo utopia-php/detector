@@ -17,4 +17,9 @@ abstract class Rendering extends Detection
     }
 
     abstract public function getName(): string;
+
+    /**
+     * @return array<string> List of relevant files for detection.
+     */
+    abstract public function getFiles(string $framework): array;
 }

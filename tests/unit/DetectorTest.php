@@ -50,7 +50,7 @@ class DetectorTest extends TestCase
             ->addOption(new NPM());
 
         foreach ($files as $file) {
-            $detector->addInput('path', $file);
+            $detector->addInput($file);
         }
 
         $detectedPackager = $detector->detect();
@@ -164,7 +164,7 @@ class DetectorTest extends TestCase
             ->addOption(new Dotnet());
 
         foreach ($files as $file) {
-            $detector->addInput('language', $file);
+            $detector->addInput($file);
         }
 
         $detectedRuntime = $detector->detect();
@@ -235,7 +235,7 @@ class DetectorTest extends TestCase
             ->addOption(new Dotnet());
 
         foreach ($files as $file) {
-            $detector->addInput('path', $file);
+            $detector->addInput($file);
         }
 
         $detectedRuntime = $detector->detect();
@@ -283,7 +283,7 @@ class DetectorTest extends TestCase
             ->addOption(new TanStackStart());
 
         foreach ($files as $file) {
-            $detector->addInput('path', $file);
+            $detector->addInput($file, Framework::INPUT_FILE);
         }
 
         $detectedFramework = $detector->detect();
@@ -332,7 +332,7 @@ class DetectorTest extends TestCase
             ->addOption(new XStatic());
 
         foreach ($files as $file) {
-            $detector->addInput('path', $file);
+            $detector->addInput($file);
         }
 
         $detectedRendering = $detector->detect();
@@ -393,13 +393,17 @@ class DetectorTest extends TestCase
                 '@tanstack/react-start' => '^1.0.0',
                 'react' => '^18.0.0',
             ],
-        ], JSON_UNESCAPED_SLASHES);
+        ], JSON_UNESCAPED_SLASHES) ?: '';
 
-        $detector->addInput('packages', $packageJson);
+        $detector->addInput($packageJson, Framework::INPUT_PACKAGES);
 
         $detectedFramework = $detector->detect();
 
         $this->assertNotNull($detectedFramework);
+        // Makes static code analyser smarter
+        if (is_null($detectedFramework)) {
+            throw new \Exception('Framework not detected');
+        }
         $this->assertEquals('tanstack-start', $detectedFramework->getName());
         $this->assertEquals('npm install', $detectedFramework->getInstallCommand());
         $this->assertEquals('npm run build', $detectedFramework->getBuildCommand());
@@ -420,13 +424,18 @@ class DetectorTest extends TestCase
             'devDependencies' => [
                 '@tanstack/react-start' => '^1.0.0',
             ],
-        ], JSON_UNESCAPED_SLASHES);
+        ], JSON_UNESCAPED_SLASHES) ?: '';
 
-        $detector->addInput('packages', $packageJson);
+        $detector->addInput($packageJson, Framework::INPUT_PACKAGES);
 
         $detectedFramework = $detector->detect();
 
         $this->assertNotNull($detectedFramework);
+        // Makes static code analyser smarter
+        if (is_null($detectedFramework)) {
+            throw new \Exception('Framework not detected');
+        }
+
         $this->assertEquals('tanstack-start', $detectedFramework->getName());
         $this->assertEquals('pnpm install', $detectedFramework->getInstallCommand());
         $this->assertEquals('pnpm build', $detectedFramework->getBuildCommand());

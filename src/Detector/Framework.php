@@ -7,20 +7,13 @@ use Utopia\Detector\Detector;
 
 class Framework extends Detector
 {
+    public const INPUT_FILE = 'file';
+    public const INPUT_PACKAGES = 'packages';
+
     /**
      * @var array<FrameworkDetection>
      */
     protected array $options = [];
-
-    /**
-     * @var array<string>
-     */
-    protected array $pathInputs = [];
-
-    /**
-     * @var array<string>
-     */
-    protected array $packageInputs = [];
 
     protected string $packager = 'npm';
 
@@ -30,25 +23,13 @@ class Framework extends Detector
         $this->packager = $packager;
     }
 
-    /**
-     * Add input with its type, only allowing 'path' and 'packages' types
-     *
-     * @param string $type Input type (must be 'path' or 'packages')
-     * @param string $content Input content
-     */
-    public function addInput(string $type, string $content): self
+    public function addInput(string $content, string $type = ''): self
     {
-        if ($type !== 'path' && $type !== 'packages') {
-            throw new \InvalidArgumentException("Framework detector only accepts 'path' and 'packages' input types, got '{$type}'");
+        if ($type !== self::INPUT_FILE && $type !== self::INPUT_PACKAGES) {
+            throw new \InvalidArgumentException("Invalid input type '{$type}'");
         }
 
-        parent::addInput($type, $content);
-
-        if ($type === 'path') {
-            $this->pathInputs[] = $content;
-        } elseif ($type === 'packages') {
-            $this->packageInputs[] = $content;
-        }
+        parent::addInput($content, $type);
 
         return $this;
     }
@@ -60,29 +41,22 @@ class Framework extends Detector
      */
     public function detect(): ?FrameworkDetection
     {
-        foreach ($this->options as $detector) {
-            $detectorFiles = $detector->getFiles();
+        $files = array_filter($this->inputs, fn ($input) => $input['type'] === self::INPUT_FILE);
+        $packages = array_filter($this->inputs, fn ($input) => $input['type'] === self::INPUT_PACKAGES);
 
+        foreach ($this->options as $detector) {
             // Check path-based detection
-            $matches = array_intersect($detectorFiles, $this->pathInputs);
+            $matches = array_intersect($detector->getFiles(), $files);
             if (count($matches) > 0) {
                 $detector->setPackager($this->packager);
-
                 return $detector;
             }
 
             // Check package-based detection
-            $detectorPackages = $detector->getPackages();
-            if (count($detectorPackages) > 0) {
-                foreach ($this->packageInputs as $packageInput) {
-                    foreach ($detectorPackages as $package) {
-                        if (str_contains($packageInput, $package)) {
-                            $detector->setPackager($this->packager);
-
-                            return $detector;
-                        }
-                    }
-                }
+            $matches = array_intersect($detector->getPackages(), $packages);
+            if (count($matches) > 0) {
+                $detector->setPackager($this->packager);
+                return $detector;
             }
         }
 

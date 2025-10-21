@@ -10,4 +10,9 @@ class XStatic extends Rendering
     {
         return 'static';
     }
+
+    public function getFiles(string $framework): array
+    {
+        return [];
+    }
 }
