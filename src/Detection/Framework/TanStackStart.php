@@ -22,7 +22,7 @@ class TanStackStart extends React
      */
     public function getPackages(): array
     {
-        return \array_merge(['@tanstack/react-start'], parent::getPackages());
+        return \array_merge(['@tanstack/react-start', '@tanstack/solid-start'], parent::getPackages());
     }
 
     public function getInstallCommand(): string
