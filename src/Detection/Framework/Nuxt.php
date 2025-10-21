@@ -2,9 +2,7 @@
 
 namespace Utopia\Detector\Detection\Framework;
 
-use Utopia\Detector\Detection\Framework;
-
-class Nuxt extends Framework
+class Nuxt extends Vue
 {
     public function getName(): string
     {
@@ -14,9 +12,17 @@ class Nuxt extends Framework
     /**
      * @return array<string>
      */
+    public function getPackages(): array
+    {
+        return \array_merge(['nuxt'], parent::getPackages());
+    }
+
+    /**
+     * @return array<string>
+     */
     public function getFiles(): array
     {
-        return ['nuxt.config.js', 'nuxt.config.ts'];
+        return \array_merge(['nuxt.config.js', 'nuxt.config.ts', 'nuxt.config.mjs'], parent::getFiles());
     }
 
     public function getInstallCommand(): string

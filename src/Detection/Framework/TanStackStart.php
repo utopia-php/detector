@@ -2,9 +2,7 @@
 
 namespace Utopia\Detector\Detection\Framework;
 
-use Utopia\Detector\Detection\Framework;
-
-class TanStackStart extends Framework
+class TanStackStart extends React
 {
     public function getName(): string
     {
@@ -16,8 +14,7 @@ class TanStackStart extends Framework
      */
     public function getFiles(): array
     {
-        // TanStack Start doesn't have specific config files
-        return [];
+        return \array_merge([], parent::getFiles());
     }
 
     /**
@@ -25,7 +22,7 @@ class TanStackStart extends Framework
      */
     public function getPackages(): array
     {
-        return ['@tanstack/react-start'];
+        return \array_merge(['@tanstack/react-start'], parent::getPackages());
     }
 
     public function getInstallCommand(): string

@@ -47,32 +47,39 @@ class Framework extends Detector
         $packages = array_filter($this->inputs, fn ($input) => $input['type'] === self::INPUT_PACKAGES);
         $packages = array_map(fn ($input) => $input['content'], $packages);
 
+        // List of possible frameworks with count of matches
+        $frameworks = [];
         foreach ($this->options as $detector) {
-            // Check path-based detection
-            $matches = array_intersect($detector->getFiles(), $files);
-            if (count($matches) > 0) {
-                $detector->setPackager($this->packager);
-                return $detector;
-            }
+            $frameworks[$detector->getName()] = 0;
+        }
 
+        foreach ($this->options as $detector) {
             // Check package-based detection
-            $matched = false;
             foreach ($packages as $packageJson) {
-                if ($matched) {
-                    break;
-                }
-
                 foreach ($detector->getPackages() as $packageNeeded) {
-                    if (str_contains($packageJson, $packageNeeded)) {
-                        $matched = true;
-                        break;
+                    if (str_contains($packageJson, '"'.$packageNeeded.'"')) {
+                        $frameworks[$detector->getName()] += 1;
                     }
                 }
             }
 
-            if ($matched) {
-                $detector->setPackager($this->packager);
-                return $detector;
+            // Check path-based detection
+            $matches = array_intersect($detector->getFiles(), $files);
+            $frameworks[$detector->getName()] += \count($matches);
+        }
+
+        // Filter out frameworks without matches
+        $frameworks = array_filter($frameworks, fn ($count) => $count > 0);
+
+        // Sort for framework with most matches to be first
+        arsort($frameworks);
+
+        if (\count($frameworks) > 0) {
+            foreach ($this->options as $detector) {
+                if ($detector->getName() === \array_key_first($frameworks)) {
+                    $detector->setPackager($this->packager);
+                    return $detector;
+                }
             }
         }
 

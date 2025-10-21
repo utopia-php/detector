@@ -14,9 +14,17 @@ class Astro extends Framework
     /**
      * @return array<string>
      */
+    public function getPackages(): array
+    {
+        return ['astro'];
+    }
+
+    /**
+     * @return array<string>
+     */
     public function getFiles(): array
     {
-        return ['astro.config.mjs', 'astro.config.js'];
+        return ['astro.config.mjs', 'astro.config.js', 'astro.config.ts'];
     }
 
     public function getInstallCommand(): string
