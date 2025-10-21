@@ -105,7 +105,7 @@ class DetectorTest extends TestCase
             ->addOption(new Dotnet());
 
         foreach ($files as $file) {
-            $detector->addInput('path', $file);
+            $detector->addInput($file);
         }
 
         $detectedRuntime = $detector->detect();
@@ -447,9 +447,9 @@ class DetectorTest extends TestCase
     public function testFrameworkDetectorRejectsInvalidInputType(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage("Framework detector only accepts 'path' and 'packages' input types, got 'language'");
+        $this->expectExceptionMessage("Invalid input type 'language'");
 
         $detector = new Framework('npm');
-        $detector->addInput('language', 'JavaScript');
+        $detector->addInput('JavaScript', 'language');
     }
 }

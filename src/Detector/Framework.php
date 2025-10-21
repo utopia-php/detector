@@ -42,7 +42,10 @@ class Framework extends Detector
     public function detect(): ?FrameworkDetection
     {
         $files = array_filter($this->inputs, fn ($input) => $input['type'] === self::INPUT_FILE);
+        $files = array_map(fn ($input) => $input['content'], $files);
+
         $packages = array_filter($this->inputs, fn ($input) => $input['type'] === self::INPUT_PACKAGES);
+        $packages = array_map(fn ($input) => $input['content'], $packages);
 
         foreach ($this->options as $detector) {
             // Check path-based detection
@@ -53,8 +56,21 @@ class Framework extends Detector
             }
 
             // Check package-based detection
-            $matches = array_intersect($detector->getPackages(), $packages);
-            if (count($matches) > 0) {
+            $matched = false;
+            foreach ($packages as $packageJson) {
+                if ($matched) {
+                    break;
+                }
+
+                foreach ($detector->getPackages() as $packageNeeded) {
+                    if (str_contains($packageJson, $packageNeeded)) {
+                        $matched = true;
+                        break;
+                    }
+                }
+            }
+
+            if ($matched) {
                 $detector->setPackager($this->packager);
                 return $detector;
             }
