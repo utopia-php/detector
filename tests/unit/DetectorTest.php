@@ -10,9 +10,13 @@ use Utopia\Detector\Detection\Framework\Flutter;
 use Utopia\Detector\Detection\Framework\Lynx;
 use Utopia\Detector\Detection\Framework\NextJs;
 use Utopia\Detector\Detection\Framework\Nuxt;
+use Utopia\Detector\Detection\Framework\React;
+use Utopia\Detector\Detection\Framework\ReactNative;
 use Utopia\Detector\Detection\Framework\Remix;
+use Utopia\Detector\Detection\Framework\Svelte;
 use Utopia\Detector\Detection\Framework\SvelteKit;
 use Utopia\Detector\Detection\Framework\TanStackStart;
+use Utopia\Detector\Detection\Framework\Vue;
 use Utopia\Detector\Detection\Packager\NPM;
 use Utopia\Detector\Detection\Packager\PNPM;
 use Utopia\Detector\Detection\Packager\Yarn;
@@ -451,5 +455,337 @@ class DetectorTest extends TestCase
 
         $detector = new Framework('npm');
         $detector->addInput('JavaScript', 'language');
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    public function frameworkEdgeCasesProvider(): array
+    {
+        return [
+            // React-based
+            [
+                'assertion' => 'Just react should mean just react',
+                'files' => [
+                    'package.json',
+                ],
+                'package' => \json_encode([
+                    'dependencies' => [
+                        'react' => '^17.0.2'
+                    ]
+                ]) ?: '',
+                'framework' => 'react',
+            ],
+            [
+                'assertion' => 'React with Next package is Next.js',
+                'files' => [
+                    'package.json',
+                ],
+                'package' => \json_encode([
+                    'dependencies' => [
+                        'react' => '^17.0.2',
+                        'next' => '^12.0.7'
+                    ]
+                ]) ?: '',
+                'framework' => 'nextjs',
+            ],
+            [
+                'assertion' => 'React with Next config is Next.js',
+                'files' => [
+                    'package.json',
+                    'next.config.js'
+                ],
+                'package' => \json_encode([
+                    'dependencies' => [
+                        'react' => '^17.0.2',
+                    ]
+                ]) ?: '',
+                'framework' => 'nextjs',
+            ],
+            [
+                'assertion' => 'React with React Native is React Native',
+                'files' => [
+                    'package.json',
+                ],
+                'package' => \json_encode([
+                    'dependencies' => [
+                        'react' => '^17.0.2',
+                        'react-native' => '^0.68.2'
+                    ]
+                ]) ?: '',
+                'framework' => 'react-native',
+            ],
+            [
+                'assertion' => 'React with Tanstack Start is Tanstack Start',
+                'files' => [
+                    'package.json',
+                ],
+                'package' => \json_encode([
+                    'dependencies' => [
+                        'react' => '^17.0.2',
+                        '@tanstack/react-start' => '^1.0.0'
+                    ]
+                ], JSON_UNESCAPED_SLASHES) ?: '',
+                'framework' => 'tanstack-start',
+            ],
+            [
+                'assertion' => 'React with Remix is Remix',
+                'files' => [
+                    'package.json',
+                    'remix.config.js'
+                ],
+                'package' => \json_encode([
+                    'dependencies' => [
+                        'react' => '^17.0.2'
+                    ]
+                ]) ?: '',
+                'framework' => 'remix',
+            ],
+            [
+                'assertion' => 'React with Lynx config file is Lynx',
+                'files' => [
+                    'package.json',
+                    'lynx.config.ts'
+                ],
+                'package' => \json_encode([
+                    'dependencies' => [
+                        'react' => '^17.0.2'
+                    ]
+                ]) ?: '',
+                'framework' => 'lynx',
+            ],
+            [
+                'assertion' => 'React with Lynx package is Lynx',
+                'files' => [
+                    'package.json'
+                ],
+                'package' => \json_encode([
+                    'dependencies' => [
+                        'react' => '^17.0.2',
+                        '@lynx-js/react' => '^1.0.0'
+                    ]
+                ], JSON_UNESCAPED_SLASHES) ?: '',
+                'framework' => 'lynx',
+            ],
+
+            // Angular-based
+            [
+                'assertion' => 'Just Angular should mean just Angular',
+                'files' => [
+                    'package.json',
+                ],
+                'package' => \json_encode([
+                    'dependencies' => [
+                        '@angular/core' => '^14.0.0'
+                    ]
+                ]) ?: '',
+                'framework' => 'angular',
+            ],
+            [
+                'assertion' => 'Angular with Analog is Analog',
+                'files' => [
+                    'package.json',
+                    'angular.json',
+                ],
+                'package' => \json_encode([
+                    'dependencies' => [
+                        '@angular/core' => '^14.0.0',
+                        '@analogjs/platform' => '^14.0.0',
+                    ]
+                ], JSON_UNESCAPED_SLASHES) ?: '',
+                'framework' => 'analog',
+            ],
+
+            // Vue-based
+            [
+                'assertion' => 'Just Vue should mean just Vue',
+                'files' => [
+                    'package.json',
+                ],
+                'package' => \json_encode([
+                    'dependencies' => [
+                        'vue' => '^3.2.47',
+                    ]
+                ]) ?: '',
+                'framework' => 'vue',
+            ],
+            [
+                'assertion' => 'Vue with Nuxt config file is Nuxt',
+                'files' => [
+                    'package.json',
+                    'nuxt.config.js',
+                ],
+                'package' => \json_encode([
+                    'dependencies' => [
+                        'vue' => '^3.2.47',
+                    ]
+                ]) ?: '',
+                'framework' => 'nuxt',
+            ],
+            [
+                'assertion' => 'Vue with Nuxt package is Nuxt',
+                'files' => [
+                    'package.json',
+                ],
+                'package' => \json_encode([
+                    'dependencies' => [
+                        'vue' => '^3.2.47',
+                        'nuxt' => '^3.0.0'
+                    ]
+                ]) ?: '',
+                'framework' => 'nuxt',
+            ],
+
+            // Astro-based
+            [
+                'assertion' => 'Just Astro should mean just Astro',
+                'files' => [
+                    'package.json',
+                ],
+                'package' => \json_encode([
+                    'dependencies' => [
+                        'astro' => '^5.0.0'
+                    ]
+                ]) ?: '',
+                'framework' => 'astro',
+            ],
+            [
+                'assertion' => 'Astro with React is Astro',
+                'files' => [
+                    'package.json',
+                ],
+                'package' => \json_encode([
+                    'dependencies' => [
+                        'astro' => '^5.0.0',
+                        'react' => '^18.2.0'
+                    ]
+                ]) ?: '',
+                'framework' => 'astro',
+            ],
+            [
+                'assertion' => 'Astro with Angular package is Astro',
+                'files' => [
+                    'package.json',
+                ],
+                'package' => \json_encode([
+                    'dependencies' => [
+                        'astro' => '^5.0.0',
+                        '@angular/core' => '^18.2.0'
+                    ]
+                ], JSON_UNESCAPED_SLASHES) ?: '',
+                'framework' => 'astro',
+            ],
+            [
+                'assertion' => 'Astro with Angular file is Astro',
+                'files' => [
+                    'package.json',
+                    'angular.json',
+                ],
+                'package' => \json_encode([
+                    'dependencies' => [
+                        'astro' => '^5.0.0',
+                    ]
+                ], JSON_UNESCAPED_SLASHES) ?: '',
+                'framework' => 'astro',
+            ],
+            [
+                'assertion' => 'Astro with Angular file and package is Astro',
+                'files' => [
+                    'package.json',
+                    'angular.json',
+                ],
+                'package' => \json_encode([
+                    'dependencies' => [
+                        'astro' => '^5.0.0',
+                        'angular' => '^18.2.0'
+                    ]
+                ], JSON_UNESCAPED_SLASHES) ?: '',
+                'framework' => 'astro',
+            ],
+            [
+                'assertion' => 'Astro with Vue is Astro',
+                'files' => [
+                    'package.json',
+                ],
+                'package' => \json_encode([
+                    'dependencies' => [
+                        'astro' => '^5.0.0',
+                        'vue' => '^3.2.47'
+                    ]
+                ]) ?: '',
+                'framework' => 'astro',
+            ],
+
+
+            // Svelte-based
+            [
+                'assertion' => 'Just Svelte should mean just Svelte',
+                'files' => [
+                    'package.json',
+                ],
+                'package' => \json_encode([
+                    'dependencies' => [
+                        'svelte' => '^3.54.0'
+                    ]
+                ]) ?: '',
+                'framework' => 'svelte',
+            ],
+            [
+                'assertion' => 'Svelte with SvelteKit is SvelteKit',
+                'files' => [
+                    'package.json',
+                ],
+                'package' => \json_encode([
+                    'dependencies' => [
+                        'svelte' => '^3.54.0',
+                        '@sveltejs/kit' => '^1.0.0'
+                    ]
+                ], JSON_UNESCAPED_SLASHES) ?: '',
+                'framework' => 'sveltekit',
+            ],
+        ];
+    }
+
+    /**
+     * Test scenarios that can possibly result in multiple frameworks,
+     * but only one is accurate detection.
+     * @param array<string> $files
+     * @dataProvider frameworkEdgeCasesProvider
+     */
+    public function testFrameworkEdgeCases(string $assertion, array $files, string $packageFile, string $framework): void
+    {
+        $detector = new Framework('npm');
+
+        $detector
+            ->addOption(new Analog())
+            ->addOption(new Angular())
+            ->addOption(new Astro())
+            ->addOption(new Flutter())
+            ->addOption(new Lynx())
+            ->addOption(new NextJs())
+            ->addOption(new Nuxt())
+            ->addOption(new React())
+            ->addOption(new ReactNative())
+            ->addOption(new Remix())
+            ->addOption(new Svelte())
+            ->addOption(new SvelteKit())
+            ->addOption(new TanStackStart())
+            ->addOption(new Vue());
+
+        foreach ($files as $file) {
+            $detector->addInput($file, Framework::INPUT_FILE);
+        }
+
+        $detector->addInput($packageFile, Framework::INPUT_PACKAGES);
+
+        $detection = $detector->detect();
+
+        $this->assertNotNull($detection, $assertion);
+        // Makes static code analyser smarter
+        if (is_null($detection)) {
+            throw new \Exception('Framework not detected');
+        }
+
+        $this->assertEquals($framework, $detection->getName(), $assertion);
     }
 }

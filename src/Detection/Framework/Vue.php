@@ -22,7 +22,7 @@ class Vue extends JS
      */
     public function getFiles(): array
     {
-        return \array_merge([], parent::getPackages());
+        return \array_merge([], parent::getFiles());
     }
 
     public function getInstallCommand(): string

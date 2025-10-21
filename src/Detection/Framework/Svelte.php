@@ -2,11 +2,11 @@
 
 namespace Utopia\Detector\Detection\Framework;
 
-class Lynx extends React
+class Svelte extends JS
 {
     public function getName(): string
     {
-        return 'lynx';
+        return 'svelte';
     }
 
     /**
@@ -14,7 +14,7 @@ class Lynx extends React
      */
     public function getPackages(): array
     {
-        return \array_merge(['@lynx-js/react'], parent::getPackages());
+        return \array_merge(['svelte'], parent::getPackages());
     }
 
     /**
@@ -22,7 +22,7 @@ class Lynx extends React
      */
     public function getFiles(): array
     {
-        return \array_merge(['lynx.config.ts', 'lynx.config.js', 'lynx.config.mjs'], parent::getFiles());
+        return \array_merge(['svelte.config.js', 'svelte.config.mjs', 'svelte.config.ts'], parent::getFiles());
     }
 
     public function getInstallCommand(): string
@@ -45,6 +45,6 @@ class Lynx extends React
 
     public function getOutputDirectory(): string
     {
-        return './dist';
+        return './build';
     }
 }

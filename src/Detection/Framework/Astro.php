@@ -2,9 +2,7 @@
 
 namespace Utopia\Detector\Detection\Framework;
 
-use Utopia\Detector\Detection\Framework;
-
-class Astro extends Framework
+class Astro extends JS
 {
     public function getName(): string
     {
@@ -16,7 +14,16 @@ class Astro extends Framework
      */
     public function getPackages(): array
     {
-        return ['astro'];
+        $packages = \array_merge(
+            ['astro'],
+            parent::getPackages(),
+            (new Angular())->getPackages(),
+            (new React())->getPackages(),
+            (new Vue())->getPackages(),
+            (new Svelte())->getPackages()
+        );
+
+        return \array_unique($packages);
     }
 
     /**
@@ -24,7 +31,16 @@ class Astro extends Framework
      */
     public function getFiles(): array
     {
-        return ['astro.config.mjs', 'astro.config.js', 'astro.config.ts'];
+        $files = \array_merge(
+            ['astro.config.mjs', 'astro.config.js', 'astro.config.ts'],
+            parent::getFiles(),
+            (new Angular())->getFiles(),
+            (new React())->getFiles(),
+            (new Vue())->getFiles(),
+            (new Svelte())->getFiles()
+        );
+
+        return \array_unique($files);
     }
 
     public function getInstallCommand(): string

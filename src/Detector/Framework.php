@@ -3,6 +3,7 @@
 namespace Utopia\Detector\Detector;
 
 use Utopia\Detector\Detection\Framework as FrameworkDetection;
+use Utopia\Detector\Detection\Framework\Astro;
 use Utopia\Detector\Detector;
 
 class Framework extends Detector
@@ -47,10 +48,17 @@ class Framework extends Detector
         $packages = array_filter($this->inputs, fn ($input) => $input['type'] === self::INPUT_PACKAGES);
         $packages = array_map(fn ($input) => $input['content'], $packages);
 
-        // List of possible frameworks with count of matches
-        $frameworks = [];
+        // List of frameworks with count of matches
+        $frameworkMatches = [];
+
+        // List of frameworks with count of parents
+        // Helps decide framework priority when multiple frameworks got same matches count
+        // (framework with least parents wins)
+        $fameworkParents = [];
+
         foreach ($this->options as $detector) {
-            $frameworks[$detector->getName()] = 0;
+            $frameworkMatches[$detector->getName()] = 0;
+            $fameworkParents[$detector->getName()] = 0;
         }
 
         foreach ($this->options as $detector) {
@@ -58,28 +66,60 @@ class Framework extends Detector
             foreach ($packages as $packageJson) {
                 foreach ($detector->getPackages() as $packageNeeded) {
                     if (str_contains($packageJson, '"'.$packageNeeded.'"')) {
-                        $frameworks[$detector->getName()] += 1;
+                        $frameworkMatches[$detector->getName()] += 1;
                     }
                 }
             }
 
             // Check path-based detection
             $matches = array_intersect($detector->getFiles(), $files);
-            $frameworks[$detector->getName()] += \count($matches);
+            $frameworkMatches[$detector->getName()] += \count($matches);
+
+            // Figure out how many classes detector extends using native PHP
+            $parent = \get_parent_class($detector);
+            while ($parent !== false) {
+                $fameworkParents[$detector->getName()] += 1;
+                $parent = \get_parent_class($parent);
+            }
         }
 
-        // Filter out frameworks without matches
-        $frameworks = array_filter($frameworks, fn ($count) => $count > 0);
+        // Filter out frameworks with 0 matches
+        $frameworkMatches = array_filter($frameworkMatches, fn ($count) => $count > 0);
+
+        if (\count($frameworkMatches) <= 0) {
+            return null;
+        }
 
         // Sort for framework with most matches to be first
-        arsort($frameworks);
+        arsort($frameworkMatches);
 
-        if (\count($frameworks) > 0) {
-            foreach ($this->options as $detector) {
-                if ($detector->getName() === \array_key_first($frameworks)) {
-                    $detector->setPackager($this->packager);
-                    return $detector;
-                }
+        // Filter out non-max matches
+        $highestMatch = $frameworkMatches[\array_key_first($frameworkMatches)];
+        $frameworkMatches = array_filter($frameworkMatches, fn ($count) => $count == $highestMatch);
+
+        if (\count($frameworkMatches) === 1) {
+            $bestFramework = \array_key_first($frameworkMatches);
+        } else {
+            $bestFrameworks = \array_keys($frameworkMatches);
+            usort($bestFrameworks, fn ($a, $b) => $fameworkParents[$a] <=> $fameworkParents[$b]);
+
+            $bestFramework = $bestFrameworks[0];
+
+            // Trick to prevent Astro (library-agnostic framework) from detecting everywhere
+            $astro = (new Astro())->getName();
+            if (
+                $bestFramework === $astro &&
+                // and 2nd detection equally good as Astro
+                $frameworkMatches[$astro] == $frameworkMatches[$bestFrameworks[1]]
+            ) {
+                $bestFramework = $bestFrameworks[1];
+            }
+        }
+
+        foreach ($this->options as $detector) {
+            if ($detector->getName() === $bestFramework) {
+                $detector->setPackager($this->packager);
+                return $detector;
             }
         }
 
