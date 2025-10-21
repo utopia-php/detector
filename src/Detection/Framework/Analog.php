@@ -2,9 +2,7 @@
 
 namespace Utopia\Detector\Detection\Framework;
 
-use Utopia\Detector\Detection\Framework;
-
-class Analog extends Framework
+class Analog extends Angular
 {
     public function getName(): string
     {
@@ -14,9 +12,17 @@ class Analog extends Framework
     /**
      * @return array<string>
      */
+    public function getPackages(): array
+    {
+        return \array_merge(['@analogjs/platform'], parent::getPackages());
+    }
+
+    /**
+     * @return array<string>
+     */
     public function getFiles(): array
     {
-        return ['angular.json'];
+        return parent::getFiles();
     }
 
     public function getInstallCommand(): string

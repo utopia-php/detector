@@ -2,19 +2,11 @@
 
 namespace Utopia\Detector\Detection\Framework;
 
-class NextJs extends React
+class TanStackStart extends React
 {
     public function getName(): string
     {
-        return 'nextjs';
-    }
-
-    /**
-     * @return array<string>
-     */
-    public function getPackages(): array
-    {
-        return \array_merge(['next'], parent::getPackages());
+        return 'tanstack-start';
     }
 
     /**
@@ -22,7 +14,15 @@ class NextJs extends React
      */
     public function getFiles(): array
     {
-        return \array_merge(['next.config.js', 'next.config.ts', 'next.config.mjs'], parent::getFiles());
+        return \array_merge([], parent::getFiles());
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function getPackages(): array
+    {
+        return \array_merge(['@tanstack/react-start', '@tanstack/solid-start'], parent::getPackages());
     }
 
     public function getInstallCommand(): string
@@ -45,6 +45,6 @@ class NextJs extends React
 
     public function getOutputDirectory(): string
     {
-        return './.next';
+        return './dist';
     }
 }

@@ -2,9 +2,7 @@
 
 namespace Utopia\Detector\Detection\Framework;
 
-use Utopia\Detector\Detection\Framework;
-
-class Angular extends Framework
+class Angular extends JS
 {
     public function getName(): string
     {
@@ -14,9 +12,17 @@ class Angular extends Framework
     /**
      * @return array<string>
      */
+    public function getPackages(): array
+    {
+        return \array_merge(['@angular/core'], parent::getPackages());
+    }
+
+    /**
+     * @return array<string>
+     */
     public function getFiles(): array
     {
-        return ['angular.json'];
+        return \array_merge(['angular.json'], parent::getFiles());
     }
 
     public function getInstallCommand(): string

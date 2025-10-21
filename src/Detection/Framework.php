@@ -26,6 +26,14 @@ abstract class Framework extends Detection
      */
     abstract public function getFiles(): array;
 
+    /**
+     * @return array<string> List of package names for detection.
+     */
+    public function getPackages(): array
+    {
+        return [];
+    }
+
     abstract public function getInstallCommand(): string;
 
     abstract public function getBuildCommand(): string;

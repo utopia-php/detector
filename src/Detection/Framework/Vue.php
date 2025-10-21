@@ -2,11 +2,11 @@
 
 namespace Utopia\Detector\Detection\Framework;
 
-class NextJs extends React
+class Vue extends JS
 {
     public function getName(): string
     {
-        return 'nextjs';
+        return 'vue';
     }
 
     /**
@@ -14,7 +14,7 @@ class NextJs extends React
      */
     public function getPackages(): array
     {
-        return \array_merge(['next'], parent::getPackages());
+        return \array_merge(['vue'], parent::getPackages());
     }
 
     /**
@@ -22,7 +22,7 @@ class NextJs extends React
      */
     public function getFiles(): array
     {
-        return \array_merge(['next.config.js', 'next.config.ts', 'next.config.mjs'], parent::getFiles());
+        return \array_merge([], parent::getFiles());
     }
 
     public function getInstallCommand(): string
@@ -45,6 +45,6 @@ class NextJs extends React
 
     public function getOutputDirectory(): string
     {
-        return './.next';
+        return './dist';
     }
 }

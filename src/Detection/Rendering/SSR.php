@@ -6,7 +6,7 @@ use Utopia\Detector\Detection\Rendering;
 
 class SSR extends Rendering
 {
-    public const FRAMEWORK_FILES = [
+    private const FRAMEWORK_FILES = [
         'nextjs' => ['.next/server/pages/_app.js'],
         'nuxt' => ['server/index.mjs'],
         'sveltekit' => ['handler.js'],
@@ -14,9 +14,18 @@ class SSR extends Rendering
         'remix' => ['build/server/index.js'],
         'angular' => ['server/server.mjs'],
         'analog' => ['server/index.mjs'],
+        'tanstack-start' => ['server/server.js', 'server/index.mjs'],
         'flutter' => [],
         'lynx' => [],
     ];
+
+    /**
+     * @return array<string>
+     */
+    public function getFiles(string $framework): array
+    {
+        return self::FRAMEWORK_FILES[$framework] ?? [];
+    }
 
     public function getName(): string
     {

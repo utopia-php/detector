@@ -4,30 +4,38 @@ namespace Utopia\Detector\Detector;
 
 use Utopia\Detector\Detection\Rendering as RenderingDetection;
 use Utopia\Detector\Detection\Rendering\XStatic;
-use Utopia\Detector\Detection\Rendering\SSR;
 use Utopia\Detector\Detector;
 
 class Rendering extends Detector
 {
+    protected string $framework;
+
     /**
-     * @param  array<string>  $inputs
+     * @var array<RenderingDetection>
      */
-    public function __construct(protected array $inputs, protected string $framework)
+    protected array $options = [];
+
+    public function __construct(string $framework)
     {
+        parent::__construct();
+
+        $this->framework = $framework;
     }
 
     public function detect(): RenderingDetection
     {
-        $files = SSR::FRAMEWORK_FILES[$this->framework] ?? [];
-        $matches = array_intersect($this->inputs, $files);
+        $files = array_map(fn ($input) => $input['content'], $this->inputs);
 
-        if (count($matches) > 0) {
-            return new SSR();
+        foreach ($this->options as $strategy) {
+            $matches = array_intersect($strategy->getFiles($this->framework), $files);
+            if (count($matches) > 0) {
+                return $strategy;
+            }
         }
 
         // set fallback file for Static if there is only one html file
         $htmlFiles = [];
-        foreach ($this->inputs as $file) {
+        foreach ($files as $file) {
             if (\pathinfo($file, PATHINFO_EXTENSION) === 'html') {
                 $htmlFiles[] = $file;
             }

@@ -12,23 +12,26 @@ class Runtime extends Detector
      */
     protected array $options = [];
 
-    /**
-     * @param  array<string>  $inputs
-     */
-    public function __construct(
-        protected array $inputs,
-        protected Strategy $strategy,
-        protected string $packager = 'npm'
-    ) {
+    protected Strategy $strategy;
+
+    protected string $packager = 'npm';
+
+    public function __construct(Strategy $strategy, string $packager = 'npm')
+    {
+        parent::__construct();
+        $this->strategy = $strategy;
+        $this->packager = $packager;
     }
 
     public function detect(): ?RuntimeDetection
     {
+        $inputs = array_map(fn ($input) => $input['content'], $this->inputs);
+
         switch ($this->strategy->getValue()) {
             case Strategy::FILEMATCH:
                 foreach ($this->options as $detector) {
                     $detectorFiles = $detector->getFiles();
-                    $matches = array_intersect($detectorFiles, $this->inputs);
+                    $matches = array_intersect($detectorFiles, $inputs);
                     if (count($matches) > 0) {
                         $detector->setPackager($this->packager);
 
@@ -40,9 +43,10 @@ class Runtime extends Detector
             case Strategy::EXTENSION:
                 foreach ($this->options as $detector) {
                     $detectorExtensions = $detector->getFileExtensions();
-                    $matches = array_intersect($detectorExtensions, array_map(function ($file) {
+                    $inputExtensions = array_map(function ($file) {
                         return pathinfo($file, PATHINFO_EXTENSION);
-                    }, $this->inputs));
+                    }, $inputs);
+                    $matches = array_intersect($detectorExtensions, $inputExtensions);
                     if (count($matches) > 0) {
                         $detector->setPackager($this->packager);
 
@@ -54,7 +58,7 @@ class Runtime extends Detector
             case Strategy::LANGUAGES:
                 foreach ($this->options as $detector) {
                     $detectorLanguages = $detector->getLanguages();
-                    $matches = array_intersect($detectorLanguages, $this->inputs);
+                    $matches = array_intersect($detectorLanguages, $inputs);
                     if (count($matches) > 0) {
                         $detector->setPackager($this->packager);
 

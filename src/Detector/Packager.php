@@ -12,19 +12,17 @@ class Packager extends Detector
      */
     protected array $options = [];
 
-    /**
-     * @param  array<string>  $inputs
-     */
-    public function __construct(protected array $inputs)
+    public function __construct()
     {
+        parent::__construct();
     }
 
     public function detect(): ?PackagerDetection
     {
-        foreach ($this->options as $packager) {
-            $packagerFiles = $packager->getFiles();
+        $files = array_map(fn ($input) => $input['content'], $this->inputs);
 
-            $matches = array_intersect($packagerFiles, $this->inputs);
+        foreach ($this->options as $packager) {
+            $matches = array_intersect($packager->getFiles(), $files);
             if (count($matches) > 0) {
                 return $packager;
             }

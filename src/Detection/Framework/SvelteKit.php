@@ -2,9 +2,7 @@
 
 namespace Utopia\Detector\Detection\Framework;
 
-use Utopia\Detector\Detection\Framework;
-
-class SvelteKit extends Framework
+class SvelteKit extends Svelte
 {
     public function getName(): string
     {
@@ -14,9 +12,17 @@ class SvelteKit extends Framework
     /**
      * @return array<string>
      */
+    public function getPackages(): array
+    {
+        return \array_merge(['@sveltejs/kit'], parent::getPackages());
+    }
+
+    /**
+     * @return array<string>
+     */
     public function getFiles(): array
     {
-        return ['svelte.config.js'];
+        return \array_merge([], parent::getFiles());
     }
 
     public function getInstallCommand(): string

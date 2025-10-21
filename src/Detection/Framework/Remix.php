@@ -2,9 +2,7 @@
 
 namespace Utopia\Detector\Detection\Framework;
 
-use Utopia\Detector\Detection\Framework;
-
-class Remix extends Framework
+class Remix extends React
 {
     public function getName(): string
     {
@@ -14,9 +12,17 @@ class Remix extends Framework
     /**
      * @return array<string>
      */
+    public function getPackages(): array
+    {
+        return \array_merge(['@remix-run/react'], parent::getPackages());
+    }
+
+    /**
+     * @return array<string>
+     */
     public function getFiles(): array
     {
-        return ['remix.config.js', 'remix.config.ts'];
+        return \array_merge(['remix.config.js', 'remix.config.ts', 'remix.config.mjs'], parent::getFiles());
     }
 
     public function getInstallCommand(): string

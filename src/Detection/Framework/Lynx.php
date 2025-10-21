@@ -2,9 +2,7 @@
 
 namespace Utopia\Detector\Detection\Framework;
 
-use Utopia\Detector\Detection\Framework;
-
-class Lynx extends Framework
+class Lynx extends React
 {
     public function getName(): string
     {
@@ -14,9 +12,17 @@ class Lynx extends Framework
     /**
      * @return array<string>
      */
+    public function getPackages(): array
+    {
+        return \array_merge(['@lynx-js/react'], parent::getPackages());
+    }
+
+    /**
+     * @return array<string>
+     */
     public function getFiles(): array
     {
-        return ['lynx.config.ts', 'lynx.config.js'];
+        return \array_merge(['lynx.config.ts', 'lynx.config.js', 'lynx.config.mjs'], parent::getFiles());
     }
 
     public function getInstallCommand(): string
