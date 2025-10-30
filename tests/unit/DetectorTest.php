@@ -356,6 +356,7 @@ class DetectorTest extends TestCase
             [['server/pages/api/users.js', '.next/server/pages/_app.js'], 'nextjs', 'static', null],
             [['server/pages/index.html', 'server/pages/api/users.js', '.next/turbopack'], 'nextjs', 'ssr', null],
             [['server/pages/index.html', 'server/pages/api/users.js', '.next/server/webpack-runtime.js'], 'nextjs', 'ssr', null],
+            [['.next/some-standalone-files.js', 'server.js'], 'nextjs', 'ssr', null],
             [['index.html', 'about.html', '404.html'], 'nextjs', 'static', null],
             [['nitro.json', 'server/index.mjs'], 'nuxt', 'ssr', null],
             [['server/server.mjs'], 'angular', 'ssr', null],
