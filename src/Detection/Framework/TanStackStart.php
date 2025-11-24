@@ -45,6 +45,6 @@ class TanStackStart extends React
 
     public function getOutputDirectory(): string
     {
-        return './dist';
+        return './.output';
     }
 }
