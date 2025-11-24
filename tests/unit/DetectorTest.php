@@ -421,7 +421,7 @@ class DetectorTest extends TestCase
         $this->assertEquals('tanstack-start', $detectedFramework->getName());
         $this->assertEquals('npm install', $detectedFramework->getInstallCommand());
         $this->assertEquals('npm run build', $detectedFramework->getBuildCommand());
-        $this->assertEquals('./dist', $detectedFramework->getOutputDirectory());
+        $this->assertEquals('./.output', $detectedFramework->getOutputDirectory());
     }
 
     /**
