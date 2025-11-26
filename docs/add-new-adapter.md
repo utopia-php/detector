@@ -117,7 +117,7 @@ public function testYourDetector(array $files, ?string $expectedName): void
 
     if ($expectedName) {
         $this->assertNotNull($detected);
-        $this->assertEquals($expectedName, $detected->getName());
+        $this->assertSame($expectedName, $detected->getName());
     } else {
         $this->assertNull($detected);
     }
