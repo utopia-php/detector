@@ -60,7 +60,7 @@ class DetectorTest extends TestCase
         $detectedPackager = $detector->detect();
 
         if ($expectedPackager) {
-            $this->assertEquals($expectedPackager, $detectedPackager?->getName());
+            $this->assertSame($expectedPackager, $detectedPackager?->getName());
         } else {
             $this->assertNull($detectedPackager);
         }
@@ -116,9 +116,9 @@ class DetectorTest extends TestCase
 
         if ($runtime) {
             $this->assertNotNull($detectedRuntime);
-            $this->assertEquals($runtime, $detectedRuntime?->getName());
-            $this->assertEquals($commands, $detectedRuntime?->getCommands());
-            $this->assertEquals($entrypoint, $detectedRuntime?->getEntrypoint());
+            $this->assertSame($runtime, $detectedRuntime?->getName());
+            $this->assertSame($commands, $detectedRuntime?->getCommands());
+            $this->assertSame($entrypoint, $detectedRuntime?->getEntrypoint());
         } else {
             $this->assertNull($detectedRuntime);
         }
@@ -175,8 +175,8 @@ class DetectorTest extends TestCase
 
         if ($runtime) {
             $this->assertNotNull($detectedRuntime);
-            $this->assertEquals($runtime, $detectedRuntime?->getName());
-            $this->assertEquals($commands, $detectedRuntime?->getCommands());
+            $this->assertSame($runtime, $detectedRuntime?->getName());
+            $this->assertSame($commands, $detectedRuntime?->getCommands());
         } else {
             $this->assertNull($detectedRuntime);
         }
@@ -246,8 +246,8 @@ class DetectorTest extends TestCase
 
         if ($runtime) {
             $this->assertNotNull($detectedRuntime);
-            $this->assertEquals($runtime, $detectedRuntime?->getName());
-            $this->assertEquals($commands, $detectedRuntime?->getCommands());
+            $this->assertSame($runtime, $detectedRuntime?->getName());
+            $this->assertSame($commands, $detectedRuntime?->getCommands());
         } else {
             $this->assertNull($detectedRuntime);
         }
@@ -294,10 +294,10 @@ class DetectorTest extends TestCase
 
         if ($framework) {
             $this->assertNotNull($detectedFramework);
-            $this->assertEquals($framework, $detectedFramework?->getName());
-            $this->assertEquals($installCommand, $detectedFramework?->getInstallCommand());
-            $this->assertEquals($buildCommand, $detectedFramework?->getBuildCommand());
-            $this->assertEquals($outputDirectory, $detectedFramework?->getOutputDirectory());
+            $this->assertSame($framework, $detectedFramework?->getName());
+            $this->assertSame($installCommand, $detectedFramework?->getInstallCommand());
+            $this->assertSame($buildCommand, $detectedFramework?->getBuildCommand());
+            $this->assertSame($outputDirectory, $detectedFramework?->getOutputDirectory());
         } else {
             $this->assertNull($detectedFramework);
         }
@@ -342,8 +342,8 @@ class DetectorTest extends TestCase
         $detectedRendering = $detector->detect();
 
         $this->assertNotNull($detectedRendering);
-        $this->assertEquals($rendering, $detectedRendering->getName());
-        $this->assertEquals($fallbackFile, $detectedRendering->getFallbackFile());
+        $this->assertSame($rendering, $detectedRendering->getName());
+        $this->assertSame($fallbackFile, $detectedRendering->getFallbackFile());
     }
 
     /**
@@ -418,10 +418,10 @@ class DetectorTest extends TestCase
         if (is_null($detectedFramework)) {
             throw new \Exception('Framework not detected');
         }
-        $this->assertEquals('tanstack-start', $detectedFramework->getName());
-        $this->assertEquals('npm install', $detectedFramework->getInstallCommand());
-        $this->assertEquals('npm run build', $detectedFramework->getBuildCommand());
-        $this->assertEquals('./.output', $detectedFramework->getOutputDirectory());
+        $this->assertSame('tanstack-start', $detectedFramework->getName());
+        $this->assertSame('npm install', $detectedFramework->getInstallCommand());
+        $this->assertSame('npm run build', $detectedFramework->getBuildCommand());
+        $this->assertSame('./.output', $detectedFramework->getOutputDirectory());
     }
 
     /**
@@ -450,9 +450,9 @@ class DetectorTest extends TestCase
             throw new \Exception('Framework not detected');
         }
 
-        $this->assertEquals('tanstack-start', $detectedFramework->getName());
-        $this->assertEquals('pnpm install', $detectedFramework->getInstallCommand());
-        $this->assertEquals('pnpm build', $detectedFramework->getBuildCommand());
+        $this->assertSame('tanstack-start', $detectedFramework->getName());
+        $this->assertSame('pnpm install', $detectedFramework->getInstallCommand());
+        $this->assertSame('pnpm build', $detectedFramework->getBuildCommand());
     }
 
     /**
@@ -796,6 +796,6 @@ class DetectorTest extends TestCase
             throw new \Exception('Framework not detected');
         }
 
-        $this->assertEquals($framework, $detection->getName(), $assertion);
+        $this->assertSame($framework, $detection->getName(), $assertion);
     }
 }
