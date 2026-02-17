@@ -17,11 +17,7 @@ class PNPM extends Packager
     public function getFiles(): array
     {
         return [
-            'package.json',
             'pnpm-lock.yaml',
-            'package-lock.json',
-            'yarn.lock',
-            'bun.lockb',
         ];
     }
 }
