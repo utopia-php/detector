@@ -72,8 +72,8 @@ class DetectorTest extends TestCase
     public function packagerDataProvider(): array
     {
         return [
-            [['bun.lockb', 'fly.toml', 'package.json', 'remix.config.js'], 'pnpm'],
-            [['yarn.lock'], 'pnpm'],
+            [['bun.lockb', 'fly.toml', 'package.json', 'remix.config.js'], 'npm'],
+            [['yarn.lock'], 'yarn'],
             [['pnpm-lock.yaml'], 'pnpm'],
             [['composer.json'], null],  // test for FAILURE
         ];
