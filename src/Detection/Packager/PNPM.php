@@ -16,6 +16,8 @@ class PNPM extends Packager
      */
     public function getFiles(): array
     {
-        return ['pnpm-lock.yaml'];
+        return [
+            'pnpm-lock.yaml',
+        ];
     }
 }

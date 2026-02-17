@@ -40,7 +40,7 @@ $packagerName = $detectedPackager->getName();
 $detector = new Runtime(
     $files,
     new Strategy(Strategy::FILEMATCH), // similar for LANGUAGES and EXTENSIONS
-    'npm'
+    'pnpm'
 );
 
 $detector
@@ -62,7 +62,7 @@ $runtimeCommands = $detectedRuntime->getCommands();
 
 // Initialise Framework Detection
 $files = ['src', 'types', 'makefile', 'components.js', 'debug.js', 'package.json', 'svelte.config.js'];
-$packager = 'npm';
+$packager = 'pnpm';
 $detector = new Framework($files, $packager);
 
 $detector

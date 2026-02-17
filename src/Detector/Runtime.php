@@ -14,9 +14,9 @@ class Runtime extends Detector
 
     protected Strategy $strategy;
 
-    protected string $packager = 'npm';
+    protected string $packager = 'pnpm';
 
-    public function __construct(Strategy $strategy, string $packager = 'npm')
+    public function __construct(Strategy $strategy, string $packager = 'pnpm')
     {
         parent::__construct();
         $this->strategy = $strategy;
