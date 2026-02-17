@@ -130,8 +130,8 @@ class DetectorTest extends TestCase
     public function runtimeDataProviderByFilematch(): array
     {
         return [
-            [['package-lock.json', 'yarn.lock', 'tsconfig.json'], 'node', 'pnpm install && pnpm run build', 'index.js', 'pnpm'],
-            [['package-lock.json', 'yarn.lock', 'tsconfig.json'], 'node', 'yarn install && yarn build', 'index.js', 'yarn'],
+            [['package-lock.json', 'yarn.lock', 'tsconfig.json'], 'node', 'pnpm install', 'index.js', 'pnpm'],
+            [['package-lock.json', 'yarn.lock', 'tsconfig.json'], 'node', 'yarn install', 'index.js', 'yarn'],
             [['composer.json', 'composer.lock'], 'php', 'composer install && composer run build', 'index.php', 'pnpm'],
             [['pubspec.yaml'], 'dart', 'dart pub get', 'main.dart', 'pnpm'],
             [['Gemfile', 'Gemfile.lock'], 'ruby', 'bundle install && bundle exec rake build', 'main.rb', 'pnpm'],
@@ -191,13 +191,13 @@ class DetectorTest extends TestCase
             [
                 ['TypeScript', 'JavaScript', 'DockerFile'],
                 'node',
-                'pnpm install && pnpm run build',
+                'pnpm install',
                 'pnpm',
             ],
             [
                 ['TypeScript', 'JavaScript', 'DockerFile'],
                 'node',
-                'yarn install && yarn build',
+                'yarn install',
                 'yarn',
             ],
             // Test for FAILURE
@@ -259,8 +259,8 @@ class DetectorTest extends TestCase
     public function runtimeDataProviderByFileExtensions(): array
     {
         return [
-            [['main.ts', 'main.js', 'DockerFile'], 'node', 'pnpm install && pnpm run build'],
-            [['main.ts', 'main.js', 'DockerFile'], 'node', 'yarn install && yarn build', 'yarn'],
+            [['main.ts', 'main.js', 'DockerFile'], 'node', 'pnpm install'],
+            [['main.ts', 'main.js', 'DockerFile'], 'node', 'yarn install', 'yarn'],
             [['composer.json', 'index.php', 'DockerFile'], 'php', 'composer install && composer run build'],
             [['index.html', 'style.css'], null, null], // Test for FAILURE
         ];
