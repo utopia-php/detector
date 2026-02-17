@@ -193,12 +193,12 @@ class MyFramework extends Framework
 
     public function getInstallCommand(): string
     {
-        return 'npm install';
+        return 'pnpm install';
     }
 
     public function getBuildCommand(): string
     {
-        return 'npm run build';
+        return 'pnpm run build';
     }
 
     public function getOutputDirectory(): string

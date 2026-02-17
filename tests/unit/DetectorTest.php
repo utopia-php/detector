@@ -72,8 +72,8 @@ class DetectorTest extends TestCase
     public function packagerDataProvider(): array
     {
         return [
-            [['bun.lockb', 'fly.toml', 'package.json', 'remix.config.js'], 'npm'],
-            [['yarn.lock'], 'yarn'],
+            [['bun.lockb', 'fly.toml', 'package.json', 'remix.config.js'], 'pnpm'],
+            [['yarn.lock'], 'pnpm'],
             [['pnpm-lock.yaml'], 'pnpm'],
             [['composer.json'], null],  // test for FAILURE
         ];
@@ -88,7 +88,7 @@ class DetectorTest extends TestCase
         ?string $runtime,
         ?string $commands,
         ?string $entrypoint,
-        string $packager = 'npm'
+        string $packager = 'pnpm'
     ): void {
         $detector = new Runtime(
             new Strategy(Strategy::FILEMATCH),
@@ -130,12 +130,12 @@ class DetectorTest extends TestCase
     public function runtimeDataProviderByFilematch(): array
     {
         return [
-            [['package-lock.json', 'yarn.lock', 'tsconfig.json'], 'node', 'npm install && npm run build', 'index.js', 'npm'],
+            [['package-lock.json', 'yarn.lock', 'tsconfig.json'], 'node', 'pnpm install && pnpm run build', 'index.js', 'pnpm'],
             [['package-lock.json', 'yarn.lock', 'tsconfig.json'], 'node', 'yarn install && yarn build', 'index.js', 'yarn'],
-            [['composer.json', 'composer.lock'], 'php', 'composer install && composer run build', 'index.php', 'npm'],
-            [['pubspec.yaml'], 'dart', 'dart pub get', 'main.dart', 'npm'],
-            [['Gemfile', 'Gemfile.lock'], 'ruby', 'bundle install && bundle exec rake build', 'main.rb', 'npm'],
-            [['index.html', 'style.css'], null, null, null, 'npm'], // Test for FAILURE
+            [['composer.json', 'composer.lock'], 'php', 'composer install && composer run build', 'index.php', 'pnpm'],
+            [['pubspec.yaml'], 'dart', 'dart pub get', 'main.dart', 'pnpm'],
+            [['Gemfile', 'Gemfile.lock'], 'ruby', 'bundle install && bundle exec rake build', 'main.rb', 'pnpm'],
+            [['index.html', 'style.css'], null, null, null, 'pnpm'], // Test for FAILURE
         ];
     }
 
@@ -147,7 +147,7 @@ class DetectorTest extends TestCase
         array $files,
         ?string $runtime,
         ?string $commands,
-        string $packager = 'npm'
+        string $packager = 'pnpm'
     ): void {
         $detector = new Runtime(
             new Strategy(Strategy::LANGUAGES),
@@ -191,8 +191,8 @@ class DetectorTest extends TestCase
             [
                 ['TypeScript', 'JavaScript', 'DockerFile'],
                 'node',
-                'npm install && npm run build',
-                'npm',
+                'pnpm install && pnpm run build',
+                'pnpm',
             ],
             [
                 ['TypeScript', 'JavaScript', 'DockerFile'],
@@ -205,7 +205,7 @@ class DetectorTest extends TestCase
                 ['HTML'],
                 null,
                 null,
-                'npm',
+                'pnpm',
             ],
         ];
     }
@@ -218,7 +218,7 @@ class DetectorTest extends TestCase
         array $files,
         ?string $runtime,
         ?string $commands,
-        string $packager = 'npm'
+        string $packager = 'pnpm'
     ): void {
         $detector = new Runtime(
             new Strategy(Strategy::EXTENSION),
@@ -259,7 +259,7 @@ class DetectorTest extends TestCase
     public function runtimeDataProviderByFileExtensions(): array
     {
         return [
-            [['main.ts', 'main.js', 'DockerFile'], 'node', 'npm install && npm run build'],
+            [['main.ts', 'main.js', 'DockerFile'], 'node', 'pnpm install && pnpm run build'],
             [['main.ts', 'main.js', 'DockerFile'], 'node', 'yarn install && yarn build', 'yarn'],
             [['composer.json', 'index.php', 'DockerFile'], 'php', 'composer install && composer run build'],
             [['index.html', 'style.css'], null, null], // Test for FAILURE
@@ -270,7 +270,7 @@ class DetectorTest extends TestCase
      * @param string[] $files List of files to check
      * @dataProvider frameworkDataProvider
      */
-    public function testFrameworkDetection(array $files, ?string $framework, ?string $installCommand = null, ?string $buildCommand = null, ?string $outputDirectory = null, string $packager = 'npm'): void
+    public function testFrameworkDetection(array $files, ?string $framework, ?string $installCommand = null, ?string $buildCommand = null, ?string $outputDirectory = null, string $packager = 'pnpm'): void
     {
         $detector = new Framework($packager);
 
@@ -309,14 +309,14 @@ class DetectorTest extends TestCase
     public function frameworkDataProvider(): array
     {
         return [
-            [['src', 'types', 'makefile', 'components.js', 'debug.js', 'package.json', 'svelte.config.js'], 'sveltekit', 'npm install', 'npm run build', './build'],
-            [['app', 'backend', 'public', 'Dockerfile', 'docker-compose.yml', 'ecosystem.config.js', 'middleware.ts', 'next.config.js', 'package-lock.json', 'package.json', 'server.js', 'tsconfig.json'], 'nextjs', 'npm install', 'npm run build', './.next'],
-            [['assets', 'components', 'layouts', 'pages', 'babel.config.js', 'error.vue', 'nuxt.config.js', 'yarn.lock'], 'nuxt', 'npm install', 'npm run build', './output'],
-            [['lynx.config.js'], 'lynx', 'npm install', 'npm run build', './dist'],
-            [['src', 'package.json', 'tsconfig.json', 'angular.json', 'logo.png'], 'angular', 'npm install', 'npm run build', './dist/angular'],
-            [['app', 'public', 'remix.config.js', 'remix.env.d.ts', 'sandbox.config.js', 'tsconfig.json', 'package.json'], 'remix', 'npm install', 'npm run build', './build'],
-            [['public', 'src', 'astro.config.mjs', 'package-lock.json', 'package.json', 'tsconfig.json'], 'astro', 'npm install', 'npm run build', './dist'],
-            [['src', 'static', 'scripts', 'eslint.config.js', 'package.json', 'pnpm-lock.yaml', 'svelte.config.js', 'tsconfig.js', 'vite.config.js', 'vite.config.lib.js'], 'sveltekit', 'npm install', 'npm run build', './build'],
+            [['src', 'types', 'makefile', 'components.js', 'debug.js', 'package.json', 'svelte.config.js'], 'sveltekit', 'pnpm install', 'pnpm run build', './build'],
+            [['app', 'backend', 'public', 'Dockerfile', 'docker-compose.yml', 'ecosystem.config.js', 'middleware.ts', 'next.config.js', 'package-lock.json', 'package.json', 'server.js', 'tsconfig.json'], 'nextjs', 'pnpm install', 'pnpm run build', './.next'],
+            [['assets', 'components', 'layouts', 'pages', 'babel.config.js', 'error.vue', 'nuxt.config.js', 'yarn.lock'], 'nuxt', 'pnpm install', 'pnpm run build', './output'],
+            [['lynx.config.js'], 'lynx', 'pnpm install', 'pnpm run build', './dist'],
+            [['src', 'package.json', 'tsconfig.json', 'angular.json', 'logo.png'], 'angular', 'pnpm install', 'pnpm run build', './dist/angular'],
+            [['app', 'public', 'remix.config.js', 'remix.env.d.ts', 'sandbox.config.js', 'tsconfig.json', 'package.json'], 'remix', 'pnpm install', 'pnpm run build', './build'],
+            [['public', 'src', 'astro.config.mjs', 'package-lock.json', 'package.json', 'tsconfig.json'], 'astro', 'pnpm install', 'pnpm run build', './dist'],
+            [['src', 'static', 'scripts', 'eslint.config.js', 'package.json', 'pnpm-lock.yaml', 'svelte.config.js', 'tsconfig.js', 'vite.config.js', 'vite.config.lib.js'], 'sveltekit', 'pnpm install', 'pnpm run build', './build'],
             [['index.html', 'style.css'], null, null, null, null], // Test for FAILURE
         ];
     }
@@ -452,7 +452,7 @@ class DetectorTest extends TestCase
 
         $this->assertSame('tanstack-start', $detectedFramework->getName());
         $this->assertSame('pnpm install', $detectedFramework->getInstallCommand());
-        $this->assertSame('pnpm build', $detectedFramework->getBuildCommand());
+        $this->assertSame('pnpm run build', $detectedFramework->getBuildCommand());
     }
 
     /**

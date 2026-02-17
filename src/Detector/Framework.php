@@ -16,9 +16,9 @@ class Framework extends Detector
      */
     protected array $options = [];
 
-    protected string $packager = 'npm';
+    protected string $packager = 'pnpm';
 
-    public function __construct(string $packager = 'npm')
+    public function __construct(string $packager = 'pnpm')
     {
         parent::__construct();
         $this->packager = $packager;

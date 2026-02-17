@@ -30,7 +30,8 @@ class SvelteKit extends Svelte
         return match ($this->packager) {
             'yarn' => 'yarn install',
             'pnpm' => 'pnpm install',
-            default => 'npm install',
+            'npm' => 'npm install',
+            default => 'pnpm install',
         };
     }
 
@@ -38,8 +39,9 @@ class SvelteKit extends Svelte
     {
         return match ($this->packager) {
             'yarn' => 'yarn build',
-            'pnpm' => 'pnpm build',
-            default => 'npm run build',
+            'pnpm' => 'pnpm run build',
+            'npm' => 'npm run build',
+            default => 'pnpm run build',
         };
     }
 
