@@ -60,6 +60,8 @@ class SvelteKit extends Svelte
 
     public function getAdapter(string $configContent): string
     {
-        return \str_contains($configContent, '@sveltejs/adapter-static') ? 'static' : 'ssr';
+        $stripped = \preg_replace('/\/\/[^\n]*/', '', $configContent) ?? $configContent;
+
+        return \str_contains($stripped, '@sveltejs/adapter-static') ? 'static' : 'ssr';
     }
 }

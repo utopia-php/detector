@@ -60,6 +60,12 @@ class TanStackStart extends React
 
     public function getAdapter(string $configContent): string
     {
-        return \str_contains($configContent, 'prerender') ? 'static' : 'ssr';
+        $stripped = \preg_replace('/\/\/[^\n]*/', '', $configContent) ?? $configContent;
+
+        if (!\preg_match('/\bprerender\b/', $stripped) || \preg_match('/\bprerender\s*:\s*false\b/', $stripped)) {
+            return 'ssr';
+        }
+
+        return 'static';
     }
 }

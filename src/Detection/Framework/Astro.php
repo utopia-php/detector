@@ -78,10 +78,9 @@ class Astro extends JS
 
     public function getAdapter(string $configContent): string
     {
-        if (\str_contains($configContent, "output: 'server'") || \str_contains($configContent, 'output: "server"')) {
-            return 'ssr';
-        }
-        if (\str_contains($configContent, "output: 'hybrid'") || \str_contains($configContent, 'output: "hybrid"')) {
+        $stripped = \preg_replace('/\/\/[^\n]*/', '', $configContent) ?? $configContent;
+
+        if (\preg_match('/\boutput\s*:\s*[\x27\x22](?:server|hybrid)[\x27\x22]/', $stripped)) {
             return 'ssr';
         }
 

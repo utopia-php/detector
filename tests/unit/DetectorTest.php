@@ -805,6 +805,8 @@ class DetectorTest extends TestCase
 
         $this->assertSame('ssr', $fw->getAdapter('export default defineConfig({ plugins: [tanstackStart()] })'));
         $this->assertSame('static', $fw->getAdapter('export default defineConfig({ plugins: [tanstackStart({ prerender: { routes: [\'/\'] } })] })'));
+        $this->assertSame('ssr', $fw->getAdapter('export default defineConfig({ plugins: [tanstackStart({ prerender: false })] })'));
+        $this->assertSame('ssr', $fw->getAdapter('// prerender: true' . "\n" . 'export default defineConfig({})'));
         $this->assertNotEmpty($fw->getConfigFiles());
     }
 
@@ -815,6 +817,7 @@ class DetectorTest extends TestCase
         $this->assertSame('ssr', $fw->getAdapter('import adapter from \'@sveltejs/adapter-auto\'; export default { kit: { adapter: adapter() } }'));
         $this->assertSame('static', $fw->getAdapter('import adapter from \'@sveltejs/adapter-static\'; export default { kit: { adapter: adapter() } }'));
         $this->assertSame('static', $fw->getAdapter('{"dependencies":{"@sveltejs/adapter-static":"^3.0.0"}}'));
+        $this->assertSame('ssr', $fw->getAdapter('// import adapter from \'@sveltejs/adapter-static\'' . "\n" . 'import adapter from \'@sveltejs/adapter-auto\''));
         $this->assertNotEmpty($fw->getConfigFiles());
     }
 
@@ -826,6 +829,8 @@ class DetectorTest extends TestCase
         $this->assertSame('ssr', $fw->getAdapter('export default defineConfig({ output: \'server\', adapter: node({ mode: \'standalone\' }) })'));
         $this->assertSame('ssr', $fw->getAdapter('export default defineConfig({ output: "server" })'));
         $this->assertSame('ssr', $fw->getAdapter('export default defineConfig({ output: \'hybrid\' })'));
+        $this->assertSame('ssr', $fw->getAdapter('export default defineConfig({ output  :  \'server\' })'));
+        $this->assertSame('static', $fw->getAdapter('// output: \'server\'' . "\n" . 'export default defineConfig({})'));
         $this->assertNotEmpty($fw->getConfigFiles());
     }
 
@@ -836,5 +841,6 @@ class DetectorTest extends TestCase
         $this->assertSame('ssr', $fw->getAdapter('{"dependencies":{"@remix-run/react":"^2.0.0"}}'));
         $this->assertSame('ssr', $fw->getAdapter('{"dependencies":{"@remix-run/serve":"^2.0.0"}}'));
         $this->assertSame('ssr', $fw->getAdapter('{"dependencies":{"@remix-run/node":"^2.0.0"}}'));
+        $this->assertSame('ssr', $fw->getAdapter(''));
     }
 }
