@@ -49,4 +49,23 @@ class TanStackStart extends React
     {
         return './.output';
     }
+
+    /**
+     * @return array<string>
+     */
+    public function getConfigFiles(): array
+    {
+        return ['vite.config.ts', 'vite.config.js', 'vite.config.mjs'];
+    }
+
+    public function getAdapter(string $configContent): string
+    {
+        $stripped = \preg_replace('/(?<!:)\/\/[^\n]*/', '', $configContent) ?? $configContent;
+
+        if (!\preg_match('/\bprerender\b/', $stripped) || \preg_match('/\bprerender[\x27\x22]?\s*:\s*false\b/', $stripped)) {
+            return 'ssr';
+        }
+
+        return 'static';
+    }
 }

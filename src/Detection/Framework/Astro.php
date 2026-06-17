@@ -67,4 +67,23 @@ class Astro extends JS
     {
         return './dist';
     }
+
+    /**
+     * @return array<string>
+     */
+    public function getConfigFiles(): array
+    {
+        return ['astro.config.mjs', 'astro.config.js', 'astro.config.ts'];
+    }
+
+    public function getAdapter(string $configContent): string
+    {
+        $stripped = \preg_replace('/(?<!:)\/\/[^\n]*/', '', $configContent) ?? $configContent;
+
+        if (\preg_match('/\boutput\s*:\s*[\x27\x22\x60](?:server|hybrid)[\x27\x22\x60]/', $stripped)) {
+            return 'ssr';
+        }
+
+        return 'static';
+    }
 }
