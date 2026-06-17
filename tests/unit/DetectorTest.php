@@ -798,4 +798,43 @@ class DetectorTest extends TestCase
 
         $this->assertSame($framework, $detection->getName(), $assertion);
     }
+
+    public function testTanStackStartAdapterDetection(): void
+    {
+        $fw = new TanStackStart();
+
+        $this->assertSame('ssr', $fw->getAdapter('export default defineConfig({ plugins: [tanstackStart()] })'));
+        $this->assertSame('static', $fw->getAdapter('export default defineConfig({ plugins: [tanstackStart({ prerender: { routes: [\'/\'] } })] })'));
+        $this->assertNotEmpty($fw->getConfigFiles());
+    }
+
+    public function testSvelteKitAdapterDetection(): void
+    {
+        $fw = new SvelteKit();
+
+        $this->assertSame('ssr', $fw->getAdapter('import adapter from \'@sveltejs/adapter-auto\'; export default { kit: { adapter: adapter() } }'));
+        $this->assertSame('static', $fw->getAdapter('import adapter from \'@sveltejs/adapter-static\'; export default { kit: { adapter: adapter() } }'));
+        $this->assertSame('static', $fw->getAdapter('{"dependencies":{"@sveltejs/adapter-static":"^3.0.0"}}'));
+        $this->assertNotEmpty($fw->getConfigFiles());
+    }
+
+    public function testAstroAdapterDetection(): void
+    {
+        $fw = new Astro();
+
+        $this->assertSame('static', $fw->getAdapter('export default defineConfig({ integrations: [] })'));
+        $this->assertSame('ssr', $fw->getAdapter('export default defineConfig({ output: \'server\', adapter: node({ mode: \'standalone\' }) })'));
+        $this->assertSame('ssr', $fw->getAdapter('export default defineConfig({ output: "server" })'));
+        $this->assertSame('ssr', $fw->getAdapter('export default defineConfig({ output: \'hybrid\' })'));
+        $this->assertNotEmpty($fw->getConfigFiles());
+    }
+
+    public function testRemixAdapterDetection(): void
+    {
+        $fw = new Remix();
+
+        $this->assertSame('ssr', $fw->getAdapter('{"dependencies":{"@remix-run/react":"^2.0.0"}}'));
+        $this->assertSame('ssr', $fw->getAdapter('{"dependencies":{"@remix-run/serve":"^2.0.0"}}'));
+        $this->assertSame('ssr', $fw->getAdapter('{"dependencies":{"@remix-run/node":"^2.0.0"}}'));
+    }
 }
