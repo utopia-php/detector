@@ -55,7 +55,7 @@ class SvelteKit extends Svelte
      */
     public function getConfigFiles(): array
     {
-        return ['svelte.config.js', 'svelte.config.ts', 'package.json'];
+        return ['svelte.config.js', 'svelte.config.mjs', 'svelte.config.ts', 'package.json'];
     }
 
     public function getAdapter(string $configContent): string
