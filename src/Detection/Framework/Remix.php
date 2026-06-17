@@ -52,15 +52,6 @@ class Remix extends React
 
     public function getAdapter(string $configContent): string
     {
-        // @remix-run/serve in dependencies indicates SSR; static adapters use build/client output only
-        if (\str_contains($configContent, '"@remix-run/serve"') || \str_contains($configContent, "'@remix-run/serve'")) {
-            return 'ssr';
-        }
-        // Vite-based Remix v2+ with SSR adapters (e.g. @remix-run/express, @remix-run/node)
-        if (\str_contains($configContent, '@remix-run/express') || \str_contains($configContent, '@remix-run/node')) {
-            return 'ssr';
-        }
-
-        return 'ssr'; // Remix defaults to SSR; static mode requires explicit adapter configuration
+        return 'ssr';
     }
 }

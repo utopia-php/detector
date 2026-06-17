@@ -50,6 +50,9 @@ class TanStackStart extends React
         return './.output';
     }
 
+    /**
+     * @return array<string>
+     */
     public function getConfigFiles(): array
     {
         return ['vite.config.ts', 'vite.config.js', 'vite.config.mjs'];

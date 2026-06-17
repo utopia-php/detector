@@ -68,6 +68,9 @@ class Astro extends JS
         return './dist';
     }
 
+    /**
+     * @return array<string>
+     */
     public function getConfigFiles(): array
     {
         return ['astro.config.mjs', 'astro.config.js', 'astro.config.ts'];
@@ -75,7 +78,6 @@ class Astro extends JS
 
     public function getAdapter(string $configContent): string
     {
-        // 'server' and 'hybrid' both require the SSR adapter
         if (\str_contains($configContent, "output: 'server'") || \str_contains($configContent, 'output: "server"')) {
             return 'ssr';
         }
