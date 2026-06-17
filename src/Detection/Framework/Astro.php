@@ -80,7 +80,7 @@ class Astro extends JS
     {
         $stripped = \preg_replace('/(?<!:)\/\/[^\n]*/', '', $configContent) ?? $configContent;
 
-        if (\preg_match('/\boutput\s*:\s*[\x27\x22](?:server|hybrid)[\x27\x22]/', $stripped)) {
+        if (\preg_match('/\boutput\s*:\s*[\x27\x22\x60](?:server|hybrid)[\x27\x22\x60]/', $stripped)) {
             return 'ssr';
         }
 

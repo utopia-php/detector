@@ -834,6 +834,8 @@ class DetectorTest extends TestCase
         $this->assertSame('ssr', $fw->getAdapter('export default defineConfig({ output  :  \'server\' })'));
         $this->assertSame('static', $fw->getAdapter('// output: \'server\'' . "\n" . 'export default defineConfig({})'));
         $this->assertSame('ssr', $fw->getAdapter('site: "https://example.com",' . "\n" . 'output: "server"'));
+        $this->assertSame('ssr', $fw->getAdapter('export default defineConfig({ output: `server` })'));
+        $this->assertSame('ssr', $fw->getAdapter('export default defineConfig({ output: `hybrid` })'));
         $this->assertNotEmpty($fw->getConfigFiles());
     }
 
