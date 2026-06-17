@@ -62,7 +62,7 @@ class TanStackStart extends React
     {
         $stripped = \preg_replace('/(?<!:)\/\/[^\n]*/', '', $configContent) ?? $configContent;
 
-        if (!\preg_match('/\bprerender\b/', $stripped) || \preg_match('/\bprerender\s*:\s*false\b/', $stripped)) {
+        if (!\preg_match('/\bprerender\b/', $stripped) || \preg_match('/\bprerender[\x27\x22]?\s*:\s*false\b/', $stripped)) {
             return 'ssr';
         }
 
