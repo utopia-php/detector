@@ -39,4 +39,21 @@ abstract class Framework extends Detection
     abstract public function getBuildCommand(): string;
 
     abstract public function getOutputDirectory(): string;
+
+    /**
+     * @return array<string> Config files to read for adapter detection, in priority order.
+     */
+    public function getConfigFiles(): array
+    {
+        return [];
+    }
+
+    /**
+     * Detect the adapter ('ssr' or 'static') from config file content.
+     * Returns empty string if detection is not possible.
+     */
+    public function getAdapter(string $configContent): string
+    {
+        return '';
+    }
 }

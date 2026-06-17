@@ -49,4 +49,15 @@ class SvelteKit extends Svelte
     {
         return './build';
     }
+
+    public function getConfigFiles(): array
+    {
+        return ['svelte.config.js', 'svelte.config.ts'];
+    }
+
+    public function getAdapter(string $configContent): string
+    {
+        // Detect static adapter from package.json dependencies or svelte.config content
+        return \str_contains($configContent, '@sveltejs/adapter-static') ? 'static' : 'ssr';
+    }
 }
