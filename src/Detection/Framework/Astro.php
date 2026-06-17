@@ -78,7 +78,7 @@ class Astro extends JS
 
     public function getAdapter(string $configContent): string
     {
-        $stripped = \preg_replace('/\/\/[^\n]*/', '', $configContent) ?? $configContent;
+        $stripped = \preg_replace('/(?<!:)\/\/[^\n]*/', '', $configContent) ?? $configContent;
 
         if (\preg_match('/\boutput\s*:\s*[\x27\x22](?:server|hybrid)[\x27\x22]/', $stripped)) {
             return 'ssr';

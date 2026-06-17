@@ -50,6 +50,14 @@ class Remix extends React
         return './build';
     }
 
+    /**
+     * @return array<string>
+     */
+    public function getConfigFiles(): array
+    {
+        return ['package.json'];
+    }
+
     public function getAdapter(string $configContent): string
     {
         return 'ssr';
