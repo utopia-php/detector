@@ -47,6 +47,6 @@ class Nuxt extends Vue
 
     public function getOutputDirectory(): string
     {
-        return './output';
+        return './.output';
     }
 }
