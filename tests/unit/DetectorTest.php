@@ -311,7 +311,7 @@ class DetectorTest extends TestCase
         return [
             [['src', 'types', 'makefile', 'components.js', 'debug.js', 'package.json', 'svelte.config.js'], 'sveltekit', 'pnpm install', 'pnpm run build', './build'],
             [['app', 'backend', 'public', 'Dockerfile', 'docker-compose.yml', 'ecosystem.config.js', 'middleware.ts', 'next.config.js', 'package-lock.json', 'package.json', 'server.js', 'tsconfig.json'], 'nextjs', 'pnpm install', 'pnpm run build', './.next'],
-            [['assets', 'components', 'layouts', 'pages', 'babel.config.js', 'error.vue', 'nuxt.config.js', 'yarn.lock'], 'nuxt', 'pnpm install', 'pnpm run build', './output'],
+            [['assets', 'components', 'layouts', 'pages', 'babel.config.js', 'error.vue', 'nuxt.config.js', 'yarn.lock'], 'nuxt', 'pnpm install', 'pnpm run build', './.output'],
             [['lynx.config.js'], 'lynx', 'pnpm install', 'pnpm run build', './dist'],
             [['src', 'package.json', 'tsconfig.json', 'angular.json', 'logo.png'], 'angular', 'pnpm install', 'pnpm run build', './dist/angular'],
             [['app', 'public', 'remix.config.js', 'remix.env.d.ts', 'sandbox.config.js', 'tsconfig.json', 'package.json'], 'remix', 'pnpm install', 'pnpm run build', './build'],
