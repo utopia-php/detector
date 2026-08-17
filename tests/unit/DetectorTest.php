@@ -831,6 +831,15 @@ class DetectorTest extends TestCase
         $commented = '// import { nitro } from \'nitro/vite\'' . "\n" . 'export default defineConfig({ plugins: [tanstackStart()] })';
 
         $this->assertSame('./dist', (new TanStackStart())->setConfig($commented)->getOutputDirectory());
+
+        $blockCommented = '/*' . "\n" . 'import { nitro } from \'nitro/vite\'' . "\n" . '*/' . "\n" . 'export default defineConfig({ plugins: [tanstackStart()] })';
+        $inlineCommented = 'export default defineConfig({ plugins: [/* nitro(), */ tanstackStart()] })';
+        $documented = '/** sets up the server */' . "\n" . 'import { nitro } from \'nitro/vite\'' . "\n" . 'export default defineConfig({ plugins: [nitro(), tanstackStart()] })';
+
+        $this->assertSame('./dist', (new TanStackStart())->setConfig($blockCommented)->getOutputDirectory());
+        $this->assertSame('./dist', (new TanStackStart())->setConfig($inlineCommented)->getOutputDirectory());
+        $this->assertSame('./.output', (new TanStackStart())->setConfig($documented)->getOutputDirectory());
+
         $this->assertSame('./.output', (new TanStackStart())->getOutputDirectory());
     }
 

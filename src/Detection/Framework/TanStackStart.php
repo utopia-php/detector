@@ -80,7 +80,8 @@ class TanStackStart extends React
             return true;
         }
 
-        $stripped = \preg_replace('/(?<!:)\/\/[^\n]*/', '', $this->config) ?? $this->config;
+        $stripped = \preg_replace('/\/\*[\s\S]*?\*\//', '', $this->config) ?? $this->config;
+        $stripped = \preg_replace('/(?<!:)\/\/[^\n]*/', '', $stripped) ?? $stripped;
 
         return (bool) \preg_match('/nitro\/vite|nitroV2Plugin|@tanstack\/nitro-v2-vite-plugin/', $stripped);
     }
