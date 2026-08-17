@@ -95,10 +95,10 @@ class TanStackStart extends React
             return 'ssr';
         }
 
-        \preg_match('/\bprerender\s*:\s*(\{(?:[^{}]|(?1))*\})/s', $stripped, $prerender);
+        \preg_match('/\bprerender[\x27\x22]?\s*:\s*(\{(?:[^{}]|(?1))*\})/s', $stripped, $prerender);
 
         // Listing routes, filtering them, or switching it off all leave part of the site to a server.
-        if (\preg_match('/\b(?:routes|filter)\s*:|\benabled\s*:\s*false\b/', $prerender[1] ?? '')) {
+        if (\preg_match('/\b(?:routes|filter)[\x27\x22]?\s*:|\benabled[\x27\x22]?\s*:\s*false\b/', $prerender[1] ?? '')) {
             return 'ssr';
         }
 
