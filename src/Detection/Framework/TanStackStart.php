@@ -74,43 +74,14 @@ class TanStackStart extends React
     }
 
     /**
-     * Removes comments, leaving string contents intact. A // inside a string
-     * does not open a comment, and nitro is named inside an import string.
+     * Only a // that opens a line is a comment here. One inside a line may sit
+     * in a string, and nitro is named inside an import string.
      */
     private function strip(string $config): string
     {
         $config = \preg_replace('/\/\*[\s\S]*?\*\//', '', $config) ?? $config;
 
-        $lines = [];
-        foreach (\explode("\n", $config) as $line) {
-            $quote = null;
-            $length = \strlen($line);
-
-            for ($i = 0; $i < $length; $i++) {
-                $char = $line[$i];
-
-                if ($quote !== null) {
-                    if ($char === '\\') {
-                        $i++;
-                    } elseif ($char === $quote) {
-                        $quote = null;
-                    }
-
-                    continue;
-                }
-
-                if ($char === '"' || $char === "'" || $char === '`') {
-                    $quote = $char;
-                } elseif ($char === '/' && ($line[$i + 1] ?? '') === '/') {
-                    $line = \substr($line, 0, $i);
-                    break;
-                }
-            }
-
-            $lines[] = $line;
-        }
-
-        return \implode("\n", $lines);
+        return \preg_replace('/^\s*\/\/.*$/m', '', $config) ?? $config;
     }
 
     private function usesNitro(): bool
