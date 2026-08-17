@@ -73,15 +73,17 @@ class TanStackStart extends React
         return ['vite.config.ts', 'vite.config.js', 'vite.config.mjs'];
     }
 
-    /**
-     * Only a // that opens a line is a comment here. One inside a line may sit
-     * in a string, and nitro is named inside an import string.
-     */
     private function strip(string $config): string
     {
         $config = \preg_replace('/\/\*[\s\S]*?\*\//', '', $config) ?? $config;
 
-        return \preg_replace('/^\s*\/\/.*$/m', '', $config) ?? $config;
+        // An odd number of quotes ahead of a // puts it inside a string, and
+        // nitro is named inside an import string.
+        return \preg_replace_callback('/^(.*?)\/\/.*$/m', function (array $matches): string {
+            $quotes = \substr_count($matches[1], '"') + \substr_count($matches[1], "'") + \substr_count($matches[1], '`');
+
+            return $quotes % 2 === 0 ? $matches[1] : $matches[0];
+        }, $config) ?? $config;
     }
 
     private function usesNitro(): bool
@@ -102,10 +104,7 @@ class TanStackStart extends React
             return 'ssr';
         }
 
-        // Listing routes or filtering them prerenders part of the site and
-        // leaves the rest to a server, so only an unnarrowed prerender is
-        // static. Guessing ssr also fails softer, since that adapter still
-        // serves a fully prerendered build while static drops the server.
+        // A narrowed prerender leaves the rest of the site to a server.
         if (\preg_match('/\bprerender\b.{0,400}?\b(routes|filter)\s*:/s', $stripped)) {
             return 'ssr';
         }

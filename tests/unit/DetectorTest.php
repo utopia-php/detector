@@ -850,6 +850,12 @@ class DetectorTest extends TestCase
         $this->assertSame('./.output', (new TanStackStart())->setConfig($stringDelimiter)->getOutputDirectory());
         $this->assertSame('./.output', (new TanStackStart())->setConfig($minified)->getOutputDirectory());
 
+        $trailing = 'export default defineConfig({ plugins: [tanstackStart()] }) // dropped nitro/vite';
+        $trailingAfterImport = 'import { nitro } from \'nitro/vite\' // the plugin' . "\n" . 'defineConfig({})';
+
+        $this->assertSame('./dist', (new TanStackStart())->setConfig($trailing)->getOutputDirectory());
+        $this->assertSame('./.output', (new TanStackStart())->setConfig($trailingAfterImport)->getOutputDirectory());
+
         $this->assertSame('./.output', (new TanStackStart())->getOutputDirectory());
     }
 
