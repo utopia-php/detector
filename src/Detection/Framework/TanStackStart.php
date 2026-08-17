@@ -4,15 +4,6 @@ namespace Utopia\Detector\Detection\Framework;
 
 class TanStackStart extends React
 {
-    protected string $config = '';
-
-    public function setConfig(string $config): self
-    {
-        $this->config = $config;
-
-        return $this;
-    }
-
     public function getName(): string
     {
         return 'tanstack-start';
