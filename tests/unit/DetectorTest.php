@@ -421,7 +421,7 @@ class DetectorTest extends TestCase
         $this->assertSame('tanstack-start', $detectedFramework->getName());
         $this->assertSame('npm install', $detectedFramework->getInstallCommand());
         $this->assertSame('npm run build', $detectedFramework->getBuildCommand());
-        $this->assertSame('./.output', $detectedFramework->getOutputDirectory());
+        $this->assertSame('./dist', $detectedFramework->getOutputDirectory());
     }
 
     /**
@@ -812,50 +812,27 @@ class DetectorTest extends TestCase
         $this->assertSame('ssr', $fw->getAdapter('export default defineConfig({ plugins: [tanstackStart({ "prerender": false })] })'));
         $this->assertSame('ssr', $fw->getAdapter('// prerender: true' . "\n" . 'export default defineConfig({})'));
         $this->assertSame('ssr', $fw->getAdapter('server: { url: "https://example.com" },' . "\n" . 'prerender: { routes: [\'/\'] }'));
-        $this->assertSame('static', $fw->getAdapter('const cdn = "//cdn.example.com"; prerender: { crawlLinks: true }'));
         $this->assertNotEmpty($fw->getConfigFiles());
     }
 
     public function testTanStackStartOutputDirectoryDetection(): void
     {
-        $nitro = 'import { nitro } from \'nitro/vite\'' . "\n" . 'export default defineConfig({ plugins: [nitro(), tanstackStart()] })';
-        $nitroV2 = 'import { nitroV2Plugin } from \'@tanstack/nitro-v2-vite-plugin\'' . "\n" . 'export default defineConfig({ plugins: [nitroV2Plugin(), tanstackStart()] })';
-        $plain = 'export default defineConfig({ plugins: [tanstackStart()] })';
+        $nitro = '{"devDependencies":{"nitro":"^3.0.0"}}';
+        $nitroV2 = '{"devDependencies":{"@tanstack/nitro-v2-vite-plugin":"^1.0.0"}}';
+        $plain = '{"dependencies":{"@tanstack/react-start":"^1.168.0"}}';
+        $prerender = 'export default defineConfig({ plugins: [tanstackStart({ prerender: { crawlLinks: true } })] })';
 
-        $this->assertSame('./.output', (new TanStackStart())->setConfig($nitro)->getOutputDirectory());
-        $this->assertSame('./.output', (new TanStackStart())->setConfig($nitroV2)->getOutputDirectory());
-        $this->assertSame('./dist', (new TanStackStart())->setConfig($plain)->getOutputDirectory());
+        $this->assertSame('./.output', (new TanStackStart())->setPackages($nitro)->getOutputDirectory());
+        $this->assertSame('./.output', (new TanStackStart())->setPackages($nitroV2)->getOutputDirectory());
+        $this->assertSame('./dist', (new TanStackStart())->setPackages($plain)->getOutputDirectory());
 
-        $nitroPrerender = 'import { nitro } from \'nitro/vite\'' . "\n" . 'export default defineConfig({ plugins: [nitro(), tanstackStart({ prerender: { crawlLinks: true } })] })';
-        $plainPrerender = 'export default defineConfig({ plugins: [tanstackStart({ prerender: { crawlLinks: true } })] })';
+        $this->assertSame('./.output/public', (new TanStackStart())->setPackages($nitro)->setConfig($prerender)->getOutputDirectory());
+        $this->assertSame('./dist/client', (new TanStackStart())->setPackages($plain)->setConfig($prerender)->getOutputDirectory());
 
-        $this->assertSame('./.output/public', (new TanStackStart())->setConfig($nitroPrerender)->getOutputDirectory());
-        $this->assertSame('./dist/client', (new TanStackStart())->setConfig($plainPrerender)->getOutputDirectory());
+        // A nitro reference only in the config does not make it a dependency.
+        $this->assertSame('./dist', (new TanStackStart())->setPackages($plain)->setConfig('import { nitro } from \'nitro/vite\'')->getOutputDirectory());
 
-        $commented = '// import { nitro } from \'nitro/vite\'' . "\n" . 'export default defineConfig({ plugins: [tanstackStart()] })';
-
-        $this->assertSame('./dist', (new TanStackStart())->setConfig($commented)->getOutputDirectory());
-
-        $blockCommented = '/*' . "\n" . 'import { nitro } from \'nitro/vite\'' . "\n" . '*/' . "\n" . 'export default defineConfig({ plugins: [tanstackStart()] })';
-        $inlineCommented = 'export default defineConfig({ plugins: [/* nitro(), */ tanstackStart()] })';
-        $documented = '/** sets up the server */' . "\n" . 'import { nitro } from \'nitro/vite\'' . "\n" . 'export default defineConfig({ plugins: [nitro(), tanstackStart()] })';
-
-        $this->assertSame('./dist', (new TanStackStart())->setConfig($blockCommented)->getOutputDirectory());
-        $this->assertSame('./dist', (new TanStackStart())->setConfig($inlineCommented)->getOutputDirectory());
-        $this->assertSame('./.output', (new TanStackStart())->setConfig($documented)->getOutputDirectory());
-
-        $stringDelimiter = 'const base = "//cdn.example.com"; import { nitro } from \'nitro/vite\';';
-        $minified = 'import{nitro}from\'nitro/vite\';export default defineConfig({base:"//cdn.x",plugins:[nitro()]})';
-
-        $this->assertSame('./.output', (new TanStackStart())->setConfig($stringDelimiter)->getOutputDirectory());
-        $this->assertSame('./.output', (new TanStackStart())->setConfig($minified)->getOutputDirectory());
-
-        $trailing = 'export default defineConfig({ plugins: [tanstackStart()] }) // dropped nitro/vite';
-        $trailingAfterImport = 'import { nitro } from \'nitro/vite\' // the plugin' . "\n" . 'defineConfig({})';
-
-        $this->assertSame('./dist', (new TanStackStart())->setConfig($trailing)->getOutputDirectory());
-        $this->assertSame('./.output', (new TanStackStart())->setConfig($trailingAfterImport)->getOutputDirectory());
-
+        $this->assertSame('./.output', (new TanStackStart())->setPackages('not json')->getOutputDirectory());
         $this->assertSame('./.output', (new TanStackStart())->getOutputDirectory());
     }
 

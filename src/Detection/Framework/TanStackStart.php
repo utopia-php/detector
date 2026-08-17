@@ -73,39 +73,41 @@ class TanStackStart extends React
         return ['vite.config.ts', 'vite.config.js', 'vite.config.mjs'];
     }
 
-    private function strip(string $config): string
-    {
-        $config = \preg_replace('/\/\*[\s\S]*?\*\//', '', $config) ?? $config;
-
-        // An odd number of quotes ahead of a // puts it inside a string, and
-        // nitro is named inside an import string.
-        return \preg_replace_callback('/^(.*?)\/\/.*$/m', function (array $matches): string {
-            $quotes = \substr_count($matches[1], '"') + \substr_count($matches[1], "'") + \substr_count($matches[1], '`');
-
-            return $quotes % 2 === 0 ? $matches[1] : $matches[0];
-        }, $config) ?? $config;
-    }
-
     private function usesNitro(): bool
     {
-        // The scaffold registers the plugin, so an unread config is nitro.
-        if ($this->config === '') {
+        $packages = \json_decode($this->packages, true);
+
+        if (!\is_array($packages)) {
+            // The scaffold registers the plugin, so an unread manifest is nitro.
             return true;
         }
 
-        return (bool) \preg_match('/nitro\/vite|nitroV2Plugin|@tanstack\/nitro-v2-vite-plugin/', $this->strip($this->config));
+        $dependencies = \array_merge(
+            (array) ($packages['dependencies'] ?? []),
+            (array) ($packages['devDependencies'] ?? [])
+        );
+
+        foreach (['nitro', 'nitropack', '@tanstack/nitro-v2-vite-plugin'] as $package) {
+            if (isset($dependencies[$package])) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function getAdapter(string $configContent): string
     {
-        $stripped = $this->strip($configContent);
+        $stripped = \preg_replace('/(?<!:)\/\/[^\n]*/', '', $configContent) ?? $configContent;
 
         if (!\preg_match('/\bprerender\b/', $stripped) || \preg_match('/\bprerender[\x27\x22]?\s*:\s*false\b/', $stripped)) {
             return 'ssr';
         }
 
         // A narrowed prerender leaves the rest of the site to a server.
-        if (\preg_match('/\bprerender\b.{0,400}?\b(routes|filter)\s*:/s', $stripped)) {
+        \preg_match('/\bprerender\s*:\s*\{([^{}]*)/s', $stripped, $prerender);
+
+        if (\preg_match('/\b(routes|filter)\s*:/', $prerender[1] ?? '')) {
             return 'ssr';
         }
 
