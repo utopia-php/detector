@@ -73,6 +73,46 @@ class TanStackStart extends React
         return ['vite.config.ts', 'vite.config.js', 'vite.config.mjs'];
     }
 
+    /**
+     * Removes comments, leaving string contents intact. A // inside a string
+     * does not open a comment, and nitro is named inside an import string.
+     */
+    private function strip(string $config): string
+    {
+        $config = \preg_replace('/\/\*[\s\S]*?\*\//', '', $config) ?? $config;
+
+        $lines = [];
+        foreach (\explode("\n", $config) as $line) {
+            $quote = null;
+            $length = \strlen($line);
+
+            for ($i = 0; $i < $length; $i++) {
+                $char = $line[$i];
+
+                if ($quote !== null) {
+                    if ($char === '\\') {
+                        $i++;
+                    } elseif ($char === $quote) {
+                        $quote = null;
+                    }
+
+                    continue;
+                }
+
+                if ($char === '"' || $char === "'" || $char === '`') {
+                    $quote = $char;
+                } elseif ($char === '/' && ($line[$i + 1] ?? '') === '/') {
+                    $line = \substr($line, 0, $i);
+                    break;
+                }
+            }
+
+            $lines[] = $line;
+        }
+
+        return \implode("\n", $lines);
+    }
+
     private function usesNitro(): bool
     {
         // The scaffold registers the plugin, so an unread config is nitro.
@@ -80,15 +120,12 @@ class TanStackStart extends React
             return true;
         }
 
-        $stripped = \preg_replace('/\/\*[\s\S]*?\*\//', '', $this->config) ?? $this->config;
-        $stripped = \preg_replace('/(?<!:)\/\/[^\n]*/', '', $stripped) ?? $stripped;
-
-        return (bool) \preg_match('/nitro\/vite|nitroV2Plugin|@tanstack\/nitro-v2-vite-plugin/', $stripped);
+        return (bool) \preg_match('/nitro\/vite|nitroV2Plugin|@tanstack\/nitro-v2-vite-plugin/', $this->strip($this->config));
     }
 
     public function getAdapter(string $configContent): string
     {
-        $stripped = \preg_replace('/(?<!:)\/\/[^\n]*/', '', $configContent) ?? $configContent;
+        $stripped = $this->strip($configContent);
 
         if (!\preg_match('/\bprerender\b/', $stripped) || \preg_match('/\bprerender[\x27\x22]?\s*:\s*false\b/', $stripped)) {
             return 'ssr';

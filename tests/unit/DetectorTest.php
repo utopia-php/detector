@@ -812,6 +812,7 @@ class DetectorTest extends TestCase
         $this->assertSame('ssr', $fw->getAdapter('export default defineConfig({ plugins: [tanstackStart({ "prerender": false })] })'));
         $this->assertSame('ssr', $fw->getAdapter('// prerender: true' . "\n" . 'export default defineConfig({})'));
         $this->assertSame('ssr', $fw->getAdapter('server: { url: "https://example.com" },' . "\n" . 'prerender: { routes: [\'/\'] }'));
+        $this->assertSame('static', $fw->getAdapter('const cdn = "//cdn.example.com"; prerender: { crawlLinks: true }'));
         $this->assertNotEmpty($fw->getConfigFiles());
     }
 
@@ -842,6 +843,12 @@ class DetectorTest extends TestCase
         $this->assertSame('./dist', (new TanStackStart())->setConfig($blockCommented)->getOutputDirectory());
         $this->assertSame('./dist', (new TanStackStart())->setConfig($inlineCommented)->getOutputDirectory());
         $this->assertSame('./.output', (new TanStackStart())->setConfig($documented)->getOutputDirectory());
+
+        $stringDelimiter = 'const base = "//cdn.example.com"; import { nitro } from \'nitro/vite\';';
+        $minified = 'import{nitro}from\'nitro/vite\';export default defineConfig({base:"//cdn.x",plugins:[nitro()]})';
+
+        $this->assertSame('./.output', (new TanStackStart())->setConfig($stringDelimiter)->getOutputDirectory());
+        $this->assertSame('./.output', (new TanStackStart())->setConfig($minified)->getOutputDirectory());
 
         $this->assertSame('./.output', (new TanStackStart())->getOutputDirectory());
     }
