@@ -812,6 +812,28 @@ class DetectorTest extends TestCase
         $this->assertNotEmpty($fw->getConfigFiles());
     }
 
+    public function testTanStackStartOutputDirectoryDetection(): void
+    {
+        $nitro = 'import { nitro } from \'nitro/vite\'' . "\n" . 'export default defineConfig({ plugins: [nitro(), tanstackStart()] })';
+        $nitroV2 = 'import { nitroV2Plugin } from \'@tanstack/nitro-v2-vite-plugin\'' . "\n" . 'export default defineConfig({ plugins: [nitroV2Plugin(), tanstackStart()] })';
+        $plain = 'export default defineConfig({ plugins: [tanstackStart()] })';
+
+        $this->assertSame('./.output', (new TanStackStart())->setConfig($nitro)->getOutputDirectory());
+        $this->assertSame('./.output', (new TanStackStart())->setConfig($nitroV2)->getOutputDirectory());
+        $this->assertSame('./dist', (new TanStackStart())->setConfig($plain)->getOutputDirectory());
+
+        $nitroPrerender = 'import { nitro } from \'nitro/vite\'' . "\n" . 'export default defineConfig({ plugins: [nitro(), tanstackStart({ prerender: { crawlLinks: true } })] })';
+        $plainPrerender = 'export default defineConfig({ plugins: [tanstackStart({ prerender: { crawlLinks: true } })] })';
+
+        $this->assertSame('./.output/public', (new TanStackStart())->setConfig($nitroPrerender)->getOutputDirectory());
+        $this->assertSame('./dist/client', (new TanStackStart())->setConfig($plainPrerender)->getOutputDirectory());
+
+        $commented = '// import { nitro } from \'nitro/vite\'' . "\n" . 'export default defineConfig({ plugins: [tanstackStart()] })';
+
+        $this->assertSame('./dist', (new TanStackStart())->setConfig($commented)->getOutputDirectory());
+        $this->assertSame('./.output', (new TanStackStart())->getOutputDirectory());
+    }
+
     public function testSvelteKitAdapterDetection(): void
     {
         $fw = new SvelteKit();

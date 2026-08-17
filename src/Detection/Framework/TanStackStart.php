@@ -4,6 +4,19 @@ namespace Utopia\Detector\Detection\Framework;
 
 class TanStackStart extends React
 {
+    protected string $config = '';
+
+    /**
+     * Vite config content, when the caller was able to read it. Lets
+     * getOutputDirectory tell the two build layouts apart.
+     */
+    public function setConfig(string $config): self
+    {
+        $this->config = $config;
+
+        return $this;
+    }
+
     public function getName(): string
     {
         return 'tanstack-start';
@@ -45,9 +58,19 @@ class TanStackStart extends React
         };
     }
 
+    /**
+     * Nitro writes .output, serving assets from .output/public. Without it the
+     * vite plugin writes dist, serving assets from dist/client.
+     */
     public function getOutputDirectory(): string
     {
-        return './.output';
+        $static = $this->getAdapter($this->config) === 'static';
+
+        if ($this->usesNitro()) {
+            return $static ? './.output/public' : './.output';
+        }
+
+        return $static ? './dist/client' : './dist';
     }
 
     /**
@@ -56,6 +79,22 @@ class TanStackStart extends React
     public function getConfigFiles(): array
     {
         return ['vite.config.ts', 'vite.config.js', 'vite.config.mjs'];
+    }
+
+    /**
+     * Nitro writes .output; without it the vite plugin writes dist. Assume
+     * nitro when the config could not be read, matching what the official
+     * scaffold generates.
+     */
+    private function usesNitro(): bool
+    {
+        if ($this->config === '') {
+            return true;
+        }
+
+        $stripped = \preg_replace('/(?<!:)\/\/[^\n]*/', '', $this->config) ?? $this->config;
+
+        return (bool) \preg_match('/nitro\/vite|nitroV2Plugin|@tanstack\/nitro-v2-vite-plugin/', $stripped);
     }
 
     public function getAdapter(string $configContent): string
