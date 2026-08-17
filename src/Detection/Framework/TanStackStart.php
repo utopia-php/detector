@@ -6,10 +6,6 @@ class TanStackStart extends React
 {
     protected string $config = '';
 
-    /**
-     * Vite config content, when the caller was able to read it. Lets
-     * getOutputDirectory tell the two build layouts apart.
-     */
     public function setConfig(string $config): self
     {
         $this->config = $config;
@@ -58,10 +54,6 @@ class TanStackStart extends React
         };
     }
 
-    /**
-     * Nitro writes .output, serving assets from .output/public. Without it the
-     * vite plugin writes dist, serving assets from dist/client.
-     */
     public function getOutputDirectory(): string
     {
         $static = $this->getAdapter($this->config) === 'static';
@@ -81,13 +73,9 @@ class TanStackStart extends React
         return ['vite.config.ts', 'vite.config.js', 'vite.config.mjs'];
     }
 
-    /**
-     * Nitro writes .output; without it the vite plugin writes dist. Assume
-     * nitro when the config could not be read, matching what the official
-     * scaffold generates.
-     */
     private function usesNitro(): bool
     {
+        // The scaffold registers the plugin, so an unread config is nitro.
         if ($this->config === '') {
             return true;
         }
