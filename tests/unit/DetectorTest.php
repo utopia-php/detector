@@ -825,13 +825,19 @@ class DetectorTest extends TestCase
         $nitroV2 = '{"devDependencies":{"@tanstack/nitro-v2-vite-plugin":"^1.0.0"}}';
         $plain = '{"dependencies":{"@tanstack/react-start":"^1.168.0"}}';
         $prerender = 'export default defineConfig({ plugins: [tanstackStart({ prerender: { crawlLinks: true } })] })';
+        $nitroPrerender = 'export default defineConfig({ plugins: [nitro(), tanstackStart({ prerender: { crawlLinks: true } })] })';
 
         $this->assertSame('./.output', (new TanStackStart())->setPackages($nitro)->getOutputDirectory());
         $this->assertSame('./.output', (new TanStackStart())->setPackages($nitroV2)->getOutputDirectory());
         $this->assertSame('./dist', (new TanStackStart())->setPackages($plain)->getOutputDirectory());
 
-        $this->assertSame('./.output/public', (new TanStackStart())->setPackages($nitro)->setConfig($prerender)->getOutputDirectory());
+        $this->assertSame('./.output/public', (new TanStackStart())->setPackages($nitro)->setConfig($nitroPrerender)->getOutputDirectory());
         $this->assertSame('./dist/client', (new TanStackStart())->setPackages($plain)->setConfig($prerender)->getOutputDirectory());
+
+        // Installing the plugin is not registering it.
+        $this->assertSame('./dist', (new TanStackStart())->setPackages($nitro)->setConfig('export default defineConfig({ plugins: [tanstackStart()] })')->getOutputDirectory());
+        $this->assertSame('./.output', (new TanStackStart())->setPackages($nitroV2)->setConfig('export default defineConfig({ plugins: [nitroV2Plugin(), tanstackStart()] })')->getOutputDirectory());
+        $this->assertSame('./dist', (new TanStackStart())->setPackages($nitro)->setConfig('// nitro(),' . "\n" . 'export default defineConfig({ plugins: [tanstackStart()] })')->getOutputDirectory());
 
         // A nitro reference only in the config does not make it a dependency.
         $this->assertSame('./dist', (new TanStackStart())->setPackages($plain)->setConfig('import { nitro } from \'nitro/vite\'')->getOutputDirectory());

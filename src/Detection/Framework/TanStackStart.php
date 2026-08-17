@@ -66,6 +66,15 @@ class TanStackStart extends React
 
     private function usesNitro(): bool
     {
+        if ($this->config !== '') {
+            $stripped = \preg_replace('/(?<!:)\/\/[^\n]*/', '', $this->config) ?? $this->config;
+
+            // Installing the plugin is not registering it, and only a registered one moves the build.
+            if (!\preg_match('/\bnitro\w*\s*\(/i', $stripped)) {
+                return false;
+            }
+        }
+
         $packages = \json_decode($this->packages, true);
 
         if (!\is_array($packages)) {
