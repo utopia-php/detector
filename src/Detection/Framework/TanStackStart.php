@@ -94,6 +94,14 @@ class TanStackStart extends React
             return 'ssr';
         }
 
+        // Listing routes or filtering them prerenders part of the site and
+        // leaves the rest to a server, so only an unnarrowed prerender is
+        // static. Guessing ssr also fails softer, since that adapter still
+        // serves a fully prerendered build while static drops the server.
+        if (\preg_match('/\bprerender\b.{0,400}?\b(routes|filter)\s*:/s', $stripped)) {
+            return 'ssr';
+        }
+
         return 'static';
     }
 }
