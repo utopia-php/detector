@@ -808,6 +808,7 @@ class DetectorTest extends TestCase
         $this->assertSame('ssr', $fw->getAdapter('export default defineConfig({ plugins: [tanstackStart({ prerender: { routes: [\'/\'] } })] })'));
         $this->assertSame('ssr', $fw->getAdapter('export default defineConfig({ plugins: [tanstackStart({ prerender: { filter: (p) => p === \'/\' } })] })'));
         $this->assertSame('ssr', $fw->getAdapter('tanstackStart({ prerender: { headers: { \'x-robots-tag\': \'all\' }, routes: [\'/\'] } })'));
+        $this->assertSame('ssr', $fw->getAdapter('tanstackStart({ prerender: { enabled: false, crawlLinks: true } })'));
         $this->assertSame('static', $fw->getAdapter('TanStackRouterVite({ routesDirectory: \'./src/routes\' }), tanstackStart({ prerender: { crawlLinks: true } })'));
         $this->assertSame('ssr', $fw->getAdapter('export default defineConfig({ plugins: [tanstackStart({ prerender: false })] })'));
         $this->assertSame('ssr', $fw->getAdapter('export default defineConfig({ plugins: [tanstackStart({ "prerender": false })] })'));
