@@ -96,7 +96,7 @@ class TanStackStart extends React
         }
 
         // A narrowed prerender leaves the rest of the site to a server.
-        \preg_match('/\bprerender\s*:\s*\{([^{}]*)/s', $stripped, $prerender);
+        \preg_match('/\bprerender\s*:\s*(\{(?:[^{}]|(?1))*\})/s', $stripped, $prerender);
 
         if (\preg_match('/\b(routes|filter)\s*:/', $prerender[1] ?? '')) {
             return 'ssr';
