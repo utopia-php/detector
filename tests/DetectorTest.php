@@ -1,7 +1,8 @@
 <?php
 
-namespace Utopia\Tests;
+namespace Utopia\Detector\Tests;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Utopia\Detector\Detection\Framework\Analog;
 use Utopia\Detector\Detection\Framework\Angular;
@@ -21,8 +22,8 @@ use Utopia\Detector\Detection\Framework\Vue;
 use Utopia\Detector\Detection\Packager\NPM;
 use Utopia\Detector\Detection\Packager\PNPM;
 use Utopia\Detector\Detection\Packager\Yarn;
-use Utopia\Detector\Detection\Rendering\XStatic;
 use Utopia\Detector\Detection\Rendering\SSR;
+use Utopia\Detector\Detection\Rendering\XStatic;
 use Utopia\Detector\Detection\Runtime\Bun;
 use Utopia\Detector\Detection\Runtime\CPP;
 use Utopia\Detector\Detection\Runtime\Dart;
@@ -44,8 +45,8 @@ class DetectorTest extends TestCase
 {
     /**
      * @param string[] $files List of files to check
-     * @dataProvider packagerDataProvider
      */
+    #[DataProvider('packagerDataProvider')]
     public function testDetectPackager(array $files, ?string $expectedPackager): void
     {
         $detector = new Packager();
@@ -70,7 +71,7 @@ class DetectorTest extends TestCase
     /**
      * @return array<array{array<string>, string|null}>
      */
-    public function packagerDataProvider(): array
+    public static function packagerDataProvider(): array
     {
         return [
             [['bun.lockb', 'fly.toml', 'package.json', 'remix.config.js'], 'npm'],
@@ -82,8 +83,8 @@ class DetectorTest extends TestCase
 
     /**
      * @param string[] $files List of files to check
-     * @dataProvider runtimeDataProviderByFilematch
      */
+    #[DataProvider('runtimeDataProviderByFilematch')]
     public function testDetectRuntimeByFilematch(
         array $files,
         ?string $runtime,
@@ -117,9 +118,9 @@ class DetectorTest extends TestCase
 
         if ($runtime) {
             $this->assertNotNull($detectedRuntime);
-            $this->assertSame($runtime, $detectedRuntime?->getName());
-            $this->assertSame($commands, $detectedRuntime?->getCommands());
-            $this->assertSame($entrypoint, $detectedRuntime?->getEntrypoint());
+            $this->assertSame($runtime, $detectedRuntime->getName());
+            $this->assertSame($commands, $detectedRuntime->getCommands());
+            $this->assertSame($entrypoint, $detectedRuntime->getEntrypoint());
         } else {
             $this->assertNull($detectedRuntime);
         }
@@ -128,7 +129,7 @@ class DetectorTest extends TestCase
     /**
      * @return array<array{array<string>, string|null, string|null, string|null, string|null}>
      */
-    public function runtimeDataProviderByFilematch(): array
+    public static function runtimeDataProviderByFilematch(): array
     {
         return [
             [['package-lock.json', 'yarn.lock', 'tsconfig.json'], 'node', 'pnpm install', 'index.js', 'pnpm'],
@@ -142,8 +143,8 @@ class DetectorTest extends TestCase
 
     /**
      * @param string[] $files List of files to check
-     * @dataProvider runtimeDataProviderByLanguages
      */
+    #[DataProvider('runtimeDataProviderByLanguages')]
     public function testDetectRuntimeByLanguage(
         array $files,
         ?string $runtime,
@@ -176,8 +177,8 @@ class DetectorTest extends TestCase
 
         if ($runtime) {
             $this->assertNotNull($detectedRuntime);
-            $this->assertSame($runtime, $detectedRuntime?->getName());
-            $this->assertSame($commands, $detectedRuntime?->getCommands());
+            $this->assertSame($runtime, $detectedRuntime->getName());
+            $this->assertSame($commands, $detectedRuntime->getCommands());
         } else {
             $this->assertNull($detectedRuntime);
         }
@@ -186,7 +187,7 @@ class DetectorTest extends TestCase
     /**
      * @return array<array{array<string>, string|null, string|null, string|null}>
      */
-    public function runtimeDataProviderByLanguages(): array
+    public static function runtimeDataProviderByLanguages(): array
     {
         return [
             [
@@ -213,8 +214,8 @@ class DetectorTest extends TestCase
 
     /**
      * @param string[] $files List of files to check
-     * @dataProvider runtimeDataProviderByFileExtensions
      */
+    #[DataProvider('runtimeDataProviderByFileExtensions')]
     public function testDetectRuntimeByFileExtension(
         array $files,
         ?string $runtime,
@@ -247,8 +248,8 @@ class DetectorTest extends TestCase
 
         if ($runtime) {
             $this->assertNotNull($detectedRuntime);
-            $this->assertSame($runtime, $detectedRuntime?->getName());
-            $this->assertSame($commands, $detectedRuntime?->getCommands());
+            $this->assertSame($runtime, $detectedRuntime->getName());
+            $this->assertSame($commands, $detectedRuntime->getCommands());
         } else {
             $this->assertNull($detectedRuntime);
         }
@@ -257,7 +258,7 @@ class DetectorTest extends TestCase
     /**
      * @return array<array{array<string>, string|null, string|null}>
      */
-    public function runtimeDataProviderByFileExtensions(): array
+    public static function runtimeDataProviderByFileExtensions(): array
     {
         return [
             [['main.ts', 'main.js', 'DockerFile'], 'node', 'pnpm install'],
@@ -269,8 +270,8 @@ class DetectorTest extends TestCase
 
     /**
      * @param string[] $files List of files to check
-     * @dataProvider frameworkDataProvider
      */
+    #[DataProvider('frameworkDataProvider')]
     public function testFrameworkDetection(array $files, ?string $framework, ?string $installCommand = null, ?string $buildCommand = null, ?string $outputDirectory = null, string $packager = 'pnpm'): void
     {
         $detector = new Framework($packager);
@@ -295,10 +296,10 @@ class DetectorTest extends TestCase
 
         if ($framework) {
             $this->assertNotNull($detectedFramework);
-            $this->assertSame($framework, $detectedFramework?->getName());
-            $this->assertSame($installCommand, $detectedFramework?->getInstallCommand());
-            $this->assertSame($buildCommand, $detectedFramework?->getBuildCommand());
-            $this->assertSame($outputDirectory, $detectedFramework?->getOutputDirectory());
+            $this->assertSame($framework, $detectedFramework->getName());
+            $this->assertSame($installCommand, $detectedFramework->getInstallCommand());
+            $this->assertSame($buildCommand, $detectedFramework->getBuildCommand());
+            $this->assertSame($outputDirectory, $detectedFramework->getOutputDirectory());
         } else {
             $this->assertNull($detectedFramework);
         }
@@ -307,7 +308,7 @@ class DetectorTest extends TestCase
     /**
      * @return array<array{array<string>, string|null, string|null, string|null, string|null}>
      */
-    public function frameworkDataProvider(): array
+    public static function frameworkDataProvider(): array
     {
         return [
             [['src', 'types', 'makefile', 'components.js', 'debug.js', 'package.json', 'svelte.config.js'], 'sveltekit', 'pnpm install', 'pnpm run build', './build'],
@@ -327,8 +328,8 @@ class DetectorTest extends TestCase
      * @param string $framework The framework
      * @param string $rendering The expected rendering type
      * @param string|null $fallbackFile The expected fallback file
-     * @dataProvider renderingDataProvider
      */
+    #[DataProvider('renderingDataProvider')]
     public function testRenderingDetection(array $files, string $framework, string $rendering, ?string $fallbackFile): void
     {
         $detector = new Rendering($framework);
@@ -342,7 +343,6 @@ class DetectorTest extends TestCase
 
         $detectedRendering = $detector->detect();
 
-        $this->assertNotNull($detectedRendering);
         $this->assertSame($rendering, $detectedRendering->getName());
         $this->assertSame($fallbackFile, $detectedRendering->getFallbackFile());
     }
@@ -350,7 +350,7 @@ class DetectorTest extends TestCase
     /**
      * @return array<array{array<string>, string, string|null, string|null}>
      */
-    public function renderingDataProvider(): array
+    public static function renderingDataProvider(): array
     {
         return [
             [['server/pages/index.html', 'server/pages/api/users.js', '.next/server/unrelated-file.js'], 'nextjs', 'static', 'server/pages/index.html'],
@@ -417,10 +417,6 @@ class DetectorTest extends TestCase
         $detectedFramework = $detector->detect();
 
         $this->assertNotNull($detectedFramework);
-        // Makes static code analyser smarter
-        if (is_null($detectedFramework)) {
-            throw new \Exception('Framework not detected');
-        }
         $this->assertSame('tanstack-start', $detectedFramework->getName());
         $this->assertSame('npm install', $detectedFramework->getInstallCommand());
         $this->assertSame('npm run build', $detectedFramework->getBuildCommand());
@@ -448,10 +444,6 @@ class DetectorTest extends TestCase
         $detectedFramework = $detector->detect();
 
         $this->assertNotNull($detectedFramework);
-        // Makes static code analyser smarter
-        if (is_null($detectedFramework)) {
-            throw new \Exception('Framework not detected');
-        }
 
         $this->assertSame('tanstack-start', $detectedFramework->getName());
         $this->assertSame('pnpm install', $detectedFramework->getInstallCommand());
@@ -473,7 +465,7 @@ class DetectorTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function frameworkEdgeCasesProvider(): array
+    public static function frameworkEdgeCasesProvider(): array
     {
         return [
             // React-based
@@ -763,9 +755,9 @@ class DetectorTest extends TestCase
      * Test scenarios that can possibly result in multiple frameworks,
      * but only one is accurate detection.
      * @param array<string> $files
-     * @dataProvider frameworkEdgeCasesProvider
      */
-    public function testFrameworkEdgeCases(string $assertion, array $files, string $packageFile, string $framework): void
+    #[DataProvider('frameworkEdgeCasesProvider')]
+    public function testFrameworkEdgeCases(string $assertion, array $files, string $package, string $framework): void
     {
         $detector = new Framework('npm');
 
@@ -789,15 +781,11 @@ class DetectorTest extends TestCase
             $detector->addInput($file, Framework::INPUT_FILE);
         }
 
-        $detector->addInput($packageFile, Framework::INPUT_PACKAGES);
+        $detector->addInput($package, Framework::INPUT_PACKAGES);
 
         $detection = $detector->detect();
 
         $this->assertNotNull($detection, $assertion);
-        // Makes static code analyser smarter
-        if (is_null($detection)) {
-            throw new \Exception('Framework not detected');
-        }
 
         $this->assertSame($framework, $detection->getName(), $assertion);
     }
@@ -856,9 +844,8 @@ class DetectorTest extends TestCase
 
     /**
      * @param array<string> $files
-     *
-     * @dataProvider dartFrameworkDataProvider
      */
+    #[DataProvider('dartFrameworkDataProvider')]
     public function testDartFrameworkDetection(string $pubspec, array $files, string $framework): void
     {
         // Registration order must not decide between two frameworks sharing the pubspec files
@@ -878,14 +865,14 @@ class DetectorTest extends TestCase
             $detectedFramework = $detector->detect();
 
             $this->assertNotNull($detectedFramework);
-            $this->assertSame($framework, $detectedFramework?->getName());
+            $this->assertSame($framework, $detectedFramework->getName());
         }
     }
 
     /**
      * @return array<string, array{string, array<string>, string}>
      */
-    public function dartFrameworkDataProvider(): array
+    public static function dartFrameworkDataProvider(): array
     {
         $pubspecFiles = ['pubspec.yaml', 'pubspec.lock'];
 
@@ -1067,10 +1054,6 @@ class DetectorTest extends TestCase
         $detectedFramework = $detector->detect();
 
         $this->assertNotNull($detectedFramework);
-        // Makes static code analyser smarter
-        if (is_null($detectedFramework)) {
-            throw new \Exception('Framework not detected');
-        }
 
         // Must stay in sync with the jaspr adapter in Appwrite's frameworks config
         $this->assertSame('dart pub get', $detectedFramework->getInstallCommand());
@@ -1078,9 +1061,7 @@ class DetectorTest extends TestCase
         $this->assertSame('./build/jaspr', $detectedFramework->getOutputDirectory());
     }
 
-    /**
-     * @dataProvider jasprAdapterDataProvider
-     */
+    #[DataProvider('jasprAdapterDataProvider')]
     public function testJasprAdapterDetection(string $pubspec, string $adapter): void
     {
         $this->assertSame($adapter, (new Jaspr())->getAdapter($pubspec));
@@ -1089,7 +1070,7 @@ class DetectorTest extends TestCase
     /**
      * @return array<string, array{string, string}>
      */
-    public function jasprAdapterDataProvider(): array
+    public static function jasprAdapterDataProvider(): array
     {
         return [
             'server mode' => ["jaspr:\n  mode: server\n", 'ssr'],
